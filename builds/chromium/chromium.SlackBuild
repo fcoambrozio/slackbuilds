@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Slackware build script for Google Chromium
+# Slackware build script for Chromium Web Browser
 #
 # Copyright 2010  Yucatan "Kenjiro" Costa, Alegrete, RS, Brasil
 # Copyright 2013  Francisco Ambrozio <sbo@franciscoambrozio.com>
@@ -132,7 +132,7 @@ _conf=(
   -Duse_system_yasm=1
   -Duse_system_zlib=0
   -Dwerror=
-  -Drelease_extra_cflags='$CFLAGS'
+  -Drelease_extra_cflags="$CFLAGS"
   -Dtarget_arch=$TARGETARCH
   -Ddisable_nacl=1
   -Ddisable_sse2=1
@@ -144,27 +144,48 @@ touch chrome/test/data/webui/i18n_process_css_test.html
 build/linux/unbundle/replace_gyp_files.py "${_conf[@]}"
 build/gyp_chromium --depth=. "${_conf[@]}"
 ninja -C out/Release chrome chrome_sandbox chromedriver
-exit
 
-# Creating the package
-cd out/Release/
-  mkdir -p $PKG/usr/lib${LIBDIRSUFFIX}/chromium
-  mkdir -p $PKG/usr/bin
-  install -m 0755 -D chrome $PKG/usr/lib${LIBDIRSUFFIX}/chromium/chromium
-  install -m 4755 -o root -g root -D chrome_sandbox $PKG/usr/lib${LIBDIRSUFFIX}/chromium/chrome-sandbox
-  install -m 0755 -D libffmpegsumo.so $PKG/usr/lib${LIBDIRSUFFIX}/chromium
-  cp *.pak $PKG/usr/lib${LIBDIRSUFFIX}/chromium
-  cp -a locales/ $PKG/usr/lib${LIBDIRSUFFIX}/chromium
-  cp -a resources/ $PKG/usr/lib${LIBDIRSUFFIX}/chromium
-  find $PKG -name '*.d' -type f -delete
+# "Install" process
+install -D out/Release/chrome $PKG/usr/lib${LIBDIRSUFFIX}/chromium/chromium
+install -D -m4755 -o root -g root out/Release/chrome_sandbox \
+  $PKG/usr/lib${LIBDIRSUFFIX}/chromium/chrome-sandbox
+install -D out/Release/chromedriver \
+  $PKG/usr/lib${LIBDIRSUFFIX}/chromium/chromedriver
 
-  mkdir -p $PKG/usr/man/man1
-  install -m 0644 -D chrome.1 $PKG/usr/man/man1/chromium.1
-  mkdir -p $PKG/usr/share/pixmaps
-  cp product_logo_48.png $PKG/usr/share/pixmaps/chromium.png
-  mkdir -p $PKG/usr/share/applications
-  install -m 0644 $CWD/chromium.desktop $PKG/usr/share/applications
-cd ../../
+cp out/Release/*.pak $PKG/usr/lib${LIBDIRSUFFIX}/chromium
+cp -a out/Release/locales $PKG/usr/lib${LIBDIRSUFFIX}/chromium
+cp -a out/Release/pseudo_locales $PKG/usr/lib${LIBDIRSUFFIX}/chromium
+ln -s locales $PKG/usr/lib${LIBDIRSUFFIX}/chromium/remoting_locales
+cp -a out/Release/resources $PKG/usr/lib${LIBDIRSUFFIX}/chromium
+
+mkdir -p $PKG/usr/lib${LIBDIRSUFFIX}/chromium/lib
+cp out/Release/lib/libffmpeg.so $PKG/usr/lib${LIBDIRSUFFIX}/chromium/lib
+
+cp out/Release/natives_blob.bin $PKG/usr/lib${LIBDIRSUFFIX}/chromium
+cp out/Release/snapshot_blob.bin $PKG/usr/lib${LIBDIRSUFFIX}/chromium
+
+cp -a third_party/icu/source/data/in/icudtl.dat $PKG/usr/lib${LIBDIRSUFFIX}/chromium
+
+mkdir -p $PKG/usr/man/man1
+install -m 0644 -D out/Release/chrome.1 $PKG/usr/man/man1/chromium.1
+
+install -D -m0755 $CWD/chromium.sh $PKG/usr/bin/chromium
+ln -s ../lib${LIBDIRSUFFIX}/chromium/chromedriver $PKG/usr/bin/chromedriver
+
+for size in 16 32; do
+  install -D -m0644 \
+    chrome/app/theme/default_100_percent/chromium/product_logo_$size.png \
+    $PKG/usr/share/icons/hicolor/${size}x${size}/apps/${PRGNAM}.png
+done
+for size in 22 24 48 64 128 256; do
+  install -D -m0644 \
+    chrome/app/theme/chromium/product_logo_$size.png \
+    $PKG/usr/share/icons/hicolor/${size}x${size}/apps/${PRGNAM}.png
+done
+
+install -D -m 0644 $CWD/chromium.desktop $PKG/usr/share/applications/chromium.desktop
+mkdir -p $PKG/etc/chromium
+cat $CWD/chromium.default > $PKG/etc/chromium/00-default.conf.new
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a AUTHORS LICENSE $PKG/usr/doc/$PRGNAM-$VERSION/ || true
@@ -174,10 +195,6 @@ find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | gr
 
 find $PKG/usr/man -type f -exec gzip -9 {} \;
 for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
-
-cd $PKG
-  ln -s /usr/lib${LIBDIRSUFFIX}/chromium/chromium $PKG/usr/bin/chromium
-  ln -s /usr/lib${LIBDIRSUFFIX}/chromium/chrome-sandbox $PKG/usr/bin/chrome-sandbox
 
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
