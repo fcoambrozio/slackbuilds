@@ -2,9 +2,8 @@
 
 # Slackware build script for Chromium Web Browser
 #
-# Copyright 2010  Yucatan "Kenjiro" Costa, Alegrete, RS, Brasil
-# Copyright 2013  Francisco Ambrozio <sbo@franciscoambrozio.com>
-# Copyright 2015  Francisco Ambrozio <sbo@franciscoambrozio.com>
+# Copyright 2010      Yucatan "Kenjiro" Costa, Alegrete, RS, Brasil
+# Copyright 2013,2016 Francisco Ambrozio <sbo@franciscoambrozio.com>
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -25,7 +24,7 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=chromium
-VERSION=${VERSION:-47.0.2526.111}
+VERSION=${VERSION:-48.0.2564.82}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
