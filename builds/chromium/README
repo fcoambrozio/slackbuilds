@@ -8,4 +8,7 @@ distribution, please get your own set of keys.
 Feel free to contact the maintainer of this SlackBuild for more
 informations.
 
+You have the option to use clang instead of gcc for the build
+process. If so, set USE_CLANG=YES.
+
 This requires for build: ninja

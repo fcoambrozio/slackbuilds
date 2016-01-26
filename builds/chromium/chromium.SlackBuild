@@ -180,7 +180,9 @@ cp -a third_party/icu/source/data/in/icudtl.dat $PKG/usr/lib${LIBDIRSUFFIX}/chro
 mkdir -p $PKG/usr/man/man1
 install -m 0644 -D out/Release/chrome.1 $PKG/usr/man/man1/chromium.1
 
-install -D -m0755 $CWD/chromium.sh $PKG/usr/bin/chromium
+mkdir -p $PKG/usr/bin
+cat $CWD/chromium.sh | sed s/@LIBDIRSUFFIX@/$LIBDIRSUFFIX/ > $PKG/usr/bin/chromium
+chmod 0755 $PKG/usr/bin/chromium
 ln -s ../lib${LIBDIRSUFFIX}/chromium/chromedriver $PKG/usr/bin/chromedriver
 
 for size in 16 32; do
