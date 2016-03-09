@@ -29,7 +29,7 @@
 #
 
 PRGNAM=chromium
-VERSION=${VERSION:-48.0.2564.116}
+VERSION=${VERSION:-49.0.2623.75}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -147,6 +147,7 @@ _conf=(
   -Duse_system_xdg_utils=1
   -Duse_system_yasm=1
   -Duse_system_zlib=0
+  -Duse_sysroot=0
   -Dwerror=
   -Drelease_extra_cflags="$CFLAGS"
   -Dtarget_arch=$TARGETARCH
