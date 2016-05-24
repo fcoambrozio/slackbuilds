@@ -30,7 +30,7 @@
 # Modified by Francisco Ambrozio
 
 PRGNAM=postgresql
-VERSION=${VERSION:-9.5.2}
+VERSION=${VERSION:-9.5.3}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
