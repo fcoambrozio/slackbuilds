@@ -4,6 +4,10 @@
 #
 # Copyright 2010      Yucatan "Kenjiro" Costa, Alegrete, RS, Brasil
 # Copyright 2013,2016 Francisco Ambrozio <sbo@franciscoambrozio.com>
+#
+# This work is based on AlienBOB's Chromium SlackBuild
+# http://www.slackware.com/~alien/slackbuilds/chromium/
+#
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -23,13 +27,8 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#
-# Version 2016 of this script was based on alienBOB's chromium SlackBuild:
-#  http://www.slackware.com/~alien/slackbuilds/chromium/
-#
-
 PRGNAM=chromium
-VERSION=${VERSION:-49.0.2623.87}
+VERSION=${VERSION:-53.0.2785.143}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -93,6 +92,10 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
+# Disable MADV_FREE (if set by glibc)
+# https://bugzilla.redhat.com/show_bug.cgi?id=1361157
+patch -p1 -i $CWD/chromium-52.0.2743.116-unset-madv_free.patch
+
 if [ "$USE_CLANG" = "YES" ]; then
   CLANG_OPT="-Dclang=1 -Dclang_use_chrome_plugins=0"
   sed -e '/-Wno-absolute-value/d' -i build/common.gypi
@@ -104,7 +107,6 @@ else
   CLANG_OPT="-Dclang=0"
   SLKCFLAGS="${SLKCFLAGS} -Wno-unused-local-typedefs"
 fi
-
 export -n LDFLAGS="$SLKLDFLAGS" CFLAGS="$SLKCFLAGS" CXXFLAGS="$SLKCFLAGS"
 
 _conf=(
@@ -115,7 +117,7 @@ _conf=(
   -Dgoogle_api_key=$GOOGLE_API_KEY
   -Dgoogle_default_client_id=$GOOGLE_DEFAULT_CLIENT_ID
   -Dgoogle_default_client_secret=$GOOGLE_DEFAULT_CLIENT_SECRET
-  -Dicu_use_data_file_flag=0
+  -Dicu_use_data_file_flag=1
   -Dlinux_sandbox_path=/usr/lib${LIBDIRSUFFIX}/chromium/chrome_sandbox
   -Dlinux_strip_binary=1
   -Dlinux_use_bundled_binutils=0
@@ -129,25 +131,25 @@ _conf=(
   -Duse_allocator=none
   -Duse_gconf=0
   -Duse_kerberos=0
-  -Duse_pulseaudio=0
+  -Duse_sysroot=0
+  -Duse_pulseaudio=1
   -Duse_system_bzip2=0
-  -Duse_system_flac=1
   -Duse_system_ffmpeg=0
   -Duse_system_harfbuzz=0
   -Duse_system_icu=0
-  -Duse_system_libevent=1
   -Duse_system_libjpeg=0
   -Duse_system_libpng=0
   -Duse_system_libxml=0
   -Duse_system_libxslt=0
-  -Duse_system_nspr=1
   -Duse_system_opus=0
   -Duse_system_snappy=0
+  -Duse_system_zlib=0
+  -Duse_system_flac=1
+  -Duse_system_libevent=1
+  -Duse_system_nspr=1
   -Duse_system_openssl=1
   -Duse_system_xdg_utils=1
   -Duse_system_yasm=1
-  -Duse_system_zlib=0
-  -Duse_sysroot=0
   -Dwerror=
   -Drelease_extra_cflags="$CFLAGS"
   -Dtarget_arch=$TARGETARCH

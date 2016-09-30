@@ -10,5 +10,3 @@ informations.
 
 You have the option to use clang instead of gcc for the build
 process. If so, set USE_CLANG=YES.
-
-This requires for build: ninja
