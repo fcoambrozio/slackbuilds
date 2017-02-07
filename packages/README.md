@@ -1,3 +1,3 @@
 
-This packages were build on Slackware **14.2**
+This packages were build on Slackware **-current branch**
 
