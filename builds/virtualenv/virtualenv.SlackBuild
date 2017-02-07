@@ -26,8 +26,8 @@
 # Modified by Francisco Ambrozio
 
 PRGNAM=virtualenv
-VERSION=${VERSION:-15.0.3}
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-15.1.0}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
 if [ -z "$ARCH" ]; then

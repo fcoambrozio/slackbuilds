@@ -1,6 +1,6 @@
-diff -uar Python-3.5.2.orig/Lib/distutils/command/install.py Python-3.5.2/Lib/distutils/command/install.py
---- Python-3.5.2.orig/Lib/distutils/command/install.py	2016-06-27 13:44:35.158933312 -0300
-+++ Python-3.5.2/Lib/distutils/command/install.py	2016-06-27 13:48:43.660947143 -0300
+diff -uar Python-3.6.0.orig/Lib/distutils/command/install.py Python-3.6.0/Lib/distutils/command/install.py
+--- Python-3.6.0.orig/Lib/distutils/command/install.py	2016-12-23 04:21:19.000000000 +0200
++++ Python-3.6.0/Lib/distutils/command/install.py	2016-12-27 23:23:09.347324233 +0200
 @@ -29,15 +29,15 @@
  
  INSTALL_SCHEMES = {
@@ -21,9 +21,9 @@ diff -uar Python-3.5.2.orig/Lib/distutils/command/install.py Python-3.5.2/Lib/di
          'headers': '$base/include/python/$dist_name',
          'scripts': '$base/bin',
          'data'   : '$base',
-diff -uar Python-3.5.2.orig/Lib/distutils/sysconfig.py Python-3.5.2/Lib/distutils/sysconfig.py
---- Python-3.5.2.orig/Lib/distutils/sysconfig.py	2016-06-27 13:44:35.157933312 -0300
-+++ Python-3.5.2/Lib/distutils/sysconfig.py	2016-06-27 13:50:07.945951834 -0300
+diff -uar Python-3.6.0.orig/Lib/distutils/sysconfig.py Python-3.6.0/Lib/distutils/sysconfig.py
+--- Python-3.6.0.orig/Lib/distutils/sysconfig.py	2016-12-23 04:21:19.000000000 +0200
++++ Python-3.6.0/Lib/distutils/sysconfig.py	2016-12-27 23:23:45.371557745 +0200
 @@ -133,7 +133,7 @@
  
      if os.name == "posix":
@@ -33,21 +33,21 @@ diff -uar Python-3.5.2.orig/Lib/distutils/sysconfig.py Python-3.5.2/Lib/distutil
          if standard_lib:
              return libpython
          else:
-diff -uar Python-3.5.2.orig/Lib/site.py Python-3.5.2/Lib/site.py
---- Python-3.5.2.orig/Lib/site.py	2016-06-27 13:44:35.151933312 -0300
-+++ Python-3.5.2/Lib/site.py	2016-06-27 13:51:23.254956025 -0300
-@@ -303,7 +303,7 @@
+diff -uar Python-3.6.0.orig/Lib/site.py Python-3.6.0/Lib/site.py
+--- Python-3.6.0.orig/Lib/site.py	2016-12-23 04:21:19.000000000 +0200
++++ Python-3.6.0/Lib/site.py	2016-12-27 23:24:50.123773461 +0200
+@@ -304,7 +304,7 @@
          seen.add(prefix)
  
          if os.sep == '/':
 -            sitepackages.append(os.path.join(prefix, "lib",
 +            sitepackages.append(os.path.join(prefix, "lib64",
-                                         "python" + sys.version[:3],
+                                         "python%d.%d" % sys.version_info[:2],
                                          "site-packages"))
          else:
-diff -uar Python-3.5.2.orig/Lib/sysconfig.py Python-3.5.2/Lib/sysconfig.py
---- Python-3.5.2.orig/Lib/sysconfig.py	2016-06-27 13:44:35.160933312 -0300
-+++ Python-3.5.2/Lib/sysconfig.py	2016-06-27 13:53:50.321964210 -0300
+diff -uar Python-3.6.0.orig/Lib/sysconfig.py Python-3.6.0/Lib/sysconfig.py
+--- Python-3.6.0.orig/Lib/sysconfig.py	2016-12-23 04:21:19.000000000 +0200
++++ Python-3.6.0/Lib/sysconfig.py	2016-12-27 23:27:39.368563068 +0200
 @@ -20,10 +20,10 @@
  
  _INSTALL_SCHEMES = {
@@ -93,10 +93,10 @@ diff -uar Python-3.5.2.orig/Lib/sysconfig.py Python-3.5.2/Lib/sysconfig.py
          'include': '{userbase}/include/python{py_version_short}',
          'scripts': '{userbase}/bin',
          'data': '{userbase}',
-diff -uar Python-3.5.2.orig/Makefile.pre.in Python-3.5.2/Makefile.pre.in
---- Python-3.5.2.orig/Makefile.pre.in	2016-06-27 13:44:35.044933306 -0300
-+++ Python-3.5.2/Makefile.pre.in	2016-06-27 13:54:41.266967046 -0300
-@@ -125,7 +125,7 @@
+diff -uar Python-3.6.0.orig/Makefile.pre.in Python-3.6.0/Makefile.pre.in
+--- Python-3.6.0.orig/Makefile.pre.in	2016-12-23 04:21:21.000000000 +0200
++++ Python-3.6.0/Makefile.pre.in	2016-12-27 23:28:09.024577604 +0200
+@@ -131,7 +131,7 @@
  MANDIR=		@mandir@
  INCLUDEDIR=	@includedir@
  CONFINCLUDEDIR=	$(exec_prefix)/include
@@ -105,9 +105,9 @@ diff -uar Python-3.5.2.orig/Makefile.pre.in Python-3.5.2/Makefile.pre.in
  ABIFLAGS=	@ABIFLAGS@
  
  # Detailed destination directories
-diff -uar Python-3.5.2.orig/Modules/getpath.c Python-3.5.2/Modules/getpath.c
---- Python-3.5.2.orig/Modules/getpath.c	2016-06-27 13:44:35.188933314 -0300
-+++ Python-3.5.2/Modules/getpath.c	2016-06-27 14:01:37.718990224 -0300
+diff -uar Python-3.6.0.orig/Modules/getpath.c Python-3.6.0/Modules/getpath.c
+--- Python-3.6.0.orig/Modules/getpath.c	2016-12-23 04:21:21.000000000 +0200
++++ Python-3.6.0/Modules/getpath.c	2016-12-27 23:30:11.883780781 +0200
 @@ -494,7 +494,7 @@
      _pythonpath = Py_DecodeLocale(PYTHONPATH, NULL);
      _prefix = Py_DecodeLocale(PREFIX, NULL);
@@ -135,22 +135,34 @@ diff -uar Python-3.5.2.orig/Modules/getpath.c Python-3.5.2/Modules/getpath.c
      }
      /* If we found EXEC_PREFIX do *not* reduce it!  (Yet.) */
  
-diff -uar Python-3.5.2.orig/configure Python-3.5.2/configure
---- Python-3.5.2.orig/configure	2016-06-27 13:44:35.044933306 -0300
-+++ Python-3.5.2/configure	2016-06-27 14:02:25.663992893 -0300
-@@ -14662,7 +14662,7 @@
- $as_echo "$LDVERSION" >&6; }
+diff -uar Python-3.6.0.orig/configure Python-3.6.0/configure
+--- Python-3.6.0.orig/configure	2016-12-23 04:21:22.000000000 +0200
++++ Python-3.6.0/configure	2016-12-27 23:31:34.568609672 +0200
+@@ -14896,9 +14896,9 @@
  
  
--LIBPL='$(prefix)'"/lib/python${VERSION}/config-${LDVERSION}"
-+LIBPL='$(prefix)'"/lib64/python${VERSION}/config-${LDVERSION}"
+ if test x$PLATFORM_TRIPLET = x; then
+-  LIBPL='$(prefix)'"/lib/python${VERSION}/config-${LDVERSION}"
++  LIBPL='$(prefix)'"/lib64/python${VERSION}/config-${LDVERSION}"
+ else
+-  LIBPL='$(prefix)'"/lib/python${VERSION}/config-${LDVERSION}-${PLATFORM_TRIPLET}"
++  LIBPL='$(prefix)'"/lib64/python${VERSION}/config-${LDVERSION}-${PLATFORM_TRIPLET}"
+ fi
  
  
- # Check whether right shifting a negative integer extends the sign bit
-diff -uar Python-3.5.2.orig/setup.py Python-3.5.2/setup.py
---- Python-3.5.2.orig/setup.py	2016-06-27 13:44:35.044933306 -0300
-+++ Python-3.5.2/setup.py	2016-06-27 14:05:44.672003969 -0300
-@@ -780,11 +780,11 @@
+diff -uar Python-3.6.0.orig/setup.py Python-3.6.0/setup.py
+--- Python-3.6.0.orig/setup.py	2016-12-23 04:21:22.000000000 +0200
++++ Python-3.6.0/setup.py	2016-12-27 23:34:22.210345509 +0200
+@@ -491,7 +491,7 @@
+         # directories (i.e. '.' and 'Include') must be first.  See issue
+         # 10520.
+         if not cross_compiling:
+-            add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib')
++            add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib64')
+             add_dir_to_list(self.compiler.include_dirs, '/usr/local/include')
+         # only change this for cross builds for 3.3, issues on Mageia
+         if cross_compiling:
+@@ -782,11 +782,11 @@
              elif curses_library:
                  readline_libs.append(curses_library)
              elif self.compiler.find_library_file(lib_dirs +
@@ -164,11 +176,13 @@ diff -uar Python-3.5.2.orig/setup.py Python-3.5.2/setup.py
                                     extra_link_args=readline_extra_link_args,
                                     libraries=readline_libs) )
          else:
-@@ -822,7 +822,7 @@
+@@ -823,8 +823,8 @@
+             if krb5_h:
                  ssl_incs += krb5_h
          ssl_libs = find_library_file(self.compiler, 'ssl',lib_dirs,
-                                      ['/usr/local/ssl/lib',
+-                                     ['/usr/local/ssl/lib',
 -                                      '/usr/contrib/ssl/lib/'
++                                     ['/usr/local/ssl/lib64',
 +                                      '/usr/contrib/ssl/lib64/'
                                       ] )
  
