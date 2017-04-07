@@ -5,15 +5,15 @@
 # You must make exactly 11 lines for the formatting to be correct.  It's also
 # customary to leave one space after the ':' except on otherwise blank lines.
 
-         |-----handy-ruler------------------------------------------------------|
-acpi_call: acpi_call (kernel module for calling ACPI methods)
-acpi_call:
-acpi_call: Simple kernel module that enables you to call ACPI methods by
-acpi_call: writing the method name followed by arguments to /proc/acpi/call.
-acpi_call: It allows you to tamper with your system. Use with CAUTION.
-acpi_call:
-acpi_call: Homepage: https://github.com/mkottman/acpi_call
-acpi_call:
-acpi_call:
-acpi_call:
-acpi_call:
+                  |-----handy-ruler------------------------------------------------------|
+acpi_call_@KERNEL@: acpi_call (kernel module for calling ACPI methods)
+acpi_call_@KERNEL@:
+acpi_call_@KERNEL@: Simple kernel module that enables you to call ACPI methods by
+acpi_call_@KERNEL@: writing the method name followed by arguments to /proc/acpi/call.
+acpi_call_@KERNEL@: It allows you to tamper with your system. Use with CAUTION.
+acpi_call_@KERNEL@:
+acpi_call_@KERNEL@: Homepage: https://github.com/mkottman/acpi_call
+acpi_call_@KERNEL@:
+acpi_call_@KERNEL@:
+acpi_call_@KERNEL@:
+acpi_call_@KERNEL@:
