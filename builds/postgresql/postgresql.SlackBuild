@@ -30,7 +30,7 @@
 # Modified by Francisco Ambrozio
 
 PRGNAM=postgresql
-VERSION=${VERSION:-9.6.2}
+VERSION=${VERSION:-9.6.3}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -102,6 +102,8 @@ find -L . \
   -o -perm 511 \) -exec chmod 755 {} \; -o \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+
+patch -p1 -i $CWD/postgresql-run-socket.patch
 
 CFLAGS="$SLKCFLAGS" \
 ./configure \
@@ -202,6 +204,10 @@ sed -e "s%@UID@%$PG_UID%" \
   -e "s%@PG_VERSION@%$PG_VERSION%" \
   $CWD/setup.$PRGNAM  > $PKG/var/log/setup/setup.$PRGNAM
 chmod 755 $PKG/var/log/setup/setup.$PRGNAM
+
+# Socket directory
+mkdir -p $PKG/var/run/postgresql
+chown postgres:postgres $PKG/var/run/postgresql
 
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
