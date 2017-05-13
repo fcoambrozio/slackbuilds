@@ -30,7 +30,7 @@
 # Modified by SlackBuilds.org
 
 PRGNAM=yakuake
-VERSION=${VERSION:-3.0.2}
+VERSION=${VERSION:-3.0.4}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
