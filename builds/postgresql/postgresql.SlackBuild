@@ -30,8 +30,8 @@
 # Modified by Francisco Ambrozio
 
 PRGNAM=postgresql
-VERSION=${VERSION:-10beta1}
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-10beta2}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 
 NUMJOBS=${NUMJOBS:-" -j5 "}
