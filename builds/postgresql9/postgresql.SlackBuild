@@ -192,6 +192,10 @@ sed -e "s%@PG_VERSION@%$PG_VERSION%" \
   -e "s%@PRGNAM@%$PRGNAM%" \
   $CWD/$PRGNAM.logrotate > $PKG/etc/logrotate.d/$PRGNAM.new
 
+# Socket directory
+mkdir -p $PKG/var/run/postgresql
+chown postgres:postgres $PKG/var/run/postgresql
+
 mkdir -p $PKG/var/log/setup
 sed -e "s%@UID@%$PG_UID%" \
   -e "s%@GID@%$PG_GID%" \
