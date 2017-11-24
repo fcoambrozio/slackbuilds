@@ -26,7 +26,7 @@
 # Modified by Francisco Ambrozio
 
 PRGNAM=postgresql
-VERSION=${VERSION:-9.6.5}
+VERSION=${VERSION:-9.6.6}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 
