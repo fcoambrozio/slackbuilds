@@ -1,8 +1,2 @@
-#!/bin/sh
-
-if [ -z $VERSION ]; then
-    echo 'Error: missing variable $VERSION'
-    exit 1
-fi
-
-lftpget http://us.php.net/distributions/php-$VERSION.tar.xz
+lftpget http://us.php.net/distributions/php-7.2.2.tar.xz.asc
+lftpget http://us.php.net/distributions/php-7.2.2.tar.xz
