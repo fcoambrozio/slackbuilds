@@ -30,7 +30,7 @@
 # Modified by SlackBuilds.org
 
 PRGNAM=yakuake
-VERSION=${VERSION:-3.0.4}
+VERSION=${VERSION:-3.0.5}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -85,6 +85,9 @@ cmake \
 
 make
 make install DESTDIR=$PKG
+
+# Don't ship .la files:
+rm -f $PKG/{,usr/}lib${LIBDIRSUFFIX}/*.la
 
 find $PKG | xargs file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
