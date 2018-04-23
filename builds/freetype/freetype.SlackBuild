@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2005-2017  Patrick J. Volkerding, Sebeka, MN, USA
+# Copyright 2005-2018  Patrick J. Volkerding, Sebeka, MN, USA
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -20,13 +20,14 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+cd $(dirname $0) ; CWD=$(pwd)
 
 PKGNAM=freetype
-VERSION=${VERSION:-$(echo $PKGNAM-*.tar.xz | cut -d - -f 2 | rev | cut -f 3- -d . | rev)}
+VERSION=${VERSION:-$(echo $PKGNAM-*.tar.?z | cut -d - -f 2 | rev | cut -f 3- -d . | rev)}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 
-NUMJOBS=${NUMJOBS:-" -j5 "}
+NUMJOBS=${NUMJOBS:-" -j7 "}
 
 # Automatically determine the architecture we're building on:
 if [ -z "$ARCH" ]; then
@@ -36,6 +37,14 @@ if [ -z "$ARCH" ]; then
     # Unless $ARCH is already set, use uname -m for all other archs:
        *) export ARCH=$( uname -m ) ;;
   esac
+fi
+
+# If the variable PRINT_PACKAGE_NAME is set, then this script will report what
+# the name of the created package would be, and then exit. This information
+# could be useful to other scripts.
+if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
+  echo "$PKGNAM-$VERSION-$ARCH-$BUILD.txz"
+  exit 0
 fi
 
 if [ "$ARCH" = "i586" ]; then
@@ -52,7 +61,6 @@ else
   LIBDIRSUFFIX=""
 fi
 
-CWD=$(pwd)
 TMP=${TMP:-/tmp}
 PKG=$TMP/package-freetype
 
@@ -60,7 +68,7 @@ rm -rf $PKG
 mkdir -p $TMP $PKG
 cd $TMP
 rm -rf freetype-$VERSION
-tar xvf $CWD/freetype-$VERSION.tar.xz || exit 1
+tar xvf $CWD/freetype-$VERSION.tar.?z || exit 1
 cd freetype-$VERSION
 
 chown -R root:root .
@@ -92,6 +100,9 @@ chown -R root:root .
 CFLAGS="$SLKCFLAGS" make setup CFG="--prefix=/usr --libdir=/usr/lib${LIBDIRSUFFIX} --build=$ARCH-slackware-linux"
 make $NUMJOBS || make || exit 1
 make install DESTDIR=$PKG || exit 1
+
+# Don't ship .la files:
+rm -f $PKG/{,usr/}lib${LIBDIRSUFFIX}/*.la
 
 # Install runtime profile configuration scripts, used to set hinting defaults:
 mkdir -p $PKG/etc/profile.d
