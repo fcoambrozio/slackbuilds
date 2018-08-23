@@ -26,7 +26,7 @@
 
 SRCNAM=php
 PRGNAM=php-pgsql
-VERSION=${VERSION:-7.2.5}
+VERSION=${VERSION:-7.2.9}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -63,7 +63,7 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $SRCNAM-$VERSION
-tar xvf $CWD/../php/$SRCNAM-$VERSION.tar.xz
+tar xvf $CWD/$SRCNAM-$VERSION.tar.xz
 cd $SRCNAM-$VERSION
 chown -R root:root .
 find -L . \
