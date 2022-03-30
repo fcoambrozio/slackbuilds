@@ -28,7 +28,7 @@ cd $(dirname $0) ; CWD=$(pwd)
 PRGNAM=containerd
 VERSION=${VERSION:-1.6.2}
 GITHASH=${GITHASH:-de8046a5501db9e0e478e1c10cbcfb21af4c6b2d}
-BUILD=${BUILD:-1}
+BUILD=${BUILD:-2}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
 
@@ -82,7 +82,7 @@ make \
   BUILDTAGS="seccomp" \
   GIT_COMMIT=$GITHASH \
   GOPATH=$TMP/$PRGNAM-$VERSION/build
-make install DESTDIR=$PKG/usr
+make install PREFIX=/usr DESTDIR=$PKG
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a README.md LICENSE NOTICE $PKG/usr/doc/$PRGNAM-$VERSION
