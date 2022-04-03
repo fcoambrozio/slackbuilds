@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.
+# Line up the first '|' above the ':' following the base package name, and
+# the '|' on the right side marks the last column you can put a character in.
+# You must make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':' except on otherwise blank lines.
+
+               |-----handy-ruler------------------------------------------------------|
+python-libevdev: python-libevdev (Python wrappers for the libevdev library)
+python-libevdev:
+python-libevdev: python-libevdev is a Python wrapper around the libevdev C library. 
+python-libevdev: It provides a Pythonic API to read events from the Linux kernel's 
+python-libevdev: input device nodes and to read and/or modify the device's state 
+python-libevdev: and capabilities.
+python-libevdev:
+python-libevdev: https://gitlab.freedesktop.org/libevdev/python-libevdev
+python-libevdev:
+python-libevdev:
+python-libevdev:

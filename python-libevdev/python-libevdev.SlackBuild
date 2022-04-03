@@ -1,9 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
-# Slackware build script for containerd
+# Slackware build script for python-libevdev
 
-# Copyright 2016 Asaf Ohayon <asaf@sysbind.co.il>
-# Copyright 2017-2021 Audrius Kažukauskas <audrius@neutrino.lt>
+# Copyright 2021 Francisco Ambrozio - Marília, SP BRA
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -17,20 +16,16 @@
 #  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO
 #  EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
 #  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-#  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+#  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; 
 #  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
 #  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-cd $(dirname $0) ; CWD=$(pwd)
-
-PRGNAM=containerd
-VERSION=${VERSION:-1.6.2}
-GITHASH=${GITHASH:-de8046a5501db9e0e478e1c10cbcfb21af4c6b2d}
-BUILD=${BUILD:-2}
+PRGNAM=python-libevdev
+VERSION=${VERSION:-0.9}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
-PKGTYPE=${PKGTYPE:-tgz}
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
@@ -40,14 +35,7 @@ if [ -z "$ARCH" ]; then
   esac
 fi
 
-# If the variable PRINT_PACKAGE_NAME is set, then this script will report what
-# the name of the created package would be, and then exit. This information
-# could be useful to other scripts.
-if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
-  echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
-  exit 0
-fi
-
+CWD=$(pwd)
 TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
 OUTPUT=${OUTPUT:-/tmp}
@@ -58,7 +46,7 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
+tar xvf $CWD/$PRGNAM-$VERSION.tar.bz2
 cd $PRGNAM-$VERSION
 chown -R root:root .
 find -L . \
@@ -67,29 +55,18 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-sed -i \
-  -e "s/git describe --match.*$/echo ${VERSION})/" \
-  -e "s/git rev-parse HEAD.*$/echo ${GITHASH})/" \
-  -e 's/-s -w //' \
-  Makefile
+python setup.py install --root=$PKG
+python3 setup.py install --root=$PKG
 
-mkdir build
-mv vendor build/src
-ln -sf $TMP/$PRGNAM-$VERSION build/src/github.com/containerd/containerd
-
-GO111MODULE=auto \
-make \
-  BUILDTAGS="seccomp" \
-  GIT_COMMIT=$GITHASH \
-  GOPATH=$TMP/$PRGNAM-$VERSION/build
-make install PREFIX=/usr DESTDIR=$PKG
+find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
+  | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cp -a README.md LICENSE NOTICE $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a COPYING README.md $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
-/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
