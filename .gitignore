@@ -22,3 +22,6 @@
 .directory
 *.phar
 *.crate
+# virtualbox uses these
+*.pdf
+*.iso
