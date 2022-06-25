@@ -75,6 +75,9 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
+# From https://github.com/archlinux/svntogit-community/blob/packages/virtualbox/trunk/020-linux518.patch
+patch -p0 -i $CWD/linux518.patch
+
 make KERN_DIR=${KERNELPATH}
 
 mkdir -p $PKG/lib/modules/$KERNEL/misc

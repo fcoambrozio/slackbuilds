@@ -25,3 +25,4 @@
 # virtualbox uses these
 *.pdf
 *.iso
+*.vbox-extpack
