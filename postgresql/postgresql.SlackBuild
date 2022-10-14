@@ -29,12 +29,12 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=postgresql
-VERSION=${VERSION:-14.5}
+VERSION=${VERSION:-15.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 PKGTYPE=${PKGTYPE:-tgz}
 
-PG_VERSION=${PG_VERSION:-14}
+PG_VERSION=${PG_VERSION:-15}
 PG_PORT=${PG_PORT:-5432}
 PG_UID=${PG_UID:-209}
 PG_GID=${PG_GID:-209}
@@ -149,7 +149,7 @@ make install-docs DESTDIR=$PKG
 )
 
 # Some interesting additional modules:
-#   https://www.postgresql.org/docs/14/contrib.html
+#   https://www.postgresql.org/docs/current/contrib.html
 
 PG_EXTENSIONS="amcheck \
   auth_delay \
