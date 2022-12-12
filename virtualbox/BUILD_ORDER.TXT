@@ -1,0 +1,5 @@
+acpica
+gsoap
+virtualbox-kernel
+virtualbox
+virtualbox-extension-pack
