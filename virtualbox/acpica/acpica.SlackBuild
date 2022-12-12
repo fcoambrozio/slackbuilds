@@ -22,13 +22,15 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+# Modified by Francisco Ambrozio
+
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=acpica
 VERSION=${VERSION:-20220331}
 BUILD=${BUILD:-1}
-TAG=${TAG:-_SBo}
-PKGTYPE=${PKGTYPE:-tgz}
+TAG=${TAG:-_fco}
+PKGTYPE=${PKGTYPE:-txz}
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
