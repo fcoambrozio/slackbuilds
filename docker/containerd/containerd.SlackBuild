@@ -23,14 +23,16 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+# Modified by Francisco Ambrozio
+
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=containerd
 VERSION=${VERSION:-1.6.9}
 GITHASH=${GITHASH:-1c90a442489720eec95342e1789ee8a5e1b9536f}
 BUILD=${BUILD:-1}
-TAG=${TAG:-_SBo}
-PKGTYPE=${PKGTYPE:-tgz}
+TAG=${TAG:-_fco}
+PKGTYPE=${PKGTYPE:-txz}
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
