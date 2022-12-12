@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Slackware build script for gst-plugins-ugly
+# Slackware build script for x264
 
-# Copyright 2013-2021  Robby Workman, Tuscaloosa, Alabama, USA
+# Copyright 2010-2021 Heinz Wiesinger, Amsterdam, The Netherlands
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -11,7 +11,7 @@
 # 1. Redistributions of this script must retain the above copyright
 #    notice, this list of conditions and the following disclaimer.
 #
-#  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
+#  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
 #  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
 #  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO
 #  EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
@@ -22,20 +22,23 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+# Originally written by core (eroc@linuxmail.org)
+# Modified by Francisco Ambrozio
+
 cd $(dirname $0) ; CWD=$(pwd)
 
-PRGNAM=gst-plugins-ugly
-VERSION=${VERSION:-1.20.4}
+PRGNAM=x264
+VERSION=${VERSION:-git_20220602_baee400f}
 BUILD=${BUILD:-1}
-TAG=${TAG:-_SBo}
-PKGTYPE=${PKGTYPE:-tgz}
+TAG=${TAG:-_fco}
+PKGTYPE=${PKGTYPE:-txz}
 
 if [ -z "$ARCH" ]; then
-  case "$( uname -m )" in
-    i?86) ARCH=i586 ;;
-    arm*) ARCH=arm ;;
-       *) ARCH=$( uname -m ) ;;
-  esac
+ case "$( uname -m )" in
+   i?86) ARCH=i586 ;;
+   arm*) ARCH=arm ;;
+      *) ARCH=$( uname -m ) ;;
+ esac
 fi
 
 # If the variable PRINT_PACKAGE_NAME is set, then this script will report what
@@ -70,7 +73,7 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-$VERSION.tar.xz
+tar xvf $CWD/$PRGNAM-$VERSION.tar.lz
 cd $PRGNAM-$VERSION
 chown -R root:root .
 find -L . \
@@ -79,33 +82,25 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-mkdir build
-cd build
-  CFLAGS="$SLKCFLAGS" \
-  CXXFLAGS="$SLKCFLAGS" \
-  meson .. \
-    --buildtype=release \
-    --infodir=/usr/info \
-    --libdir=/usr/lib${LIBDIRSUFFIX} \
-    --localstatedir=/var \
-    --mandir=/usr/man \
-    --prefix=/usr \
-    --sysconfdir=/etc
-  "${NINJA:=ninja}"
-  DESTDIR=$PKG $NINJA install
-cd ..
+CFLAGS="$SLKCFLAGS" \
+CXXFLAGS="$SLKCFLAGS" \
+./configure \
+  --prefix=/usr \
+  --libdir=/usr/lib${LIBDIRSUFFIX} \
+  --enable-shared \
+  --enable-pic \
+  --enable-lto \
+  --disable-avs
 
-find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | \
-  grep ELF | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+make
+make install DESTDIR=$PKG
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cp -a \
-  AUTHORS COPYING* ChangeLog NEWS RE* \
-  $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a AUTHORS COPYING doc/*.txt $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
-/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
+/sbin/makepkg -l y -c n -p $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
