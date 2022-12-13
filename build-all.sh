@@ -31,9 +31,9 @@ do
         exit 1
     fi
 
-    cd -
-
     source /etc/profile
+
+    cd -
 done
 
 
@@ -54,6 +54,8 @@ do
     fi
 
     source /etc/profile
+
+    cd -
 done
 
 PASS3=" \
@@ -81,9 +83,9 @@ do
         exit 1
     fi
 
-    cd -
-
     source /etc/profile
+
+    cd -
 done
 
 cd virtualbox || {
