@@ -175,6 +175,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --with-pcre \
   --with-pcre-jit \
   --with-libatomic \
+  --with-threads \
   $GEOIP_MOD \
   $GPERF_MOD \
   $ADD_MODULE
