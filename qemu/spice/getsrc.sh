@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# get source for spice-protocol - https://www.spice-space.org
+# get source for spice - https://www.spice-space.org
 #
 
 VERSION="0.15.1"
