@@ -87,7 +87,7 @@ find -L . \
 patch -p1 < $CWD/fix-python-destdir-usage.diff
 
 make clean
-make CFLAGS="$SLKCFLAGS -w -Wl,--allow-multiple-definition" PREFIX=/usr LIBDIR=/usr/lib${LIBDIRSUFFIX}
+MAKEFLAGS="" make CFLAGS="$SLKCFLAGS -w -Wl,--allow-multiple-definition" PREFIX=/usr LIBDIR=/usr/lib${LIBDIRSUFFIX}
 make install PREFIX=/usr LIBDIR=/usr/lib${LIBDIRSUFFIX} DESTDIR=$PKG
 
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \

@@ -67,8 +67,7 @@ find -L . \
 cp $CWD/snappy.pc.in .
 sed -i "s#\${prefix}/lib#\${prefix}/lib$LIBDIRSUFFIX#g" snappy.pc.in
 
-for patch in $CWD/patches/*
-do
+for patch in $CWD/patches/* ; do
     patch -p1 < $patch
 done
 
