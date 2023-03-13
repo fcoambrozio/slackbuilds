@@ -3,8 +3,8 @@
 # get source for glusterfs
 #
 
-MJRVER="10"
-VERSION="$MJRVER.3"
+MJRVER="11"
+VERSION="$MJRVER.0"
 DOWNLOAD="https://download.gluster.org/pub/gluster/glusterfs/$MJRVER/$VERSION/glusterfs-$VERSION.tar.gz"
 
 wget -c $DOWNLOAD
