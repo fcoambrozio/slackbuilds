@@ -28,8 +28,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=docker
-VERSION=${VERSION:-23.0.2}
-GITHASH=${GITHASH:-219f21b}
+VERSION=${VERSION:-23.0.4}
+GITHASH=${GITHASH:-cbce331}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
