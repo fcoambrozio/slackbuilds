@@ -103,12 +103,6 @@ MODE="755"
 # We don't want an init-script building kernel modules.
 zcat $CWD/vboxdrv.sh-setup.diff.gz | patch -d src/VBox/Installer/linux --verbose || exit 1
 
-# Fix wrong path to rdesktop-vrdp-keymaps
-zcat $CWD/006-rdesktop-vrdp-keymap-path.patch.gz | patch -p1 --verbose || exit 1
-
-# https://build.opensuse.org/package/view_file/Virtualization/virtualbox/vb-6.1.16-modal-dialog-parent.patch?expand=1
-patch -p1 -i $CWD/vb-6.1.16-modal-dialog-parent.patch
-
 # Skip python2 detection
 sed -i 's|python2.7 python2.6 ||' ./configure
 

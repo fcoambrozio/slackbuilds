@@ -90,7 +90,7 @@ find . \
   -exec chmod 644 {} \+
 
 # Build shared libraries (patch from gentoo)
-zcat $CWD/gsoap-2.8.91-shared_libs.patch.gz | patch -p1 --verbose || exit 1
+zcat $CWD/gsoap-2.8.126-shared_libs.patch.gz | patch -p1 --verbose || exit 1
 
 autoreconf -vif
 

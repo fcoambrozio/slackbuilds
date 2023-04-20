@@ -3,7 +3,7 @@
 # get source for virtualbox-extension-pack
 #
 
-VERSION="6.1.42"
+VERSION="7.0.8"
 DOWNLOAD="http://download.virtualbox.org/virtualbox/$VERSION/Oracle_VM_VirtualBox_Extension_Pack-$VERSION.vbox-extpack"
 
 wget -c $DOWNLOAD
