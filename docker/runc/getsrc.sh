@@ -3,7 +3,7 @@
 # get source for runc
 #
 
-VERSION="1.1.6"
+VERSION="1.1.7"
 DOWNLOAD="https://github.com/opencontainers/runc/archive/v$VERSION/runc-$VERSION.tar.gz"
 
 wget -c $DOWNLOAD
