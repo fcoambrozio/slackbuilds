@@ -27,7 +27,7 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PKGNAM=virtualbox
 VERSION=${VERSION:-$(echo VirtualBox-*.tar.?z | rev | cut -f 3- -d . | cut -f 1 -d - | rev)}
-BUILD=${BUILD:-1}
+BUILD=${BUILD:-2}
 TAG=${TAG:-_fco}
 
 # Automatically determine the architecture we're building on:
@@ -102,6 +102,9 @@ MODE="755"
 
 # We don't want an init-script building kernel modules.
 zcat $CWD/vboxdrv.sh-setup.diff.gz | patch -d src/VBox/Installer/linux --verbose || exit 1
+
+# https://gitweb.gentoo.org/repo/gentoo.git/plain/app-emulation/virtualbox/files/virtualbox-7.0.6-gcc-13.patch
+patch -p1 -i $CWD/virtualbox-7.0.6-gcc-13.patch || exit 1
 
 # Skip python2 detection
 sed -i 's|python2.7 python2.6 ||' ./configure

@@ -31,7 +31,7 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=nginx
 VERSION=${VERSION:-1.24.0}
-BUILD=${BUILD:-1}
+BUILD=${BUILD:-2}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 
@@ -119,11 +119,11 @@ else
 fi
 
 # Enable gperftools support.
-if [ "${GPERF:-no}" == "yes" ]; then
-  GPERF_MOD="--with-google_perftools_module"
-else
-  GPERF_MOD=""
-fi
+#if [ "${GPERF:-no}" == "yes" ]; then
+#  GPERF_MOD="--with-google_perftools_module"
+#else
+#  GPERF_MOD=""
+#fi
 
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
@@ -176,8 +176,8 @@ CXXFLAGS="$SLKCFLAGS" \
   --with-pcre-jit \
   --with-libatomic \
   --with-threads \
+  --with-google_perftools_module \
   $GEOIP_MOD \
-  $GPERF_MOD \
   $ADD_MODULE
 
 make
