@@ -32,7 +32,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=qemu
-VERSION=${VERSION:-7.2.1}
+VERSION=${VERSION:-8.0.0}
 SRCVER=$(echo $VERSION | tr _ - )
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
@@ -131,7 +131,6 @@ CXXFLAGS="$SLKCFLAGS" \
   --disable-debug-info \
   --enable-virtfs \
   --enable-sdl \
-  --enable-jemalloc \
   --enable-nettle \
   --${uring}able-linux-io-uring \
   --audio-drv-list=${AUDIODRIVERS} \
