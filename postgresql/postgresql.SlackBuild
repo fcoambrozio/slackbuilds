@@ -29,7 +29,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=postgresql
-VERSION=${VERSION:-15.2}
+VERSION=${VERSION:-15.3}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -65,11 +65,11 @@ OUTPUT=${OUTPUT:-/tmp}
 # Other popular choice is 26/26
 if ! grep ^postgres: /etc/group 2>&1 > /dev/null; then
   echo "  You must have a postgres group to run this script."
-  echo "    # groupadd -g $PG_GID postgres"
+  echo "    # groupadd -r -g $PG_GID postgres"
   exit 1
 elif ! grep ^postgres: /etc/passwd 2>&1 > /dev/null; then
   echo "  You must have a postgres user to run this script."
-  echo "    # useradd -u $PG_UID -g $PG_GID -d /var/lib/pgsql postgres"
+  echo "    # useradd -r -u $PG_UID -g $PG_GID -d /var/lib/pgsql postgres"
   exit 1
 fi
 
