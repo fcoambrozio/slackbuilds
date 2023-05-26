@@ -23,26 +23,22 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Changelog
-# Slackware-15.0 
-# 7.0   03-Feb-2022    version update and test on 15.0
-
 # Modified by Francisco Ambrozio
 
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=qemu
 VERSION=${VERSION:-8.0.0}
-SRCVER=$(echo $VERSION | tr _ - )
-BUILD=${BUILD:-1}
+BUILD=${BUILD:-2}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 
-KVMGROUP=${KVMGROUP:-users}
+KVMGROUP=${KVMGROUP:-kvm}
 TARGETS=${TARGETS:-some}
 VNC_ENABLE=${VNC_ENABLE:-yes}
 AUDIODRIVERS=${AUDIODRIVERS:-pa,alsa,oss,sdl}
-BRIDGE_HELPER_SETUID=${BRIDGE_HELPER_SETUID:-no}
+BRIDGE_HELPER_SETUID=${BRIDGE_HELPER_SETUID:-yes}
+SLIRP=${SLIRP:-=yes}
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
@@ -89,9 +85,9 @@ set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-rm -rf $PRGNAM-$SRCVER
-tar xvf $CWD/$PRGNAM-$SRCVER.tar.xz
-cd $PRGNAM-$SRCVER
+rm -rf $PRGNAM-$VERSION
+tar xvf $CWD/$PRGNAM-$VERSION.tar.xz
+cd $PRGNAM-$VERSION
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
@@ -117,6 +113,13 @@ else
   with_vnc="--disable-vnc"
 fi
 
+# To enable user mode networking use SLIRP=yes
+if [ "$SLIRP" = "yes" ]; then
+  with_slirp="--enable-slirp"
+else
+  with_slirp=""
+fi
+
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
 ./configure \
@@ -134,6 +137,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --enable-nettle \
   --${uring}able-linux-io-uring \
   --audio-drv-list=${AUDIODRIVERS} \
+  $with_slirp \
   $with_vnc \
   $targets
 
