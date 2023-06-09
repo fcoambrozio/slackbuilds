@@ -28,8 +28,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=qemu
-VERSION=${VERSION:-8.0.0}
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-8.0.2}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 
