@@ -28,7 +28,7 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=glusterfs
 VERSION=${VERSION:-11.0}
-BUILD=${BUILD:-2}
+BUILD=${BUILD:-3}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 
@@ -80,6 +80,9 @@ find -L . \
   -o -perm 511 \) -exec chmod 755 {} \; -o \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+
+# Fix definition conflict with userspace-rcu
+> contrib/userspace-rcu/rculist-extra.h
 
 ./autogen.sh
 CFLAGS="$SLKCFLAGS -w -Wl,--allow-multiple-definition" \
