@@ -30,8 +30,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=nginx
-VERSION=${VERSION:-1.24.0}
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-1.25.1}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 
@@ -117,13 +117,6 @@ if [ "$DYNAMIC" == "yes" ]; then
 else
   ADD_MODULE="--add-module=$ADDMODULE"
 fi
-
-# Enable gperftools support.
-#if [ "${GPERF:-no}" == "yes" ]; then
-#  GPERF_MOD="--with-google_perftools_module"
-#else
-#  GPERF_MOD=""
-#fi
 
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
