@@ -11,7 +11,7 @@ esac
 
 
 if [ "$ARCH" = "x86_64" ]; then
-    DOWNLOAD="https://repository-origin.spotify.com/pool/non-free/s/spotify-client/spotify-client_1.2.11.916.geb595a67_amd64.deb"
+    DOWNLOAD="http://repository.spotify.com/pool/non-free/s/spotify-client/spotify-client_1.2.13.661.ga588f749_amd64.deb"
 else
     DOWNLOAD="http://repository.spotify.com/pool/non-free/s/spotify-client/spotify-client_1.0.72.117.g6bd7cc73-35_i386.deb"
 fi
