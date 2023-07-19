@@ -1,0 +1,3 @@
+This package sets the requiered udev rules to the system
+in order to use fastboot and adb on android device
+with proper permissions.
