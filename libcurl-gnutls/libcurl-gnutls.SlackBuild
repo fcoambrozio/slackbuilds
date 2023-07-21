@@ -30,14 +30,16 @@
 # s/PKGNAM/SRCNAM/g (sorry, PRGNAM and PKGNAM look too similar in too
 # many fonts).
 
+# Modified by Francisco Ambrozio
+
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=libcurl-gnutls
 SRCNAM=curl
-VERSION=${VERSION:-8.1.2}
+VERSION=${VERSION:-8.2.0}
 BUILD=${BUILD:-1}
-TAG=${TAG:-_SBo}
-PKGTYPE=${PKGTYPE:-tgz}
+TAG=${TAG:-_fco}
+PKGTYPE=${PKGTYPE:-txz}
 
 TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
