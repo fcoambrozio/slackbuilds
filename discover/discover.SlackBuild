@@ -45,7 +45,7 @@
 # -----------------------------------------------------------------------------
 
 PRGNAM=discover
-VERCUR=${VERCUR:-5.27.6}
+VERCUR=${VERCUR:-5.27.7}
 VER150=${VER150:-5.23.5}
 BUILD=${BUILD:-1}
 NUMJOBS=${NUMJOBS:-" -j$(nproc) "}
