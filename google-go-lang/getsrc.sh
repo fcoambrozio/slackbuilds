@@ -3,7 +3,7 @@
 # get source for google-go-lang
 #
 
-VERSION="1.20.6"
+VERSION="1.20.7"
 GOBOOTSTRAPSRC="https://dl.google.com/go/go1.4-bootstrap-20171003.tar.gz"
 DOWNLOAD="https://go.dev/dl/go$VERSION.src.tar.gz"
 
