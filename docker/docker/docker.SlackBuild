@@ -28,8 +28,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=docker
-VERSION=${VERSION:-24.0.5}
-GITHASH=${GITHASH:-a61e2b4}
+VERSION=${VERSION:-24.0.6}
+GITHASH=${GITHASH:-1a79695}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -75,12 +75,14 @@ mkdir build
 mv vendor build/src
 ln -sf $TMP/$SRCNAM-$VERSION build/src/github.com/docker/docker
 
+patch -p0 -i $CWD/build-with-mod-readonly.diff
+
 GO111MODULE=auto \
-DOCKER_GITCOMMIT=$GITHASH \
-DOCKER_BUILDTAGS="seccomp" \
-VERSION=$VERSION \
-GOPATH=$TMP/$SRCNAM-$VERSION/build \
-./hack/make.sh dynbinary
+  DOCKER_GITCOMMIT=$GITHASH \
+  DOCKER_BUILDTAGS="seccomp" \
+  VERSION=$VERSION \
+  GOPATH=$TMP/$SRCNAM-$VERSION/build \
+  ./hack/make.sh dynbinary
 
 install -D -m 0755 bundles/dynbinary-daemon/dockerd $PKG/usr/bin/dockerd
 install -D -m 0755 bundles/dynbinary-daemon/docker-proxy $PKG/usr/bin/docker-proxy
