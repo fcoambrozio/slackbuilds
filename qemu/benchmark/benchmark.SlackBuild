@@ -2,7 +2,7 @@
 
 # Slackware build script for benchmark
 
-# Copyright 2022 Francisco Ambrozio - Marília, SP BRA
+# Copyright 2022, 2023 Francisco Ambrozio - Marília, SP BRA
 #
 # All rights reserved.
 #
@@ -26,7 +26,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=benchmark
-VERSION=${VERSION:-1.8.2}
+VERSION=${VERSION:-1.8.3}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
