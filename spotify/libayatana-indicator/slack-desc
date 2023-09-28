@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.
+# Line up the first '|' above the ':' following the base package name, and
+# the '|' on the right side marks the last column you can put a character in.
+# You must make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':' except on otherwise blank lines.
+
+                    |-----handy-ruler------------------------------------------------------|
+libayatana-indicator: libayatana-indicator (Ayatana Indicators Shared Library)
+libayatana-indicator:
+libayatana-indicator: The Ayatana Indicators project is the continuation of Application
+libayatana-indicator: Indicators and System Indicators, two technologies developed by
+libayatana-indicator: Canonical Ltd. for the Unity7 desktop.
+libayatana-indicator:
+libayatana-indicator: Application Indicators are a GTK implementation of the
+libayatana-indicator: StatusNotifierItem Specification (SNI) that was originally submitted
+libayatana-indicator: to freedesktop.org by KDE.
+libayatana-indicator:
+libayatana-indicator: Homepage: https://github.com/AyatanaIndicators/libayatana-indicator

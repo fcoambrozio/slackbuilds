@@ -3,7 +3,7 @@
 # get source for libcurl-gnutls - https://curl.haxx.se
 #
 
-VERSION="8.2.1"
+VERSION="8.3.0"
 DOWNLOAD="https://curl.se/download/curl-$VERSION.tar.xz"
 
 wget -c $DOWNLOAD

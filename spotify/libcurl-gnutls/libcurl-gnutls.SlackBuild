@@ -36,7 +36,7 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=libcurl-gnutls
 SRCNAM=curl
-VERSION=${VERSION:-8.2.1}
+VERSION=${VERSION:-8.3.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -96,22 +96,14 @@ CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
 ./configure \
   --prefix=/usr \
-  --libdir=/usr/lib$LIBDIRSUFFIX \
-  --sysconfdir=/etc \
-  --localstatedir=/var \
+  --libdir=/usr/lib${LIBDIRSUFFIX} \
   --mandir=/usr/man \
-  --infodir=/usr/info \
-  --docdir=/usr/doc/$PRGNAM-$VERSION \
+  --with-libssh2 \
+  --with-gssapi \
+  --enable-ares \
   --enable-static=no \
-  --enable-shared=yes \
-  --disable-manual \
-  --without-libssh2 \
-  --without-gssapi \
   --without-ca-bundle \
-  --with-ca-path=/etc/ssl/certs \
-  --with-gnutls="/usr" \
-  --host=$ARCH-slackware-linux \
-  --build=$ARCH-slackware-linux
+  --with-gnutls="/usr"
 
 make -C lib
 make -C lib DESTDIR=$PKG install
