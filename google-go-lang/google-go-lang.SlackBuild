@@ -31,7 +31,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=google-go-lang
-VERSION=${VERSION:-1.21.0}
+VERSION=${VERSION:-1.21.1}
+BOOTSTRAP_VERSION=${BOOTSTRAP_VERSION:-1.19.13}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -57,15 +58,15 @@ elif [ "$ARCH" = "x86_64" ]; then
 elif [ "$ARCH" = "arm" ]; then
   LIBDIRSUFFIX=""
   GOARCH="arm"
-  export GOARM="6" # can be '5' as well, to use soft float instead of hardware
+  export GOARM="7" # can be '5' as well, to use soft float instead of hardware
+elif [ "$ARCH" = "aarch64" ]; then
+  LIBDIRSUFFIX="64"
+  GOARCH="arm64"
 else
   LIBDIRSUFFIX=""
   GOARCH=386
 fi
 
-# If the variable PRINT_PACKAGE_NAME is set, then this script will report what
-# the name of the created package would be, and then exit. This information
-# could be useful to other scripts.
 if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
   exit 0
@@ -78,7 +79,65 @@ OUTPUT=${OUTPUT:-/tmp}
 set -e
 
 rm -rf $PKG
-mkdir -p $TMP $PKG/usr/lib${LIBDIRSUFFIX}/go${VERSION} $OUTPUT
+mkdir -p $TMP $PKG/usr/lib${LIBDIRSUFFIX}/go${BOOTSTRAP_VERSION} $OUTPUT
+cd $PKG/usr/lib${LIBDIRSUFFIX}/go${BOOTSTRAP_VERSION}
+tar xvf $CWD/go${BOOTSTRAP_VERSION}.src.tar.gz
+cd go
+chown -R root:root .
+find -L . \
+ \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
+ -o -perm 511 \) -exec chmod 755 {} \; -o \
+ \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
+ -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+
+# as of >= go1.5, the cross-compiler does not need to be bootstrap, so the
+# compiler need only be compiled for the host OS, which it detects
+unset GOBIN GOPATH GOOS GOARCH
+
+# Not sure why, but this causes run.bash to fail --rworkman
+unset BASH_ENV
+
+# gcc 5+ is go1.4 API, so we'll bootstrap with it
+export GOROOT_BOOTSTRAP="/usr"
+
+# Default GOROOT is the parent directory of all.bash,
+# which is the current directory we're in.
+# Defining it here means we can use it below when building
+# shared libraries
+GOROOT="$(pwd)"
+export GOROOT
+
+# The value of GOROOT once the package is installed
+export GOROOT_FINAL="/usr/lib${LIBDIRSUFFIX}/go${BOOTSTRAP_VERSION}/go"
+
+case "$ARCH" in
+  arm|i?86) export GOMAXPROCS=1 ;;
+esac
+
+cd src
+
+if [[ "${RUN_TEST}" = "true" ]] ; then
+  LC_ALL=C \
+    ./all.bash
+else
+  LC_ALL=C \
+    ./make.bash
+fi
+
+# As of go1.5, golang supports shared libraries, so generate them for use.
+$GOROOT/bin/go install -buildmode=shared std
+
+cd ..
+
+# remove Go build cache
+rm -rf pkg/obj/go-build/*
+
+# remove the doc Makefile
+rm -f doc/Makefile
+
+mkdir -p $PKG$GOROOT_FINAL
+
+mkdir -p $PKG/usr/lib${LIBDIRSUFFIX}/go${VERSION} $OUTPUT
 cd $PKG/usr/lib${LIBDIRSUFFIX}/go${VERSION}
 tar xvf $CWD/go${VERSION}.src.tar.gz
 cd go
@@ -96,39 +155,31 @@ unset GOBIN GOPATH GOOS GOARCH
 # Not sure why, but this causes run.bash to fail --rworkman
 unset BASH_ENV
 
-if [ "$ARCH" = "i586" ]; then
-  # issue with gccgo+go1.16 on x86
-  # https://www.linuxquestions.org/questions/showthread.php?p=6253507
-  # hopefully this is not needed forever...
-  tar -C $TMP -xf $CWD/go1.4-bootstrap-20171003.tar.gz
-  pushd $TMP/go
-  export GOROOT=$TMP/go
-  cd ./src
-  ./make.bash
-  popd
-  export GOROOT_BOOTSTRAP="$TMP/go"
-else
-  # gcc 5+ is go1.4 API, so we'll bootstrap with it
-  export GOROOT_BOOTSTRAP="/usr"
-fi
+# gcc 5+ is go1.4 API, so we'll bootstrap with it
+export GOROOT_BOOTSTRAP="$PKG/usr/lib${LIBDIRSUFFIX}/go${BOOTSTRAP_VERSION}/go"
 
 # Default GOROOT is the parent directory of all.bash,
 # which is the current directory we're in.
 # Defining it here means we can use it below when building
 # shared libraries
-export GOROOT="$(pwd)"
+GOROOT="$(pwd)"
+export GOROOT
 
 # The value of GOROOT once the package is installed
 export GOROOT_FINAL="/usr/lib${LIBDIRSUFFIX}/go${VERSION}/go"
 
+case "$ARCH" in
+  arm|i?86) export GOMAXPROCS=1 ;;
+esac
+
 cd src
 
-if [ "x${RUN_TEST}" = "xtrue" ] ; then
-	LC_ALL=C \
-	./all.bash
+if [[ "${RUN_TEST}" = "true" ]] ; then
+  LC_ALL=C \
+    ./all.bash
 else
-	LC_ALL=C \
-	./make.bash
+  LC_ALL=C \
+    ./make.bash
 fi
 
 # As of go1.5, golang supports shared libraries, so generate them for use.
@@ -143,6 +194,9 @@ rm -rf pkg/obj/go-build/*
 rm -f doc/Makefile
 
 mkdir -p $PKG$GOROOT_FINAL
+
+# remove bootstrap
+rm -rf $PKG/usr/lib$LIBDIRSUFFIX/go$BOOTSTRAP_VERSION
 
 # Put the profile scripts for setting PATH and env variables
 mkdir -p $PKG/etc/profile.d
@@ -162,7 +216,7 @@ chmod 0755 $PKG/etc/profile.d/go.sh
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a \
-  CONTRIBUTING.md LICENSE PATENTS README.md VERSION SECURITY.md \
+  CONTRIBUTING.md LICENSE PATENTS README.md SECURITY.md VERSION \
   $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
