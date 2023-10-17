@@ -28,8 +28,8 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=vscode-bin
 SRCNAM=code-stable
-VERSION=${VERSION:-1.83.0}
-SRCVER=1696349520
+VERSION=${VERSION:-1.83.1}
+SRCVER=1696981541
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -79,8 +79,8 @@ mkdir -p $PKG/usr/share/icons/hicolor/1024x1024/apps
 cp $PKG/opt/vscode-bin/resources/app/resources/linux/code.png $PKG/usr/share/icons/hicolor/1024x1024/apps
 
 (
-cd $PKG/usr/bin
-ln -s /opt/vscode-bin/bin/code .
+ cd $PKG/usr/bin
+ ln -s /opt/vscode-bin/bin/code .
 )
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
