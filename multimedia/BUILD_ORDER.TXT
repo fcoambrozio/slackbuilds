@@ -1,0 +1,17 @@
+SDL_gfx
+aom
+faac
+faad2
+libdv
+libmpeg2
+rtmpdump
+schroedinger
+srt
+twolame
+x264
+x265
+xvidcore
+libquicktime
+mjpegtools
+gst-plugins-ugly
+gst-plugins-bad-nonfree
