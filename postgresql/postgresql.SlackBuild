@@ -29,7 +29,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=postgresql
-VERSION=${VERSION:-16.0}
+VERSION=${VERSION:-16.1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -108,8 +108,8 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-patch -p1 -i $CWD/v2-0001-jit-Support-opaque-pointers-in-LLVM-16.patch
-patch -p1 -i $CWD/v2-0002-jit-Changes-for-LLVM-17.patch
+#patch -p1 -i $CWD/v2-0001-jit-Support-opaque-pointers-in-LLVM-16.patch
+#patch -p1 -i $CWD/v2-0002-jit-Changes-for-LLVM-17.patch
 
 CFLAGS="$SLKCFLAGS" \
 ./configure \
