@@ -1,0 +1,13 @@
+gcab
+libgusb
+libsmbios
+libxmlb
+python-toml
+abseil-cpp
+protobuf
+protobuf-c
+libjcat
+pefile
+python-smartypants
+python-typogrify
+fwupd
