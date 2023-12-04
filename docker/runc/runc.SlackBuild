@@ -33,8 +33,9 @@ GITHASH=${GITHASH:-18a0cb0f32bcac2ecc9a10f327d282759c144dab}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
+NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
 
-SRCVER=$(echo $VERSION | tr _ -)
+export MAKEFLAGS=$NUMJOBS
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
@@ -52,18 +53,18 @@ if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   exit 0
 fi
 
-TMP=${TMP:-/tmp/SBo}
+TMP=${TMP:-/var/tmp/build}
 PKG=$TMP/package-$PRGNAM
-OUTPUT=${OUTPUT:-/tmp}
+OUTPUT=${OUTPUT:-/var/tmp/packages}
 
 set -e
 
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-rm -rf $PRGNAM-$SRCVER
-tar xvf $CWD/$PRGNAM-$SRCVER.tar.gz
-cd $PRGNAM-$SRCVER
+rm -rf $PRGNAM-$VERSION
+tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
+cd $PRGNAM-$VERSION
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
@@ -89,3 +90,10 @@ cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
+
+echo "PRGNAM=$PRGNAM" > $TMP/$PRGNAM-build.env
+echo "VERSION=$VERSION" >> $TMP/$PRGNAM-build.env
+echo "BUILD=$BUILD" >> $TMP/$PRGNAM-build.env
+echo "TAG=$TAG" >> $TMP/$PRGNAM-build.env
+echo "PKGTYPE=$PKGTYPE" >> $TMP/$PRGNAM-build.env
+echo "PKGFINAL=$OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE" >> $TMP/$PRGNAM-build.env

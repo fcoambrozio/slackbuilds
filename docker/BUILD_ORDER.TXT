@@ -1,5 +1,7 @@
 runc
 containerd
 tini
-docker
 docker-cli
+docker
+docker-buildx
+docker-compose

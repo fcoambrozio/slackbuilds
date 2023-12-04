@@ -33,6 +33,9 @@ GITHASH=${GITHASH:-311b9ff}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
+NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
+
+export MAKEFLAGS=$NUMJOBS
 
 SRCNAM=moby
 
@@ -52,9 +55,9 @@ if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   exit 0
 fi
 
-TMP=${TMP:-/tmp/SBo}
+TMP=${TMP:-/var/tmp/build}
 PKG=$TMP/package-$PRGNAM
-OUTPUT=${OUTPUT:-/tmp}
+OUTPUT=${OUTPUT:-/var/tmp/packages}
 
 set -e
 
@@ -71,17 +74,14 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-mkdir build
-mv vendor build/src
-ln -sf $TMP/$SRCNAM-$VERSION build/src/github.com/docker/docker
+export GOFLAGS='-buildmode=pie -trimpath -mod=readonly -modcacherw -ldflags=-linkmode=external'
+export GO111MODULE=off
+export DISABLE_WARN_OUTSIDE_CONTAINER=1
 
-patch -p0 -i $CWD/build-with-mod-readonly.diff
-
-GO111MODULE=auto \
+AUTO_GOPATH=1 \
   DOCKER_GITCOMMIT=$GITHASH \
   DOCKER_BUILDTAGS="seccomp" \
   VERSION=$VERSION \
-  GOPATH=$TMP/$SRCNAM-$VERSION/build \
   ./hack/make.sh dynbinary
 
 install -D -m 0755 bundles/dynbinary-daemon/dockerd $PKG/usr/bin/dockerd
@@ -112,3 +112,10 @@ cat $CWD/doinst.sh > $PKG/install/doinst.sh
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
+
+echo "PRGNAM=$PRGNAM" > $TMP/$PRGNAM-build.env
+echo "VERSION=$VERSION" >> $TMP/$PRGNAM-build.env
+echo "BUILD=$BUILD" >> $TMP/$PRGNAM-build.env
+echo "TAG=$TAG" >> $TMP/$PRGNAM-build.env
+echo "PKGTYPE=$PKGTYPE" >> $TMP/$PRGNAM-build.env
+echo "PKGFINAL=$OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE" >> $TMP/$PRGNAM-build.env

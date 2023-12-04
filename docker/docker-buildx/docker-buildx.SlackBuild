@@ -27,8 +27,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=docker-buildx
-VERSION=${VERSION:-0.11.2}
-GITHASH=${GITHASH:-9872040}
+VERSION=${VERSION:-0.12.0}
+GITHASH=${GITHASH:-542e5d8}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -48,9 +48,9 @@ if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   exit 0
 fi
 
-TMP=${TMP:-/tmp/SBo}
+TMP=${TMP:-/var/tmp/build}
 PKG=$TMP/package-$PRGNAM
-OUTPUT=${OUTPUT:-/tmp}
+OUTPUT=${OUTPUT:-/var/tmp/packages}
 
 set -e
 
@@ -92,3 +92,10 @@ cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
+
+echo "PRGNAM=$PRGNAM" > $TMP/$PRGNAM-build.env
+echo "VERSION=$VERSION" >> $TMP/$PRGNAM-build.env
+echo "BUILD=$BUILD" >> $TMP/$PRGNAM-build.env
+echo "TAG=$TAG" >> $TMP/$PRGNAM-build.env
+echo "PKGTYPE=$PKGTYPE" >> $TMP/$PRGNAM-build.env
+echo "PKGFINAL=$OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE" >> $TMP/$PRGNAM-build.env

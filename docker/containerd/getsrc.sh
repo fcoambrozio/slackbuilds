@@ -3,7 +3,7 @@
 # get source for containerd
 #
 
-VERSION="1.7.8"
+VERSION="1.7.10"
 DOWNLOAD="https://github.com/containerd/containerd/archive/v$VERSION/containerd-$VERSION.tar.gz"
 
 wget -c $DOWNLOAD
