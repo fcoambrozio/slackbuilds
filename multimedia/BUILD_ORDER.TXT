@@ -1,4 +1,3 @@
-SDL_gfx
 aom
 faac
 faad2
@@ -14,4 +13,4 @@ xvidcore
 libquicktime
 mjpegtools
 gst-plugins-ugly
-gst-plugins-bad-nonfree
+gst-plugins-bad

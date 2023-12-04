@@ -14,6 +14,6 @@ gst-plugins-bad: but they're missing something - be it a good code review, some
 gst-plugins-bad: documentation, a set of tests, a real live maintainer, or some actual
 gst-plugins-bad: wide use.
 gst-plugins-bad:
-gst-plugins-bad: Since gst-plugins-bad-free is part of Slackware, this package only
-gst-plugins-bad: includes the plugins that are not already in gst-plugins-bad-free.
+gst-plugins-bad: This package is built to be a replacement for gst-plugins-bad-free.
+gst-plugins-bad:
 gst-plugins-bad:

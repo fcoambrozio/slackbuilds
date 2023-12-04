@@ -3,7 +3,7 @@
 git clone https://git.code.sf.net/p/libquicktime/git libquicktime-git
 
 cd libquicktime-git
-  VERSION="git_$(git log --format="%ad_%h" --date=short | head -n 1 | tr -d -)"
+  VERSION="$(git log --format="%ad_%h" --date=short | head -n 1 | tr -d -)"
   LONGDATE="$(git log -1 --format=%cd --date=format:%c )"
 cd ..
 
