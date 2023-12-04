@@ -1,0 +1,5 @@
+libcurl-gnutls
+ayatana-ido
+libayatana-indicator
+libayatana-appindicator
+spotify
