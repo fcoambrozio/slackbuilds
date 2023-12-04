@@ -36,9 +36,12 @@ cd $(dirname $0) ; CWD=$(pwd)
 PRGNAM=gtest
 SRCNAM=googletest
 VERSION=${VERSION:-1.14.0}
-BUILD=${BUILD:-2}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
+NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
+
+export MAKEFLAGS=$NUMJOBS
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
@@ -53,9 +56,9 @@ if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   exit 0
 fi
 
-TMP=${TMP:-/tmp/SBo}
+TMP=${TMP:-/var/tmp/build}
 PKG=$TMP/package-$PRGNAM
-OUTPUT=${OUTPUT:-/tmp}
+OUTPUT=${OUTPUT:-/var/tmp/packages}
 
 if [ "$ARCH" = "i586" ]; then
   SLKCFLAGS="-O2 -march=i586 -mtune=i686"
@@ -100,17 +103,17 @@ cd build
 cd ..
 
 mkdir -p $PKG/usr/lib$LIBDIRSUFFIX $PKG/usr/include/$PRGNAM/internal/custom \
-    $PKG/usr/include/gmock/internal/custom
+  $PKG/usr/include/gmock/internal/custom
 
 install -m 0644 googlemock/include/gmock/*.h $PKG/usr/include/gmock
 install -m 0644 googlemock/include/gmock/internal/*.h $PKG/usr/include/gmock/internal/
 install -m 0644 googlemock/include/gmock/internal/custom/*.h \
-    $PKG/usr/include/gmock/internal/custom
+  $PKG/usr/include/gmock/internal/custom
 
 install -m 0644 googletest/include/$PRGNAM/*.h $PKG/usr/include/$PRGNAM/
 install -m 0644 googletest/include/$PRGNAM/internal/*.h $PKG/usr/include/$PRGNAM/internal/
 install -m 0644 googletest/include/$PRGNAM/internal/custom/*.h \
-    $PKG/usr/include/$PRGNAM/internal/custom
+  $PKG/usr/include/$PRGNAM/internal/custom
 
 # install the libs and the pkgconfig files!
 install -s -m 0755 build/lib/*.so $PKG/usr/lib$LIBDIRSUFFIX

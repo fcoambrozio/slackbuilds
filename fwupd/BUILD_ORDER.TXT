@@ -8,6 +8,4 @@ protobuf
 protobuf-c
 libjcat
 pefile
-python-smartypants
-python-typogrify
 fwupd
