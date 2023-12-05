@@ -29,8 +29,10 @@ VERSION=${VERSION:-5.6.4}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
+NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
 
-# Automatically determine the architecture we're building on:
+export MAKEFLAGS=$NUMJOBS
+
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
     i?86) ARCH=i586 ;;
@@ -39,17 +41,14 @@ if [ -z "$ARCH" ]; then
   esac
 fi
 
-# If the variable PRINT_PACKAGE_NAME is set, then this script will report what
-# the name of the created package would be, and then exit. This information
-# could be useful to other scripts.
 if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
   exit 0
 fi
 
-TMP=${TMP:-/tmp/SBo}
+TMP=${TMP:-/var/tmp/build}
 PKG=$TMP/package-$PRGNAM
-OUTPUT=${OUTPUT:-/tmp}
+OUTPUT=${OUTPUT:-/var/tmp/packages}
 
 if [ "$ARCH" = "i586" ]; then
   SLKCFLAGS="-O2 -march=i586 -mtune=i686"
@@ -65,7 +64,7 @@ else
   LIBDIRSUFFIX=""
 fi
 
-set -e # Exit on most errors
+set -e
 
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
@@ -103,11 +102,8 @@ if [ "$ARCH" = "x86_64" ]; then
     rmdir $PKG/usr/lib
 fi
 
-# Don't ship .la files:
 rm -f $PKG/{,usr/}lib${LIBDIRSUFFIX}/*.la
 
-# Strip binaries and libraries - this can be done with 'make install-strip'
-# in many source trees, and that's usually acceptable, if not, use this:
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
@@ -125,3 +121,10 @@ cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
+
+echo "PRGNAM=$PRGNAM" > $TMP/$PRGNAM-build.env
+echo "VERSION=$VERSION" >> $TMP/$PRGNAM-build.env
+echo "BUILD=$BUILD" >> $TMP/$PRGNAM-build.env
+echo "TAG=$TAG" >> $TMP/$PRGNAM-build.env
+echo "PKGTYPE=$PKGTYPE" >> $TMP/$PRGNAM-build.env
+echo "PKGFINAL=$OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE" >> $TMP/$PRGNAM-build.env

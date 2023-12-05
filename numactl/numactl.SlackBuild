@@ -13,6 +13,9 @@ VERSION=${VERSION:-2.0.16}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
+NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
+
+export MAKEFLAGS=$NUMJOBS
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
@@ -30,9 +33,9 @@ if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   exit 0
 fi
 
-TMP=${TMP:-/tmp/SBo}
+TMP=${TMP:-/var/tmp/build}
 PKG=$TMP/package-$PRGNAM
-OUTPUT=${OUTPUT:-/tmp}
+OUTPUT=${OUTPUT:-/var/tmp/packages}
 
 if [ "$ARCH" = "i586" ]; then
   SLKCFLAGS="-O2 -march=i586 -mtune=i686"
