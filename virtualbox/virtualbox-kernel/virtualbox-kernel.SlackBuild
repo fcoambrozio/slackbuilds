@@ -28,6 +28,9 @@ PKGNAM=virtualbox-kernel
 SRC_VERSION=${VERSION:-$(echo $PKGNAM-*.tar.?z | rev | cut -f 3- -d . | cut -f 1 -d - | rev)}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
+NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
+
+export MAKEFLAGS=$NUMJOBS
 
 KERNEL=${KERNEL:-$(uname -r)}
 KERNELPATH=${KERNELPATH:-/lib/modules/$KERNEL/build}
@@ -52,11 +55,9 @@ if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   exit 0
 fi
 
-NUMJOBS=${NUMJOBS:-" -j$(expr $(nproc) + 1) "}
-
-TMP=${TMP:-/tmp}
+TMP=${TMP:-/var/tmp/build}
 PKG=$TMP/package-$PKGNAM
-OUTPUT=${OUTPUT:-/tmp}
+OUTPUT=${OUTPUT:-/var/tmp/packages}
 
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
@@ -95,3 +96,10 @@ sed "s%@KERNEL@%$KERNEL%" $CWD/doinst.sh > $PKG/install/doinst.sh
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PKGNAM-$VERSION-$ARCH-$BUILD$TAG.txz
+
+echo "PKGNAM=$PKGNAM" > $TMP/$PKGNAM-build.env
+echo "VERSION=$VERSION" >> $TMP/$PKGNAM-build.env
+echo "BUILD=$BUILD" >> $TMP/$PKGNAM-build.env
+echo "TAG=$TAG" >> $TMP/$PKGNAM-build.env
+echo "PKGTYPE=txz" >> $TMP/$PKGNAM-build.env
+echo "PKGFINAL=$OUTPUT/$PKGNAM-$VERSION-$ARCH-$BUILD$TAG.txz" >> $TMP/$PKGNAM-build.env

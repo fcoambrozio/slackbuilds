@@ -28,6 +28,9 @@ PKGNAM=gsoap
 VERSION=${VERSION:-$(echo $PKGNAM-*.tar.?z | rev | cut -f 3- -d . | cut -f 1 -d - | rev)}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
+NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
+
+export MAKEFLAGS=$NUMJOBS
 
 # Automatically determine the architecture we're building on:
 if [ -z "$ARCH" ]; then
@@ -47,8 +50,6 @@ if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   echo "$PKGNAM-$VERSION-$ARCH-$BUILD$TAG.txz"
   exit 0
 fi
-
-NUMJOBS=${NUMJOBS:-" -j$(expr $(nproc) + 1) "}
 
 if [ "$ARCH" = "i586" ]; then
   SLKCFLAGS="-O2 -march=i586 -mtune=i686"
@@ -70,9 +71,9 @@ else
   LIBDIRSUFFIX=""
 fi
 
-TMP=${TMP:-/tmp}
+TMP=${TMP:-/var/tmp/build}
 PKG=$TMP/package-$PKGNAM
-OUTPUT=${OUTPUT:-/tmp}
+OUTPUT=${OUTPUT:-/var/tmp/packages}
 
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
@@ -122,3 +123,10 @@ cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PKGNAM-$VERSION-$ARCH-$BUILD$TAG.txz
+
+echo "PKGNAM=$PKGNAM" > $TMP/$PKGNAM-build.env
+echo "VERSION=$VERSION" >> $TMP/$PKGNAM-build.env
+echo "BUILD=$BUILD" >> $TMP/$PKGNAM-build.env
+echo "TAG=$TAG" >> $TMP/$PKGNAM-build.env
+echo "PKGTYPE=txz" >> $TMP/$PKGNAM-build.env
+echo "PKGFINAL=$OUTPUT/$PKGNAM-$VERSION-$ARCH-$BUILD$TAG.txz" >> $TMP/$PKGNAM-build.env
