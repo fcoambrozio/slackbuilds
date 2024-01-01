@@ -77,6 +77,9 @@ mkdir build
 mv vendor build/src
 ln -sf $TMP/$SRCNAM-$VERSION build/src/github.com/docker/cli
 
+export GOPATH="$TMP/go"
+export GOCACHE="$TMP/go-build"
+
 GO111MODULE=auto \
 DISABLE_WARN_OUTSIDE_CONTAINER=1 \
 make dynbinary \

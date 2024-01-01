@@ -75,6 +75,9 @@ find -L . \
 # Do not try to get git commit hash, we're not inside git repository.
 sed -i '/^COMMIT/d' Makefile
 
+export GOPATH="$TMP/go"
+export GOCACHE="$TMP/go-build"
+
 make \
   BUILDTAGS="seccomp" \
   COMMIT=$GITHASH
