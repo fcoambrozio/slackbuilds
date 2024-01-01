@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# get source for faac
+# get source for libdv
 #
 
 VERSION="1.0.0"
