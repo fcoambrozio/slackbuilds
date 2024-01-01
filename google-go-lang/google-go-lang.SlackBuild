@@ -31,10 +31,13 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=google-go-lang
-VERSION=${VERSION:-1.21.4}
+VERSION=${VERSION:-1.21.5}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
+NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
+
+export MAKEFLAGS=$NUMJOBS
 
 RUN_TEST=${RUN_TEST:-false}
 
