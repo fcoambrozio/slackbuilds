@@ -33,6 +33,9 @@ VERSION=${VERSION:-16.1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
+NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
+
+export MAKEFLAGS=$NUMJOBS
 
 PG_VERSION=${PG_VERSION:-16}
 PG_PORT=${PG_PORT:-5432}
@@ -55,9 +58,9 @@ if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   exit 0
 fi
 
-TMP=${TMP:-/tmp/SBo}
+TMP=${TMP:-/var/tmp/build}
 PKG=$TMP/package-$PRGNAM
-OUTPUT=${OUTPUT:-/tmp}
+OUTPUT=${OUTPUT:-/var/tmp/packages}
 
 # Bail out if user or group isn't valid on your system
 # For slackbuilds.org, assigned postgres uid/gid are 209/209
@@ -71,13 +74,6 @@ elif ! grep ^postgres: /etc/passwd 2>&1 > /dev/null; then
   echo "  You must have a postgres user to run this script."
   echo "    # useradd -r -u $PG_UID -g $PG_GID -d /var/lib/pgsql postgres"
   exit 1
-fi
-
-# Enable NLS builds using 'ENABLE_NLS=1 ./postgresql.SlackBuild'
-if [ ! -z $ENABLE_NLS  ];then
-  NLS=enable
-else
-  NLS=disable
 fi
 
 if [ "$ARCH" = "i586" ]; then
@@ -108,8 +104,10 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-#patch -p1 -i $CWD/v2-0001-jit-Support-opaque-pointers-in-LLVM-16.patch
-#patch -p1 -i $CWD/v2-0002-jit-Changes-for-LLVM-17.patch
+for p in $CWD/patches/*.patch; do
+  patch -p1 -i $p
+done
+unset p
 
 CFLAGS="$SLKCFLAGS" \
 ./configure \
@@ -120,20 +118,22 @@ CFLAGS="$SLKCFLAGS" \
   --mandir=/usr/man \
   --docdir=/usr/doc/$PRGNAM-$VERSION \
   --datadir=/usr/share/$PRGNAM-$PG_VERSION \
-  --with-gssapi \
-  --with-libxml \
-  --with-openssl \
+  --enable-nls \
+  --disable-rpath \
+  --with-llvm \
+  --with-tcl \
   --with-perl \
   --with-python \
-  --with-tcl \
+  --with-gssapi \
   --with-pam \
-  --with-system-tzdata=/usr/share/zoneinfo \
-  --with-uuid=e2fs \
-  --with-icu \
   --with-ldap \
-  --with-llvm \
+  --with-uuid=e2fs \
+  --with-libxml \
   --with-libxslt \
-  --$NLS-nls \
+  --with-system-tzdata=/usr/share/zoneinfo \
+  --with-lz4 \
+  --with-zstd \
+  --with-ssl=openssl \
   --build=$ARCH-slackware-linux
 
 make
@@ -153,7 +153,6 @@ make install-docs DESTDIR=$PKG
 
 # Some interesting additional modules:
 #   https://www.postgresql.org/docs/current/contrib.html
-
 PG_EXTENSIONS="amcheck \
   auth_delay \
   auto_explain \
