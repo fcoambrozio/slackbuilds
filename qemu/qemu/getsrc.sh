@@ -3,7 +3,7 @@
 # get source for qemu
 #
 
-VERSION="8.1.3"
+VERSION="8.2.0"
 DOWNLOAD="https://download.qemu.org/qemu-$VERSION.tar.xz"
 
 wget -c $DOWNLOAD
