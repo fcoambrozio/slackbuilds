@@ -9,7 +9,7 @@ config() {
 }
 
 config etc/fwupd/fwupd.conf.new
-config etc/fwupd/remotes.d/fwupd-tests.conf.new
+#config etc/fwupd/remotes.d/fwupd-tests.conf.new
 config etc/fwupd/remotes.d/lvfs-testing.conf.new
 config etc/fwupd/remotes.d/lvfs.conf.new
 config etc/fwupd/remotes.d/vendor-directory.conf.new

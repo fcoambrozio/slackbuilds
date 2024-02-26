@@ -107,6 +107,8 @@ zcat $CWD/vboxdrv.sh-setup.diff.gz | patch -d src/VBox/Installer/linux --verbose
 # https://gitweb.gentoo.org/repo/gentoo.git/plain/app-emulation/virtualbox/files/virtualbox-7.0.6-gcc-13.patch
 patch -p1 -i $CWD/virtualbox-7.0.6-gcc-13.patch || exit 1
 
+patch -p0 -i $CWD/libxml2-2.12.patch || exit 1
+
 # Skip python2 detection
 sed -i 's|python2.7 python2.6 ||' ./configure
 
@@ -182,8 +184,8 @@ cd out/linux.$BUILDDIR/release/bin/
   mv sdk $PKG/usr/share/virtualbox/
   install -m $MODE -g $GROUP VBoxSysInfo.sh $PKG/usr/share/virtualbox/
   install -m $MODE -g $GROUP VBoxCreateUSBNode.sh $PKG/usr/share/virtualbox/
-  install -m $MODE -g $GROUP VBoxTunctl $PKG/usr/bin/
-  rm -f VBoxSysInfo.sh VBoxCreateUSBNode.sh VBoxTunctl
+  #install -m $MODE -g $GROUP VBoxTunctl $PKG/usr/bin/
+  rm -f VBoxSysInfo.sh VBoxCreateUSBNode.sh #VBoxTunctl
   mv * $PKG/usr/lib$LIBDIRSUFFIX/virtualbox/
   chown -R root:$GROUP $PKG/usr/lib$LIBDIRSUFFIX/virtualbox/
   chmod -R $MODE $PKG/usr/lib$LIBDIRSUFFIX/virtualbox/

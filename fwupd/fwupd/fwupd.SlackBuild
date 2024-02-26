@@ -28,7 +28,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=fwupd
-VERSION=${VERSION:-1.9.10}
+VERSION=${VERSION:-1.9.13}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -108,6 +108,7 @@ meson --prefix=/usr \
   -Dplugin_uefi_capsule=$uefi_capsule \
   -Dsupported_build=enabled \
   -Dsystemd=disabled \
+  -Dvendor_metadata=true \
   build
 
 "${NINJA:=ninja}" -C build
@@ -127,7 +128,7 @@ mv $PKG/usr/bin/{,fwupd-}dbxtool
 mv $PKG/usr/man/man1/{,fwupd-}dbxtool.1.gz
 
 mv $PKG/etc/fwupd/fwupd.conf $PKG/etc/fwupd/fwupd.conf.new
-mv $PKG/etc/fwupd/remotes.d/fwupd-tests.conf $PKG/etc/fwupd/remotes.d/fwupd-tests.conf.new
+#mv $PKG/etc/fwupd/remotes.d/fwupd-tests.conf $PKG/etc/fwupd/remotes.d/fwupd-tests.conf.new
 mv $PKG/etc/fwupd/remotes.d/lvfs-testing.conf $PKG/etc/fwupd/remotes.d/lvfs-testing.conf.new
 mv $PKG/etc/fwupd/remotes.d/lvfs.conf $PKG/etc/fwupd/remotes.d/lvfs.conf.new
 mv $PKG/etc/fwupd/remotes.d/vendor-directory.conf $PKG/etc/fwupd/remotes.d/vendor-directory.conf.new

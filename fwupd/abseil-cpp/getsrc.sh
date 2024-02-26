@@ -3,7 +3,7 @@
 # get source for abseil-cpp
 #
 
-VERSION="20230802.1"
+VERSION="20240116.1"
 DOWNLOAD="https://github.com/abseil/abseil-cpp/archive/$VERSION/abseil-cpp-$VERSION.tar.gz"
 
 wget -c $DOWNLOAD

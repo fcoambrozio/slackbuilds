@@ -3,7 +3,7 @@
 # get source for libnfs - https://github.com/sahlberg/libnfs
 #
 
-VERSION="5.0.2"
+VERSION="5.0.3"
 DOWNLOAD="https://github.com/sahlberg/libnfs/archive/libnfs-$VERSION/libnfs-libnfs-$VERSION.tar.gz"
 
 wget -c $DOWNLOAD
