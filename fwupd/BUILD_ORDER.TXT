@@ -1,10 +1,10 @@
 gcab
-libgusb
+#libgusb
 libsmbios
 libxmlb
 python-toml
-abseil-cpp
-protobuf
+#abseil-cpp
+#protobuf
 protobuf-c
 libjcat
 pefile

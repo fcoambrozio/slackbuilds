@@ -96,6 +96,7 @@ if [ "$ARCH" = "x86_64" ]; then
   cd build-12
 
   cmake \
+    -Wno-dev \
     -DCMAKE_C_FLAGS:STRING="$SLKCFLAGS" \
     -DCMAKE_CXX_FLAGS:STRING="$SLKCFLAGS" \
     -DCMAKE_INSTALL_PREFIX=/usr \
@@ -111,6 +112,7 @@ if [ "$ARCH" = "x86_64" ]; then
   cd ../build-10
 
   cmake \
+    -Wno-dev \
     -DCMAKE_C_FLAGS:STRING="$SLKCFLAGS" \
     -DCMAKE_CXX_FLAGS:STRING="$SLKCFLAGS" \
     -DCMAKE_INSTALL_PREFIX=/usr \
@@ -128,6 +130,7 @@ if [ "$ARCH" = "x86_64" ]; then
   ln -s ../build-12/libx265.a libx265_main12.a
 
   cmake \
+    -Wno-dev \
     -DCMAKE_C_FLAGS:STRING="$SLKCFLAGS" \
     -DCMAKE_CXX_FLAGS:STRING="$SLKCFLAGS" \
     -DCMAKE_INSTALL_PREFIX=/usr \
@@ -145,6 +148,7 @@ else
   cd build-8
 
   cmake \
+    -Wno-dev \
     -DCMAKE_C_FLAGS:STRING="$SLKCFLAGS" \
     -DCMAKE_CXX_FLAGS:STRING="$SLKCFLAGS" \
     -DCMAKE_INSTALL_PREFIX=/usr \

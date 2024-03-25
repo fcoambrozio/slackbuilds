@@ -31,7 +31,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=google-go-lang
-VERSION=${VERSION:-1.21.7}
+VERSION=${VERSION:-1.22.1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -90,12 +90,14 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
+GOVERSION=$(go version | cut -f3 -d" ")
+
 export GOARCH
 
 # The value of GOROOT once the package is installed
 export GOROOT_FINAL="/usr/lib${LIBDIRSUFFIX}/go${VERSION}/go"
 
-export GOROOT_BOOTSTRAP=/usr
+export GOROOT_BOOTSTRAP="/usr/lib${LIBDIRSUFFIX}/go${GOVERSION}/go"
 
 # Default GOROOT is the parent directory of all.bash,
 # which is the current directory we're in.

@@ -4,7 +4,7 @@
 #
 
 MJRVER="2.8"
-VERSION="$MJRVER.132"
+VERSION="$MJRVER.133"
 DOWNLOAD="https://sinalbr.dl.sourceforge.net/project/gsoap2/gsoap_$VERSION.zip"
 
 wget -c $DOWNLOAD

@@ -31,7 +31,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=libquicktime
-VERSION=${VERSION:-20230629_dd9879b}
+VERSION=${VERSION:-20240202_2213b76}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}

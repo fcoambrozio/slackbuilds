@@ -28,7 +28,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=rtmpdump
-VERSION=${VERSION:-20210219_f1b83c1}
+VERSION=${VERSION:-20240301_6f6bb13}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -94,12 +94,11 @@ sed -i \
   -e 's/#CRYPTO=GNUTLS/CRYPTO=GNUTLS/' \
   Makefile librtmp/Makefile
 
-XCFLAGS="$SLKCFLAGS" \
 make \
+  OPT="$SLKCFLAGS" \
   prefix=/usr \
   libdir=/usr/lib$LIBDIRSUFFIX
 
-XCFLAGS="$SLKCFLAGS" \
 make \
   prefix=/usr \
   libdir=/usr/lib$LIBDIRSUFFIX \
