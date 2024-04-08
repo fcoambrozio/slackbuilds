@@ -1,20 +1,6 @@
-From 114df35e84ad95b6d5afbcf69aa85a14ff029000 Mon Sep 17 00:00:00 2001
-From: Danilo Spinella <danilo.spinella@suse.com>
-Date: Fri, 9 Jul 2021 16:57:35 +0200
-Subject: [PATCH] Add a switch to use system gtest and benchmark
-
-Allow to use the gtest and benchmark libraries from the system.
-Use pkg-config to check that the libraries are installed and to
-add the correct cflags/link flags.
----
- CMakeLists.txt | 66 ++++++++++++++++++++++++++++++++++++--------------
- 1 file changed, 48 insertions(+), 18 deletions(-)
-
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 672561e6..eb2a743d 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -90,6 +90,14 @@ option(SNAPPY_BUILD_TESTS "Build Snappy's own tests." ON)
+--- a/CMakeLists.txt.orig	2024-04-08 09:46:50.437980337 -0300
++++ b/CMakeLists.txt	2024-04-08 09:46:57.704980299 -0300
+@@ -95,6 +95,14 @@
  
  option(SNAPPY_BUILD_BENCHMARKS "Build Snappy's benchmarks" ON)
  
@@ -29,7 +15,7 @@ index 672561e6..eb2a743d 100644
  option(SNAPPY_FUZZING_BUILD "Build Snappy for fuzzing." OFF)
  
  option(SNAPPY_REQUIRE_AVX "Target processors with AVX support." OFF)
-@@ -284,29 +292,40 @@ endif(SNAPPY_BUILD_TESTS OR SNAPPY_BUILD_BENCHMARKS)
+@@ -319,34 +327,40 @@
  if(SNAPPY_BUILD_TESTS)
    enable_testing()
  
@@ -49,6 +35,11 @@ index 672561e6..eb2a743d 100644
 -    set_property(TARGET gmock
 -        APPEND PROPERTY COMPILE_OPTIONS -Wno-missing-field-initializers)
 -  endif(SNAPPY_HAVE_NO_MISSING_FIELD_INITIALIZERS)
+-
+-  if(SNAPPY_HAVE_NO_IMPLICIT_INT_FLOAT_CONVERSION)
+-    set_property(TARGET gtest
+-        APPEND PROPERTY COMPILE_OPTIONS -Wno-implicit-int-float-conversion)
+-  endif(SNAPPY_HAVE_NO_IMPLICIT_INT_FLOAT_CONVERSION)
 +  if(SNAPPY_USE_BUNDLED_GTEST)
 +    # Prevent overriding the parent project's compiler/linker settings on Windows.
 +    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
@@ -87,7 +78,7 @@ index 672561e6..eb2a743d 100644
  
    add_test(
      NAME snappy_unittest
-@@ -322,17 +341,28 @@ if(SNAPPY_BUILD_TESTS)
+@@ -362,17 +376,28 @@
  endif(SNAPPY_BUILD_TESTS)
  
  if(SNAPPY_BUILD_BENCHMARKS)
