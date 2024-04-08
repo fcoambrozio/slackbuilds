@@ -3,7 +3,7 @@
 # get source for libxmlb
 #
 
-VERSION="0.3.15"
+VERSION="0.3.17"
 DOWNLOAD="https://github.com/hughsie/libxmlb/archive/$VERSION/libxmlb-$VERSION.tar.gz"
 
 wget -c $DOWNLOAD
