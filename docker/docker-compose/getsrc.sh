@@ -3,7 +3,7 @@
 # get source for docker-compose
 #
 
-VERSION="2.26.1"
+VERSION="2.27.0"
 DOWNLOAD="https://github.com/docker/compose/archive/v$VERSION/compose-$VERSION.tar.gz"
 
 wget -c $DOWNLOAD
