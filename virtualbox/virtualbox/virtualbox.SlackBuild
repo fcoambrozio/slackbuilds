@@ -107,8 +107,6 @@ zcat $CWD/vboxdrv.sh-setup.diff.gz | patch -d src/VBox/Installer/linux --verbose
 # https://gitweb.gentoo.org/repo/gentoo.git/plain/app-emulation/virtualbox/files/virtualbox-7.0.6-gcc-13.patch
 patch -p1 -i $CWD/virtualbox-7.0.6-gcc-13.patch || exit 1
 
-patch -p0 -i $CWD/libxml2-2.12.patch || exit 1
-
 # Skip python2 detection
 sed -i 's|python2.7 python2.6 ||' ./configure
 
@@ -177,7 +175,7 @@ cd out/linux.$BUILDDIR/release/bin/
 
   export VBOX_INSTALL_PATH=/usr/lib$LIBDIRSUFFIX/virtualbox
   cd sdk/installer
-    python3 ./vboxapisetup.py install --prefix "/usr" --root $PKG || exit 1
+    python ./vboxapisetup.py install --prefix "/usr" --root $PKG || exit 1
   cd -
   rm -rf sdk/installer
 

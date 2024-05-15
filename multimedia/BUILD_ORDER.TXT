@@ -1,4 +1,3 @@
-#aom
 faac
 faad2
 libdv

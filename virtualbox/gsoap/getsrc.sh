@@ -1,10 +1,10 @@
 #!/bin/bash
 #
-# get source for gsoap - https://www.cs.fsu.edu/~engelen/soap.html
+# get source for gsoap - https://sourceforge.net/projects/gsoap2/
 #
 
 MJRVER="2.8"
-VERSION="$MJRVER.133"
+VERSION="$MJRVER.134"
 DOWNLOAD="https://sinalbr.dl.sourceforge.net/project/gsoap2/gsoap_$VERSION.zip"
 
 wget -c $DOWNLOAD

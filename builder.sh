@@ -9,7 +9,7 @@ fi
 BASEDIR="/srv/slackbuilds"
 
 if grep -aq container=lxc /proc/1/environ 2> /dev/null ; then
-  BASEDIR="/usr/src/slackbuilds"
+  BASEDIR="/build/slackbuilds"
 fi
 
 WRKDIR=$BASEDIR/$1
