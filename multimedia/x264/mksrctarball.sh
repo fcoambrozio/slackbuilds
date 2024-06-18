@@ -3,7 +3,7 @@
 git clone https://code.videolan.org/videolan/x264.git
 
 cd x264
-  git checkout stable
+  git checkout master
   VERSION="$(git log --format="%ad_%h" --date=short | head -n 1 | tr -d -)"
   LONGDATE="$(git log -1 --format=%cd --date=format:%c )"
 cd ..

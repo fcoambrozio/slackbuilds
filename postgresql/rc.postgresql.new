@@ -80,7 +80,7 @@ case "$1" in
         chmod 0640 $LOGFILE
 
         mkdir -p /run/postgresql
-        chmod postgres:postgres /run/postgresql
+        chown postgres:postgres /run/postgresql
 
         if [ ! -e $DATADIR/PG_VERSION ]; then
             echo "You should initialize the PostgreSQL database at location $DATADIR"
