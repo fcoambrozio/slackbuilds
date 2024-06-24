@@ -3,7 +3,7 @@
 # get source for gst-plugins-bad
 #
 
-VERSION="1.24.4"
+VERSION="1.24.5"
 DOWNLOAD="https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-$VERSION.tar.xz"
 
 wget -c $DOWNLOAD
