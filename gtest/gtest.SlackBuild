@@ -35,8 +35,8 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=gtest
 SRCNAM=googletest
-VERSION=${VERSION:-1.14.0}
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-1.15.0}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
