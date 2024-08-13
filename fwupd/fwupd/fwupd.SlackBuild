@@ -28,13 +28,11 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=fwupd
-VERSION=${VERSION:-1.9.21}
+VERSION=${VERSION:-1.9.23}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
-
-export MAKEFLAGS=$NUMJOBS
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
@@ -111,7 +109,7 @@ meson --prefix=/usr \
   -Dvendor_metadata=true \
   build
 
-"${NINJA:=ninja}" -C build
+"${NINJA:=ninja}" $NUMJOBS -C build || "${NINJA:=ninja}" -C build
 DESTDIR=$PKG $NINJA -C build install
 
 # fix permissions on rules.d
@@ -159,10 +157,3 @@ cat $CWD/doinst.sh > $PKG/install/doinst.sh
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
-
-echo "PRGNAM=$PRGNAM" > $TMP/$PRGNAM-build.env
-echo "VERSION=$VERSION" >> $TMP/$PRGNAM-build.env
-echo "BUILD=$BUILD" >> $TMP/$PRGNAM-build.env
-echo "TAG=$TAG" >> $TMP/$PRGNAM-build.env
-echo "PKGTYPE=$PKGTYPE" >> $TMP/$PRGNAM-build.env
-echo "PKGFINAL=$OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE" >> $TMP/$PRGNAM-build.env

@@ -26,11 +26,12 @@
 
 # Modified by Francisco Ambrozio
 
+
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=postgresql
-VERSION=${VERSION:-16.3}
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-16.4}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}

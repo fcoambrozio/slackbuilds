@@ -150,10 +150,3 @@ cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PKGNAM-$VERSION-$ARCH-$BUILD$TAG.txz
-
-echo "PKGNAM=$PKGNAM" > $TMP/$PKGNAM-build.env
-echo "VERSION=$VERSION" >> $TMP/$PKGNAM-build.env
-echo "BUILD=$BUILD" >> $TMP/$PKGNAM-build.env
-echo "TAG=$TAG" >> $TMP/$PKGNAM-build.env
-echo "PKGTYPE=txz" >> $TMP/$PKGNAM-build.env
-echo "PKGFINAL=$OUTPUT/$PKGNAM-$VERSION-$ARCH-$BUILD$TAG.txz" >> $TMP/$PKGNAM-build.env
