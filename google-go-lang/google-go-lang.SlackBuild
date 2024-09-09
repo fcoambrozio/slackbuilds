@@ -31,7 +31,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=google-go-lang
-VERSION=${VERSION:-1.23.0}
+VERSION=${VERSION:-1.23.1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -67,6 +67,9 @@ else
   LIBDIRSUFFIX=""
   GOARCH=386
 fi
+
+export GOPATH="$TMP/go"
+export GOCACHE="$TMP/go-build"
 
 if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
@@ -109,9 +112,6 @@ export GOROOT
 case "$ARCH" in
   arm|i?86) export GOMAXPROCS=1 ;;
 esac
-
-export GOPATH="$TMP/go"
-export GOCACHE="$TMP/go-build"
 
 cd src
 

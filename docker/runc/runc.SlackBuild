@@ -25,12 +25,11 @@
 
 # Modified by Francisco Ambrozio
 
-
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=runc
-VERSION=${VERSION:-1.1.13}
-GITHASH=${GITHASH:-58aa9203c123022138b22cf96540c284876a7910}
+VERSION=${VERSION:-1.1.14}
+GITHASH=${GITHASH:-2c9f560}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}

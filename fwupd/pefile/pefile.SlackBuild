@@ -28,8 +28,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=pefile
-VERSION=${VERSION:-2023.2.7}
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-2024.8.26}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 
@@ -88,7 +88,7 @@ find $PKG | xargs file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cp -a README LICENSE $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a LICENSE $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 mkdir -p $PKG/install
@@ -96,10 +96,3 @@ cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
-
-echo "PRGNAM=$PRGNAM" > $TMP/$PRGNAM-build.env
-echo "VERSION=$VERSION" >> $TMP/$PRGNAM-build.env
-echo "BUILD=$BUILD" >> $TMP/$PRGNAM-build.env
-echo "TAG=$TAG" >> $TMP/$PRGNAM-build.env
-echo "PKGTYPE=$PKGTYPE" >> $TMP/$PRGNAM-build.env
-echo "PKGFINAL=$OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE" >> $TMP/$PRGNAM-build.env

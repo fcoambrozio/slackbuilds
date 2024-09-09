@@ -26,11 +26,10 @@
 
 # Modified by Francisco Ambrozio
 
-
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=postgresql
-VERSION=${VERSION:-16.4}
+VERSION=${VERSION:-17rc1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -38,7 +37,7 @@ NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
 
 export MAKEFLAGS=$NUMJOBS
 
-PG_VERSION=${PG_VERSION:-16}
+PG_VERSION=${PG_VERSION:-17}
 PG_PORT=${PG_PORT:-5432}
 PG_UID=${PG_UID:-209}
 PG_GID=${PG_GID:-209}
@@ -211,7 +210,7 @@ cd $TMP/$PRGNAM-$VERSION
 find $PKG/usr/man -type f -exec gzip -9 {} \;
 for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
 
-cp -a COPYRIGHT HISTORY README doc/KNOWN_BUGS doc/MISSING_FEATURES doc/TODO $PKG/usr/doc/$PRGNAM-$VERSION/
+cp -a COPYRIGHT HISTORY README.md doc/KNOWN_BUGS doc/MISSING_FEATURES doc/TODO $PKG/usr/doc/$PRGNAM-$VERSION/
 rm -rf $PKG/usr/doc/$PRGNAM-$VERSION/{man.tar.gz,man1,manl,man7,postgres.tar.gz}
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 cat $CWD/README.SBo > $PKG/usr/doc/$PRGNAM-$VERSION/README.SBo

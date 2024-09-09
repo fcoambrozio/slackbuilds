@@ -32,7 +32,7 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=faac
 VERSION=${VERSION:-1.30}
-BUILD=${BUILD:-2}
+BUILD=${BUILD:-3}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
@@ -93,6 +93,8 @@ find -L . \
 # Fix for automake >= 1.13
 sed -i "s|AM_CONFIG_HEADER|AC_CONFIG_HEADERS|" configure.ac
 
+patch -p1 -i $CWD/11215a2dc792d28a8fa7bbef059c6798d248a0ea.patch
+
 ./bootstrap
 
 CFLAGS="$SLKCFLAGS" \
@@ -123,10 +125,3 @@ cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
-
-echo "PRGNAM=$PRGNAM" > $TMP/$PRGNAM-build.env
-echo "VERSION=$VERSION" >> $TMP/$PRGNAM-build.env
-echo "BUILD=$BUILD" >> $TMP/$PRGNAM-build.env
-echo "TAG=$TAG" >> $TMP/$PRGNAM-build.env
-echo "PKGTYPE=$PKGTYPE" >> $TMP/$PRGNAM-build.env
-echo "PKGFINAL=$OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE" >> $TMP/$PRGNAM-build.env

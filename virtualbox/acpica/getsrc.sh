@@ -3,7 +3,6 @@
 # get source for acpica - http://www.acpica.org
 #
 
-VERSION="20240321"
-DOWNLOAD="https://github.com/acpica/acpica/files/14718333/acpica-unix-${VERSION}.tar.gz"
+DOWNLOAD="https://github.com/user-attachments/files/16769900/acpica-unix-20240827.tar.gz"
 
 wget -c $DOWNLOAD

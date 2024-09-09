@@ -29,8 +29,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=device-tree-compiler
-VERSION=${VERSION:-1.7.0}
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-1.7.1}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
@@ -90,11 +90,16 @@ find -L . \
 
 #patch -p1 < $CWD/fix-python-destdir-usage.diff
 
-make clean
-MAKEFLAGS="" make NO_PYTHON=1 CFLAGS="$SLKCFLAGS -w -Wl,--allow-multiple-definition" PREFIX=/usr LIBDIR=/usr/lib${LIBDIRSUFFIX}
-make install NO_PYTHON=1 PREFIX=/usr LIBDIR=/usr/lib${LIBDIRSUFFIX} DESTDIR=$PKG
-
-CFLAGS="-L$PKG/usr/lib$LIBDIRSUFFIX" pip install git+git://git.kernel.org/pub/scm/utils/dtc/dtc.git@v$VERSION --prefix=$PKG/usr
+mkdir build
+cd build
+  CFLAGS="$SLKCFLAGS" \
+  CXXFLAGS="$SLKCFLAGS" \
+  meson .. \
+    --libdir=/usr/lib${LIBDIRSUFFIX} \
+    --prefix=/usr
+  "${NINJA:=ninja}"
+  DESTDIR=$PKG $NINJA install
+cd ..
 
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
@@ -110,10 +115,3 @@ cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
-
-echo "PRGNAM=$PRGNAM" > $TMP/$PRGNAM-build.env
-echo "VERSION=$VERSION" >> $TMP/$PRGNAM-build.env
-echo "BUILD=$BUILD" >> $TMP/$PRGNAM-build.env
-echo "TAG=$TAG" >> $TMP/$PRGNAM-build.env
-echo "PKGTYPE=$PKGTYPE" >> $TMP/$PRGNAM-build.env
-echo "PKGFINAL=$OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE" >> $TMP/$PRGNAM-build.env

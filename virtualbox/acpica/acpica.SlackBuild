@@ -27,7 +27,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=acpica
-VERSION=${VERSION:-20240321}
+VERSION=${VERSION:-20240827}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -83,6 +83,9 @@ find -L . \
   -o -perm 511 \) -exec chmod 755 {} \; -o \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+
+# Congratulations Intel for making a incomplete release
+cp -p $CWD/files/acpixf.h source/include/
 
 cd generate/unix
   OPT_CFLAGS="$SLKCFLAGS" \
