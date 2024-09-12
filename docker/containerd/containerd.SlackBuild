@@ -28,8 +28,9 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=containerd
-VERSION=${VERSION:-1.7.21}
-BUILD=${BUILD:-1}
+VERSION=${VERSION:-1.7.22}
+GITHASH=${GITHASH:-7f7fdf5}
+BUILD=${BUILD:-2}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}

@@ -27,7 +27,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=docker-compose
-VERSION=${VERSION:-2.29.2}
+VERSION=${VERSION:-2.29.3}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -68,8 +68,6 @@ find -L . \
 
 export GOPATH="$TMP/go"
 export GOCACHE="$TMP/go-build"
-
-GITURI=github.com/docker/compose
 
 CGO_ENABLED=0 \
 GOFLAGS="-buildmode=pie -trimpath -ldflags=-linkmode=external -ldflags=-X=github.com/docker/compose/v2/internal.Version=${VERSION} -mod=readonly -modcacherw" \
