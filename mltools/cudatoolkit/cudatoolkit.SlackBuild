@@ -1,0 +1,138 @@
+#!/bin/bash
+
+# Slackware build script for CUDA Toolkit
+
+# Copyright 2020 Giorgio Peron <giorgio.peron@gmail.com>, Belluno, Italy
+# All rights reserved.
+#
+# Redistribution and use of this script, with or without modification, is
+# permitted provided that the following conditions are met:
+#
+# 1. Redistributions of this script must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ''AS IS'' AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+# EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# 2023-05-16 DW
+# Removed LIBDIRSUFFIX and made 'lib64' hard-coded as we're 64bit only
+# Simplified/moved ARCH parts
+# Moved broken symlinks out of doinst.sh to slackbuild
+# NOTE download page shows newer version available, but all file and
+# subdirectory locations have changed
+
+# Modified by Francisco Ambrozio - updated for version 12.6.1 based on archlinux PKGBUILD
+
+cd $(dirname $0) ; CWD=$(pwd)
+
+PRGNAM=cudatoolkit
+FILENAME=cuda
+VERSION=${VERSION:-12.6.1}
+DRIVER=${DRIVER:-560.35.03}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_fco}
+PKGTYPE=${PKGTYPE:-txz}
+
+if [ -z "$ARCH" ]; then
+  ARCH=$( uname -m )
+fi
+
+if [ "$ARCH" != "x86_64" ]; then
+  echo "$ARCH architecture is unsupported." >/dev/stderr
+  exit 1
+fi
+
+# If the variable PRINT_PACKAGE_NAME is set, then this script will report what
+# the name of the created package would be, and then exit. This information
+# could be useful to other scripts.
+if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
+  echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
+  exit 0
+fi
+
+TMP=${TMP:-/tmp/SBo}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+set -e
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf $PRGNAM-$VERSION
+mkdir -p $PRGNAM-$VERSION
+
+# 20220127 bkw: it wasn't necessary to chmod +x the .run file. Plus,
+# SlackBuilds should *never* write to $CWD.
+sh $CWD/$FILENAME\_$VERSION\_$DRIVER\_linux.run --target $PRGNAM-$VERSION --noexec --tmpdir $TMP
+
+mkdir -p $PKG/opt/cuda
+cd $PRGNAM-$VERSION/builds
+rm -r NVIDIA*.run bin
+mv integration nsight_compute nsight_systems EULA.txt "$PKG/opt/cuda/"
+mv cuda_demo_suite/extras "$PKG/opt/cuda/"
+mv cuda_sanitizer_api/compute-sanitizer "$PKG/opt/cuda/extras/"
+rmdir cuda_sanitizer_api
+
+for lib in *; do
+  if [[ "$lib" =~ .*"version.json".* ]]; then
+    continue
+  fi
+  cp -r $lib/* "$PKG/opt/cuda/"
+done
+
+rm -f $PKG/opt/cuda/bin/cuda-uninstaller
+
+# Put man in the standard place
+mkdir -p $PKG/usr
+cp -r libcufile/gds/man $PKG/usr/
+find $PKG/usr/man -type f -exec gzip -9 {} \;
+for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
+
+DOCS="CUDA_Toolkit_Release_Notes.txt DOCS EULA.txt LICENSE README"
+# Put doc in the standard place
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+for doc in $DOCS
+do
+  cp -a $PKG/opt/cuda/$doc $PKG/usr/doc/$PRGNAM-$VERSION/
+done
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+
+# Install profiles
+install -D -m 755 "${CWD}/files/cuda.sh" "${PKG}/etc/profile.d/cuda.sh"
+install -D -m 755 "${CWD}/files/cuda.csh" "${PKG}/etc/profile.d/cuda.csh"
+
+# Install pkgconfig files
+mkdir -p "$PKG"/usr/lib64/pkgconfig
+cp "${CWD}"/files/*.pc "${PKG}"/usr/lib64/pkgconfig
+
+# Allow newer compilers to work.
+# See https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#system-requirements
+# for official requirements
+sed -i "/.*unsupported GNU version.*/d" "${PKG}"/opt/cuda/targets/x86_64-linux/include/crt/host_config.h
+sed -i "/.*unsupported clang version.*/d" "${PKG}"/opt/cuda/targets/x86_64-linux/include/crt/host_config.h
+
+# Fix Makefile paths to CUDA
+for f in $(find "$PKG"/opt/cuda -name Makefile); do
+  sed -i "s|/usr/local/cuda|/opt/cuda|g" "$f"
+done
+
+install -m 755 "${CWD}/files/nsight_compute.sh" "${PKG}/opt/cuda/bin/nsight_compute.sh"
+install -m 755 "${CWD}/files/nsight_systems.sh" "${PKG}/opt/cuda/bin/nsight_systems.sh"
+mkdir -p $PKG/usr/share/applications
+cp $CWD/files/*.desktop $PKG/usr/share/applications
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+cat $CWD/doinst.sh > $PKG/install/doinst.sh
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE

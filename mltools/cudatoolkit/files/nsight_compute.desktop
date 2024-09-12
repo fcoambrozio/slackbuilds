@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=NVIDIA Nsight Compute
+GenericName=NVIDIA Nsight Compute
+Icon=/opt/cuda/nsight_compute/docs/_static/nsight-compute.png
+Exec=/opt/cuda/bin/nsight_compute.sh
+TryExec=/opt/cuda/bin/nsight_compute.sh
+Keywords=cuda;gpu;nvidia;debugger;
+X-AppInstall-Keywords=cuda;gpu;nvidia;debugger;
+X-GNOME-Keywords=cuda;gpu;nvidia;debugger;
+Terminal=false
+Categories=Development;IDE;Debugger;ParallelComputing
