@@ -27,8 +27,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=gst-plugins-ugly
-VERSION=${VERSION:-1.24.7}
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-1.24.8}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
