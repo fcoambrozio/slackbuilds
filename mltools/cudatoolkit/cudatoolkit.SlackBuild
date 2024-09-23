@@ -107,8 +107,7 @@ done
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 # Install profiles
-install -D -m 755 "${CWD}/files/cuda.sh" "${PKG}/etc/profile.d/cuda.sh"
-install -D -m 755 "${CWD}/files/cuda.csh" "${PKG}/etc/profile.d/cuda.csh"
+install -D -m 755 "${CWD}/files/cuda.sh" "${PKG}/etc/profile.d/cuda.sh.new"
 
 # Install pkgconfig files
 mkdir -p "$PKG"/usr/lib64/pkgconfig
