@@ -30,7 +30,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=nginx
-VERSION=${VERSION:-1.25.2}
+VERSION=${VERSION:-1.26.2}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -140,6 +140,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --with-poll_module \
   --with-http_ssl_module \
   --with-http_v2_module \
+  --with-http_v3_module \
   --with-http_realip_module \
   --with-http_addition_module \
   --with-http_xslt_module${DYNAMIC_MODULE} \
@@ -157,6 +158,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --with-http_slice_module \
   --with-http_stub_status_module \
   --with-http_perl_module${DYNAMIC_MODULE} \
+  --with-google_perftools_module \
   --with-mail${DYNAMIC_MODULE} \
   --with-mail_ssl_module \
   --with-stream${DYNAMIC_MODULE} \
@@ -169,7 +171,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --with-pcre-jit \
   --with-libatomic \
   --with-threads \
-  --with-google_perftools_module \
+  --with-cc-opt="$SLKCFLAGS" \
   $GEOIP_MOD \
   $ADD_MODULE
 
