@@ -27,9 +27,9 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=docker-buildx
-VERSION=${VERSION:-0.17.0}
-GITHASH=${GITHASH:-78c8c28}
-BUILD=${BUILD:-1}
+VERSION=${VERSION:-0.17.1}
+GITHASH=${GITHASH:-257815a}
+BUILD=${BUILD:-2}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 
@@ -67,15 +67,12 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-export GOPATH="$TMP/go"
-export GOCACHE="$TMP/go-build"
-
 GITURI=github.com/docker/buildx
 
 CGO_ENABLED=0 \
 GOFLAGS=-mod=vendor \
 GO111MODULE=on \
-  go build -ldflags "-X $GITURI/version.Version=${VERSION} -X $GITURI/version.Revision=${GITHASH} -X $GITURI/version.Package=$GITURI -w -s" \
+  go build -ldflags "-X ${GITURI}/version.Version=${VERSION} -X ${GITURI}/version.Revision=${GITHASH} -X ${GITURI}/version.Package=${GITURI} -w -s" \
   -o docker-buildx ./cmd/buildx
 
 mkdir -p $PKG/usr/libexec/docker/cli-plugins/
