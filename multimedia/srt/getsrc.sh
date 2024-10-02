@@ -3,7 +3,7 @@
 # get source for srt
 #
 
-VERSION="1.5.4-rc.0"
+VERSION="1.5.4-rc.1"
 DOWNLOAD="https://github.com/Haivision/srt/archive/v$VERSION/srt-$VERSION.tar.gz"
 
 wget -c $DOWNLOAD
