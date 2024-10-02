@@ -104,19 +104,12 @@ MODE="755"
 # We don't want an init-script building kernel modules.
 zcat $CWD/vboxdrv.sh-setup.diff.gz | patch -d src/VBox/Installer/linux --verbose || exit 1
 
-# https://gitweb.gentoo.org/repo/gentoo.git/plain/app-emulation/virtualbox/files/virtualbox-7.0.6-gcc-13.patch
-patch -p1 -i $CWD/virtualbox-7.0.6-gcc-13.patch || exit 1
-
-# Skip python2 detection
-sed -i 's|python2.7 python2.6 ||' ./configure
-
 # Use our CFLAGS
-sed -i "s|CXX_FLAGS=\"\"|CXX_FLAGS=\"$SLKCFLAGS -std=c++11\"|" ./configure
+sed -i "s|CXX_FLAGS=\"\"|CXX_FLAGS=\"$SLKCFLAGS\"|" ./configure
 
 bash ./configure \
   --disable-kmods \
   --disable-vmmraw \
-  --disable-java \
   --enable-vde \
   --enable-vnc \
   --with-makeself=/usr/bin/echo \
@@ -127,7 +120,7 @@ bash ./configure \
 
 cp $CWD/LocalConfig.kmk .
 sed -i "s|LIBDIR|lib$LIBDIRSUFFIX|" ./LocalConfig.kmk
-sed -i "s|CXXFLAGS|$SLKCFLAGS -std=c++11|" ./LocalConfig.kmk
+sed -i "s|CXXFLAGS|$SLKCFLAGS|" ./LocalConfig.kmk
 
 kmk ${NUMJOBS} LOCALCFG=./LocalConfig.kmk || exit 1
 
@@ -173,21 +166,22 @@ cd out/linux.$BUILDDIR/release/bin/
 
   mv virtualbox.xml $PKG/usr/share/mime/packages
 
-  export VBOX_INSTALL_PATH=/usr/lib$LIBDIRSUFFIX/virtualbox
-  cd sdk/installer
-    python ./vboxapisetup.py install --prefix "/usr" --root $PKG || exit 1
-  cd -
-  rm -rf sdk/installer
-
   mv sdk $PKG/usr/share/virtualbox/
   install -m $MODE -g $GROUP VBoxSysInfo.sh $PKG/usr/share/virtualbox/
   install -m $MODE -g $GROUP VBoxCreateUSBNode.sh $PKG/usr/share/virtualbox/
-  #install -m $MODE -g $GROUP VBoxTunctl $PKG/usr/bin/
-  rm -f VBoxSysInfo.sh VBoxCreateUSBNode.sh #VBoxTunctl
+  rm -f VBoxSysInfo.sh VBoxCreateUSBNode.sh
   mv * $PKG/usr/lib$LIBDIRSUFFIX/virtualbox/
   chown -R root:$GROUP $PKG/usr/lib$LIBDIRSUFFIX/virtualbox/
   chmod -R $MODE $PKG/usr/lib$LIBDIRSUFFIX/virtualbox/
   mv $PKG/usr/lib$LIBDIRSUFFIX/virtualbox/VBox.sh $PKG/usr/lib$LIBDIRSUFFIX/virtualbox/VBox
+
+  export VBOX_INSTALL_PATH=/usr/lib$LIBDIRSUFFIX/virtualbox
+  export VBOX_SDK_PATH=$PKG/usr/share/virtualbox/sdk
+  cd $PKG/usr/share/virtualbox/sdk/installer/python/vboxapi
+    patch -p0 -i $CWD/vboxapi_setup.diff || exit 1
+    python setup.py install --root=$PKG || exit 1
+  cd -
+  rm -rf $PKG/usr/share/virtualbox/sdk/installer
 cd $TMP/VirtualBox-${VERSION}
 
 # Drop broken symlink

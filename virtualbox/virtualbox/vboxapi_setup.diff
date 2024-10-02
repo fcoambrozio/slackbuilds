@@ -1,0 +1,14 @@
+--- setup.py.orig	2024-09-30 18:27:00.567792512 -0300
++++ setup.py	2024-09-30 18:27:17.794792419 -0300
+@@ -134,11 +134,6 @@
+         from vboxapi import VirtualBoxManager
+         oVBoxMgr = VirtualBoxManager()
+         oVBox    = oVBoxMgr.getVirtualBox()
+-        oHost    = oVBox.host
+-        if oHost.architecture not in (oVBoxMgr.constants.PlatformArchitecture_x86,
+-                                      oVBoxMgr.constants.PlatformArchitecture_ARM):
+-            raise Exception('Host platform invalid!')
+-        print("Testing VirtualBox Python bindings successful: Detected VirtualBox %s (%d)" % (oVBox.version, oHost.architecture))
+         _ = oVBox.getMachines()
+         oVBoxMgr.deinit()
+         del oVBoxMgr
