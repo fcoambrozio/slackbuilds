@@ -35,7 +35,7 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=cudatoolkit
 FILENAME=cuda
-VERSION=${VERSION:-12.6.1}
+VERSION=${VERSION:-12.6.2}
 DRIVER=${DRIVER:-560.35.03}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
