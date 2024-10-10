@@ -5,4 +5,5 @@ python-toml
 protobuf-c
 libjcat
 pefile
+flashrom
 fwupd
