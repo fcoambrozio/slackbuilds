@@ -1,4 +1,5 @@
 gcab
+chrpath
 libsmbios
 libxmlb
 python-toml

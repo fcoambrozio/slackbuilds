@@ -27,7 +27,7 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=libsmbios
 VERSION=${VERSION:-2.4.3}
-BUILD=${BUILD:-3}
+BUILD=${BUILD:-4}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
@@ -102,6 +102,8 @@ make install DESTDIR=$PKG
 install -m755 -d $PKG/usr/include
 cp -a src/include/* $PKG/usr/include/
 cp -a out/public-include/* $PKG/usr/include/
+
+chrpath -d $PKG/usr/sbin/smbios-sys-info-lite
 
 # Don't clobber the config file
 mv $PKG/etc/libsmbios/logging.conf $PKG/etc/libsmbios/logging.conf.new
