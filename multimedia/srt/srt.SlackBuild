@@ -31,8 +31,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=srt
-VERSION=${VERSION:-1.5.4_rc2}
-SRCVER=1.5.4-rc.2
+VERSION=${VERSION:-1.5.4}
+SRCVER=$VERSION
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
