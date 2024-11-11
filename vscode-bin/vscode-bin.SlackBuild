@@ -28,8 +28,8 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=vscode-bin
 SRCNAM=code-stable
-VERSION=${VERSION:-1.94.2}
-SRCVER=1728492644
+VERSION=${VERSION:-1.95.2}
+SRCVER=1730980362
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
