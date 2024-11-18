@@ -27,7 +27,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=nvidia-container-toolkit
-VERSION=${VERSION:-1.16.2}
+VERSION=${VERSION:-1.17.2}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -81,17 +81,21 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-CFLAGS="" \
-CPPFLAGS="" \
-LDLIBS="" \
-make binaries
+mkdir build
+go build -v \
+  -buildmode=pie \
+  -mod=vendor \
+  -modcacherw \
+  -ldflags "-compressdwarf=false -linkmode external -extldflags \"-Wl,-z,lazy\" -X github.com/NVIDIA/nvidia-container-toolkit/internal/info.version=$VERSION" \
+  -o build ./...
 
 mkdir -p $PKG/usr/bin
-install -m 755 -t $PKG/usr/bin nvidia-container-runtime-hook
-install -m 755 -t $PKG/usr/bin nvidia-container-runtime
-install -m 755 -t $PKG/usr/bin nvidia-container-runtime.cdi
-install -m 755 -t $PKG/usr/bin nvidia-container-runtime.legacy
-install -m 755 -t $PKG/usr/bin nvidia-ctk
+install -m 755 -t $PKG/usr/bin build/nvidia-container-runtime-hook
+install -m 755 -t $PKG/usr/bin build/nvidia-container-runtime
+install -m 755 -t $PKG/usr/bin build/nvidia-container-runtime.cdi
+install -m 755 -t $PKG/usr/bin build/nvidia-container-runtime.legacy
+install -m 755 -t $PKG/usr/bin build/nvidia-cdi-hook
+install -m 755 -t $PKG/usr/bin build/nvidia-ctk
 
 mkdir -p $PKG/etc/nvidia-container-runtime/host-files-for-container.d
 cat $CWD/config.toml.new > $PKG/etc/nvidia-container-runtime/config.toml.new
@@ -99,8 +103,8 @@ cat $CWD/config.toml.new > $PKG/etc/nvidia-container-runtime/config.toml.new
 mkdir -p $PKG/usr/share/containers/oci/hooks.d
 cat $CWD/oci-nvidia-hook.json.new > $PKG/usr/share/containers/oci/hooks.d/oci-nvidia-hook.json.new
 
-#find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
-#  | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
+  | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp LICENSE $PKG/usr/doc/$PRGNAM-$VERSION
