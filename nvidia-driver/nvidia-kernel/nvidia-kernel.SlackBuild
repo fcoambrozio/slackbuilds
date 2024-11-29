@@ -31,10 +31,10 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=nvidia-kernel
-VERSION=${VERSION:-560.35.03}
+VERSION=${VERSION:-550.135}
 BUILD=${BUILD:-1}
-TAG=${TAG:-_SBo}
-PKGTYPE=${PKGTYPE:-tgz}
+TAG=${TAG:-_fco}
+PKGTYPE=${PKGTYPE:-txz}
 
 KERNEL=${KERNEL:-$(uname -r)}
 KERNELPATH=${KERNELPATH:-/lib/modules/${KERNEL}/build}
