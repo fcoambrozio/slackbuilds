@@ -28,8 +28,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=containerd
-VERSION=${VERSION:-2.0.0}
-GITHASH=${GITHASH:-207ad71}
+VERSION=${VERSION:-2.0.1}
+GITHASH=${GITHASH:-88aa2f5}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -77,9 +77,6 @@ sed -i \
   -e "s/git rev-parse HEAD.*$/echo ${GITHASH})/" \
   -e 's/-s -w //' \
   Makefile
-
-export GOPATH="$TMP/go"
-export GOCACHE="$TMP/go-build"
 
 make \
   VERSION=${VERSION} \

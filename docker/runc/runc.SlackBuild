@@ -28,8 +28,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=runc
-VERSION=${VERSION:-1.2.2}
-GITHASH=${GITHASH:-7cb3632}
+VERSION=${VERSION:-1.2.3}
+GITHASH=${GITHASH:-0d37cfd}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
