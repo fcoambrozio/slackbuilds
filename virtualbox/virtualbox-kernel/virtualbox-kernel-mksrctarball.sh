@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # This script helps you to make the source package
 # of the virtualbox host kernel module.
 # IMPORTANT: The virtualbox-ose version you want to use

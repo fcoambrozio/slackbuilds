@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Copyright 2008 Mauro Giachero <mauro.giachero@gmail.com>
-# Copyright 2008-2022 Heinz Wiesinger, Amsterdam, The Netherlands
+# Copyright 2008-2024 Heinz Wiesinger, Amsterdam, The Netherlands
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -21,17 +21,12 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Modified by Francisco Ambrozio
-
 cd $(dirname $0) ; CWD=$(pwd)
 
 PKGNAM=virtualbox
 VERSION=${VERSION:-$(echo VirtualBox-*.tar.?z | rev | cut -f 3- -d . | cut -f 1 -d - | rev)}
 BUILD=${BUILD:-2}
 TAG=${TAG:-_fco}
-NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
-
-export MAKEFLAGS=$NUMJOBS
 
 # Automatically determine the architecture we're building on:
 if [ -z "$ARCH" ]; then
@@ -51,6 +46,8 @@ if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   echo "$PKGNAM-$VERSION-$ARCH-$BUILD$TAG.txz"
   exit 0
 fi
+
+NUMJOBS=${NUMJOBS:-" -j$(expr $(nproc) + 1) "}
 
 if [ "$ARCH" = "i586" ]; then
   SLKCFLAGS="-O2 -march=i586 -mtune=i686"
@@ -90,6 +87,8 @@ rm -rf VirtualBox-$VERSION
 tar xvf $CWD/VirtualBox-$VERSION.tar.?z || exit 1
 cd VirtualBox-$VERSION || exit 1
 
+patch -p1 -i $CWD/022-index-out-of-bound.patch || exit 1
+
 chown -R root:root .
 find . \
   \( -perm 777 -o -perm 775 -o -perm 711 -o -perm 555 -o -perm 511 \) \
@@ -104,12 +103,17 @@ MODE="755"
 # We don't want an init-script building kernel modules.
 zcat $CWD/vboxdrv.sh-setup.diff.gz | patch -d src/VBox/Installer/linux --verbose || exit 1
 
+# file missing from this release
+sed '/security-of-remote-vms/d' -i doc/manual/en_US/dita/UserManual.ditamap
+
+# Skip python2 detection
+sed -i 's|python2.7 python2.6 ||' ./configure
+
 # Use our CFLAGS
-sed -i "s|CXX_FLAGS=\"\"|CXX_FLAGS=\"$SLKCFLAGS\"|" ./configure
+sed -i "s|CXX_FLAGS=\"\"|CXX_FLAGS=\"$SLKCFLAGS -std=c++11\"|" ./configure
 
 bash ./configure \
   --disable-kmods \
-  --disable-vmmraw \
   --enable-vde \
   --enable-vnc \
   --with-makeself=/usr/bin/echo \
@@ -120,7 +124,7 @@ bash ./configure \
 
 cp $CWD/LocalConfig.kmk .
 sed -i "s|LIBDIR|lib$LIBDIRSUFFIX|" ./LocalConfig.kmk
-sed -i "s|CXXFLAGS|$SLKCFLAGS|" ./LocalConfig.kmk
+sed -i "s|CXXFLAGS|$SLKCFLAGS -std=c++11|" ./LocalConfig.kmk
 
 kmk ${NUMJOBS} LOCALCFG=./LocalConfig.kmk || exit 1
 
@@ -166,6 +170,12 @@ cd out/linux.$BUILDDIR/release/bin/
 
   mv virtualbox.xml $PKG/usr/share/mime/packages
 
+  export VBOX_INSTALL_PATH=/usr/lib$LIBDIRSUFFIX/virtualbox
+  cd sdk/installer/python/
+    python3 ./vboxapisetup.py install --prefix "/usr" --root $PKG || exit 1
+  cd -
+  rm -rf sdk/installer
+
   mv sdk $PKG/usr/share/virtualbox/
   install -m $MODE -g $GROUP VBoxSysInfo.sh $PKG/usr/share/virtualbox/
   install -m $MODE -g $GROUP VBoxCreateUSBNode.sh $PKG/usr/share/virtualbox/
@@ -174,14 +184,6 @@ cd out/linux.$BUILDDIR/release/bin/
   chown -R root:$GROUP $PKG/usr/lib$LIBDIRSUFFIX/virtualbox/
   chmod -R $MODE $PKG/usr/lib$LIBDIRSUFFIX/virtualbox/
   mv $PKG/usr/lib$LIBDIRSUFFIX/virtualbox/VBox.sh $PKG/usr/lib$LIBDIRSUFFIX/virtualbox/VBox
-
-  export VBOX_INSTALL_PATH=/usr/lib$LIBDIRSUFFIX/virtualbox
-  export VBOX_SDK_PATH=$PKG/usr/share/virtualbox/sdk
-  cd $PKG/usr/share/virtualbox/sdk/installer/python/vboxapi
-    patch -p0 -i $CWD/vboxapi_setup.diff || exit 1
-    python setup.py install --root=$PKG || exit 1
-  cd -
-  rm -rf $PKG/usr/share/virtualbox/sdk/installer
 cd $TMP/VirtualBox-${VERSION}
 
 # Drop broken symlink
@@ -242,6 +244,9 @@ chmod 0755 $PKG/etc/profile.d/*
 # setup udev rules for vboxdrv and USB device support
 mkdir -p $PKG/lib/udev/rules.d
 install -m 644 $CWD/10-virtualbox.rules $PKG/lib/udev/rules.d/
+
+mkdir $PKG/etc/modprobe.d
+cat $CWD/modprobe-virtualbox.conf > $PKG/etc/modprobe.d/virtualbox.conf
 
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
