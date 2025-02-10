@@ -27,7 +27,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=cudnn
-VERSION=${VERSION:-9.7.0.66}
+VERSION=${VERSION:-9.7.1.26}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
