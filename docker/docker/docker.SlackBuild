@@ -25,11 +25,12 @@
 
 # Modified by Francisco Ambrozio
 
+
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=docker
-VERSION=${VERSION:-27.5.1}
-GITHASH=${GITHASH:-4c9b3b0}
+VERSION=${VERSION:-28.0.1}
+GITHASH=${GITHASH:-bbd0a17}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -74,6 +75,9 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
+mkdir -p /var/tmp/go-build
+
+export TMPDIR=/var/tmp/go-build
 export GOFLAGS='-buildmode=pie -trimpath -mod=readonly -modcacherw -ldflags=-linkmode=external'
 export GO111MODULE=off
 export DISABLE_WARN_OUTSIDE_CONTAINER=1

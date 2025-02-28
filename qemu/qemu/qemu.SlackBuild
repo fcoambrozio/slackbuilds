@@ -28,7 +28,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=qemu
-VERSION=${VERSION:-9.2.0}
+VERSION=${VERSION:-9.2.1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -123,8 +123,10 @@ else
   with_slirp=""
 fi
 
-# https://bugs.gentoo.org/759604
-patch -p1 -i $CWD/qemu-8.0.0-disable-keymap.patch
+for patch in $CWD/patches/*.patch
+do
+    patch -p1 -i $patch
+done
 
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
