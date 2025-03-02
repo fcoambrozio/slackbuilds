@@ -1,3 +1,4 @@
+go-md2man
 runc
 containerd
 tini
