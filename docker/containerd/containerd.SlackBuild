@@ -23,13 +23,18 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#
 # Modified by Francisco Ambrozio
+#
+# 20250302 - updated to 2.0.3
+#
+
 
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=containerd
-VERSION=${VERSION:-2.0.2}
-GITHASH=${GITHASH:-c507a02}
+VERSION=${VERSION:-2.0.3}
+GITHASH=${GITHASH:-06b99ca}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -80,10 +85,19 @@ sed -i \
 
 make \
   VERSION=${VERSION} \
-  BUILDTAGS="seccomp" \
   GO_BUILD_FLAGS="-trimpath -mod=readonly -modcacherw" \
   EXTRA_LDFLAGS="-buildid="
+make VERSION=${VERSION} man
 make install PREFIX=/usr DESTDIR=$PKG
+
+install -D -m 0644 man/*.5 -t $PKG/usr/man/man5
+install -D -m 0644 man/*.8 -t $PKG/usr/man/man8
+
+find $PKG/usr/man -type f -exec gzip -9 {} \;
+for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
+
+install -D -m 0644 contrib/autocomplete/ctr $PKG/usr/share/bash-completion/completions/ctr
+install -D -m 0644 contrib/autocomplete/zsh_autocomplete $PKG/usr/share/zsh/site-functions/_ctr
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a README.md LICENSE NOTICE $PKG/usr/doc/$PRGNAM-$VERSION
