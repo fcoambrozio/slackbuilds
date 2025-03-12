@@ -23,12 +23,16 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#
 # Modified by Francisco Ambrozio
+#  202250311 - updated to 9.2.2
+#
+
 
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=qemu
-VERSION=${VERSION:-9.2.1}
+VERSION=${VERSION:-9.2.2}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -123,10 +127,7 @@ else
   with_slirp=""
 fi
 
-for patch in $CWD/patches/*.patch
-do
-    patch -p1 -i $patch
-done
+patch -p1 -i $CWD/qemu-9.0.0-disable-keymap.patch
 
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
