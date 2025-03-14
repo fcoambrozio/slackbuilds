@@ -1,0 +1,38 @@
+diff --git a/kernel-firmware/kernel-firmware.SlackBuild b/kernel-firmware/kernel-firmware.SlackBuild
+index 505c96a..5753cbe 100755
+--- a/kernel-firmware/kernel-firmware.SlackBuild
++++ b/kernel-firmware/kernel-firmware.SlackBuild
+@@ -24,8 +24,8 @@ cd $(dirname $0) ; CWD=$(pwd)
+ 
+ PKGNAM=kernel-firmware
+ ARCH=noarch
+-BUILD=${BUILD:-2}
+-GITHASH=7673dffd5e3324a726caf8bfc0f1a005862f5f16
++BUILD=${BUILD:-1}
++GITHASH=b69d4b74c98611d4c1bdd1d1a767791b451a3f38
+ TAG=${TAG:-_fco}
+ # Compress the firmware blobs?
+ # Default is "none" for no compression.
+@@ -48,7 +48,7 @@ if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
+   #DATE="$(lynx -dump -width=256 https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=HEAD | grep "    author   " | head -n 1 | rev | cut -f 3 -d ' ' | rev | tr -d -)"
+   #DATE="$(lynx -dump -width=256 https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=HEAD | grep "   committer " | head -n 1 | rev | cut -f 3 -d ' ' | rev | tr -d -)"
+   #HEADISAT="$(lynx -dump -width=256 https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=HEAD | grep "    commit   " | head -n 1 | cut -f 2 -d ] | cut -b 1-7)"
+-  DATE="20250109"
++  DATE="20250311"
+   HEADISAT=$(echo $GITHASH | cut -b 1-7)
+   echo "$PKGNAM-${DATE}_${HEADISAT}-$ARCH-$BUILD.txz"
+   exit 0
+@@ -64,11 +64,12 @@ cd $PKG
+ git clone git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+ cd linux-firmware
+ git checkout $GITHASH
++git show 7673dffd5e3324a726caf8bfc0f1a005862f5f16:rtw89/rtw8852c_fw-1.bin > rtw89/rtw8852c_fw-1.bin
+ cd -
+ # Better determine these the same way as above.
+ #DATE="$(lynx -dump -width=256 https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=HEAD | grep "   committer " | head -n 1 | rev | cut -f 3 -d ' ' | rev | tr -d -)"
+ #HEADISAT="$(lynx -dump -width=256 https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=HEAD | grep "    commit   " | head -n 1 | cut -f 2 -d ] | cut -b 1-7)"
+-DATE="20250109"
++DATE="20250311"
+ HEADISAT=$(echo $GITHASH | cut -b 1-7)
+ chown -R root:root .
+ 
