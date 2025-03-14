@@ -38,12 +38,16 @@
 #   give you a parallel build, but it does break the 'make test'
 #   portion of the bmake build.
 
-# Modified by Francisco Ambrozio - updated version
+#
+# Modified by Francisco Ambrozio
+#  20250312: update for 20250225
+#
+
 
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=bmake
-VERSION=${VERSION:-20250120}
+VERSION=${VERSION:-20250225}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -61,9 +65,9 @@ if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   exit 0
 fi
 
-TMP=${TMP:-/tmp/SBo}
+TMP=${TMP:-/var/tmp/build}
 PKG=$TMP/package-$PRGNAM
-OUTPUT=${OUTPUT:-/tmp}
+OUTPUT=${OUTPUT:-/var/tmp/packages}
 
 if [ "$ARCH" = "i586" ]; then
   SLKCFLAGS="-O2 -march=i586 -mtune=i686"

@@ -22,12 +22,16 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Modifed by Francisco Ambrozio - updated version
+#
+# Modifed by Francisco Ambrozio
+#  20250312: update for 1.17.5
+#
+
 
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=libnvidia-container
-VERSION=${VERSION:-1.17.4}
+VERSION=${VERSION:-1.17.5}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -45,9 +49,9 @@ if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   exit 0
 fi
 
-TMP=${TMP:-/tmp/SBo}
+TMP=${TMP:-/var/tmp/build}
 PKG=$TMP/package-$PRGNAM
-OUTPUT=${OUTPUT:-/tmp}
+OUTPUT=${OUTPUT:-/var/tmp/packages}
 
 if [ "$ARCH" = "i586" ]; then
   SLKCFLAGS="-O2 -march=i586 -mtune=i686"
@@ -81,10 +85,17 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
+patch -p1 -i $CWD/fix-makefile.patch
+patch -p1 -i $CWD/fix-go1.24.patch
+
+export GOFLAGS="-mod=vendor"
+
 CFLAGS="$SLKCFLAGS -I/usr/include/tirpc" \
 CPPFLAGS="$SLKCFLAGS -I/usr/include/tirpc" \
 LDLIBS="-ltirpc" \
 make install \
+  CGO_CFLAGS="$CFLAGS" \
+  GO_LDFLAGS="-compressdwarf=false -linkmode=external" \
   prefix=/usr \
   libdir=/usr/lib${LIBDIRSUFFIX} \
   sysconfdir=/etc \

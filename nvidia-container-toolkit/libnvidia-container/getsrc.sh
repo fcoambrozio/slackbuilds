@@ -1,9 +1,10 @@
 #!/bin/bash
 #
-# get source for libnvidia-container
+# get source for libnvidia-container - https://github.com/NVIDIA/libnvidia-container
 #
 
-VERSION="1.17.4"
+
+VERSION="1.17.5"
 DOWNLOAD="https://github.com/NVIDIA/libnvidia-container/archive/v${VERSION}/libnvidia-container-${VERSION}.tar.gz"
 
 wget -c $DOWNLOAD
