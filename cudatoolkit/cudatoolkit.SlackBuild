@@ -29,15 +29,19 @@
 # NOTE download page shows newer version available, but all file and
 # subdirectory locations have changed
 
+#
 # Modified by Francisco Ambrozio - updated for version 12.6.1 based on archlinux PKGBUILD
+#  20250312 - updated to 12.8.1
+#
+
 
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=cudatoolkit
 FILENAME=cuda
-VERSION=${VERSION:-12.8.0}
-DRIVER=${DRIVER:-570.86.10}
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-12.8.1}
+DRIVER=${DRIVER:-570.124.06}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 
@@ -58,9 +62,14 @@ if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   exit 0
 fi
 
-TMP=${TMP:-/tmp/SBo}
+if [ ! -s /etc/profile.d/gcc13.sh ]; then
+    echo "gcc13 not found."
+    exit 1
+fi
+
+TMP=${TMP:-/var/tmp/build}
 PKG=$TMP/package-$PRGNAM
-OUTPUT=${OUTPUT:-/tmp}
+OUTPUT=${OUTPUT:-/var/tmp/packages}
 
 set -e
 
@@ -69,6 +78,8 @@ mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
 mkdir -p $PRGNAM-$VERSION
+
+. /etc/profile.d/gcc13.sh
 
 # 20220127 bkw: it wasn't necessary to chmod +x the .run file. Plus,
 # SlackBuilds should *never* write to $CWD.
