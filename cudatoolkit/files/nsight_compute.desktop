@@ -2,9 +2,9 @@
 Type=Application
 Name=NVIDIA Nsight Compute
 GenericName=NVIDIA Nsight Compute
-Icon=/opt/cuda/nsight_compute/docs/_static/nsight-compute.png
-Exec=/opt/cuda/bin/nsight_compute.sh
-TryExec=/opt/cuda/bin/nsight_compute.sh
+Icon=/opt/cuda/nsight_compute/host/linux-desktop-glibc_2_11_3-x64/ncu-ui.png
+Exec=/opt/cuda/nsight_compute/host/linux-desktop-glibc_2_11_3-x64/ncu-ui
+TryExec=/opt/cuda/nsight_compute/host/linux-desktop-glibc_2_11_3-x64/ncu-ui
 Keywords=cuda;gpu;nvidia;debugger;
 X-AppInstall-Keywords=cuda;gpu;nvidia;debugger;
 X-GNOME-Keywords=cuda;gpu;nvidia;debugger;

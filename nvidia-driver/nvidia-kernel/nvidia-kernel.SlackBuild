@@ -26,13 +26,15 @@
 
 # Thanks to Robby Workman for suggestions to improve this script.
 
+#
 # Modified by Francisco Ambrozio - added --tmpdir $TMP option to the .run file 
+#
 
 
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=nvidia-kernel
-VERSION=${VERSION:-570.124.04}
+VERSION=${VERSION:-570.133.07}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -78,9 +80,9 @@ if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   exit 0
 fi
 
-TMP=${TMP:-/tmp/SBo}
+TMP=${TMP:-/var/tmp/build}
 PKG=$TMP/package-$PRGNAM
-OUTPUT=${OUTPUT:-/tmp}
+OUTPUT=${OUTPUT:-/var/tmp/packages}
 
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
