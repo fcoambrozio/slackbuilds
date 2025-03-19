@@ -30,9 +30,9 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=docker-cli
-VERSION=${VERSION:-28.0.1}
-GITHASH=${GITHASH:-068a01e}
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-28.0.2}
+GITHASH=${GITHASH:-0442a73}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}

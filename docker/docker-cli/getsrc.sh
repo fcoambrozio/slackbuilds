@@ -1,9 +1,10 @@
 #!/bin/bash
 #
-# get source for docker-cli
+# get source for docker-cli - https://github.com/docker/cli
 #
 
-VERSION="28.0.1"
+
+VERSION="28.0.2"
 DOWNLOAD="https://github.com/docker/cli/archive/v$VERSION/cli-$VERSION.tar.gz"
 
 wget -c $DOWNLOAD
