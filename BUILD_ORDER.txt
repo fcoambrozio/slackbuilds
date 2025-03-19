@@ -8,6 +8,7 @@ pwgen
 pass
 numactl
 gsoap
+imlib2
 powerline-status
 python/python-typing-extensions
 python/python-pyudev
@@ -60,6 +61,7 @@ docker/docker
 docker/docker-buildx
 docker/docker-compose
 Solaar
+xrdp
 postgresql
 php-pgsql
 nginx

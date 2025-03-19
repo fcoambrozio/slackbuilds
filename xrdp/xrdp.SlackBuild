@@ -1,0 +1,170 @@
+#!/bin/bash
+
+# Slackware build script for xrdp
+# Written by Phillip Warner <pc_warner@yahoo.com>
+# Amended by David Allen <david.a58@optusnet.com.au>
+
+# 20220414 bkw: Modified by SlackBuilds.org, BUILD=2:
+# - add a couple missing .new config files to doinst.sh.
+
+#
+# Modified by Francisco Ambrozio
+#
+
+
+cd $(dirname $0) ; CWD=$(pwd)
+
+PRGNAM=xrdp
+VERSION=${VERSION:-0.10.2}
+BUILD=${BUILD:-2}
+TAG=${TAG:-_SBo}
+PKGTYPE=${PKGTYPE:-txz}
+
+if [ -z "$ARCH" ]; then
+  case "$( uname -m )" in
+    i?86) ARCH=i586 ;;
+    arm*) ARCH=arm ;;
+       *) ARCH=$( uname -m ) ;;
+  esac
+fi
+
+if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
+  echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
+  exit 0
+fi
+
+TMP=${TMP:-/var/tmp/build}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/var/tmp/packages}
+
+if [ "$ARCH" = "i586" ]; then
+  SLKCFLAGS="-O2 -march=i586 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "i686" ]; then
+  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "x86_64" ]; then
+  SLKCFLAGS="-O2 -fPIC"
+  LIBDIRSUFFIX="64"
+else
+  SLKCFLAGS="-O2"
+  LIBDIRSUFFIX=""
+fi
+
+set -e
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf $PRGNAM-$VERSION
+tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
+cd $PRGNAM-$VERSION
+chown -R root:root .
+find -L . \
+ \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 -o -perm 511 \) \
+ -exec chmod 755 {} \+ -o \
+ \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
+ -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \+
+
+# uses autoreconf now
+autoreconf -vfi
+
+CFLAGS="$SLKCFLAGS" \
+CPPFLAGS="$SLKCFLAGS" \
+./configure \
+  --prefix=/usr \
+  --libdir=/usr/lib${LIBDIRSUFFIX} \
+  --sysconfdir=/etc \
+  --localstatedir=/var \
+  --mandir=/usr/man \
+  --docdir=/usr/doc/$PRGNAM-$VERSION \
+  --build=$ARCH-slackware-linux \
+  --enable-x264 \
+  --enable-jpeg \
+  --enable-tjpeg \
+  --enable-fuse \
+  --enable-fdkaac \
+  --enable-opus \
+  --enable-rfxcodec \
+  --enable-mp3lame \
+  --enable-pixman \
+  --enable-painter \
+  --enable-vsock \
+  --enable-ipv6 \
+  --enable-rdpsndaudin \
+  --with-imlib2
+
+make
+
+## Use sed rather than patch as line locations change between versions
+# Change LogLevel to INFO instead of DEBUG
+#sed -i "s/LogLevel=DEBUG/LogLevel=INFO/" xrdp/xrdp.ini
+#sed -i "s/SyslogLevel=DEBUG/SyslogLevel=INFO/" xrdp/xrdp.ini
+#sed -i "s/LogLevel=DEBUG/LogLevel=INFO/" sesman/sesman.ini
+#sed -i "s/SyslogLevel=DEBUG/SyslogLevel=INFO/" sesman/sesman.ini
+# Disable Root logins by default
+sed -i "s/AllowRootLogin=true/AllowRootLogin=false/" sesman/sesman.ini
+# Set default RDP session xinit script to /etc/xrdp/xrdp-xinitrc
+sed -i "s/UserWindowManager=startwm.sh/UserWindowManager=.xrdp-xinitrc/" sesman/sesman.ini
+sed -i "s/DefaultWindowManager=startwm.sh/DefaultWindowManager=xrdp-xinitrc/" sesman/sesman.ini
+
+sed -i "s/#runtime_user=xrdp/runtime_user=xrdp/" xrdp/xrdp.ini
+sed -i "s/#runtime_group=xrdp/runtime_group=xrdp/" xrdp/xrdp.ini
+sed -i "s/#SessionSockdirGroup=xrdp/SessionSockdirGroup=xrdp/" sesman/sesman.ini
+
+make install DESTDIR=$PKG
+
+# Make sure log directory is there
+mkdir -p $PKG/var/log
+
+# Change startwm.sh name for more consistency with previous SlackBuild
+# and corresponding user file name
+mv $PKG/etc/$PRGNAM/startwm.sh  $PKG/etc/$PRGNAM/xrdp-xinitrc.new
+
+# Install the xrdp-xwmconfig utility
+install -D -m 0755 -o root -g root $CWD/xrdp-xwmconfig \
+  $PKG/usr/bin/xrdp-xwmconfig
+
+# Let's not clobber existing configs
+( cd $PKG/etc/$PRGNAM
+  mv rsakeys.ini rsakeys.ini.new
+  mv sesman.ini sesman.ini.new
+  mv xrdp.ini xrdp.ini.new
+  mv xrdp_keyboard.ini xrdp_keyboard.ini.new
+  mv reconnectwm.sh reconnectwm.sh.new
+  rename ini ini.new  km-????????.ini
+)
+
+# Used to make the init script from instfiles/xrdp.sh,
+#  but it was removed from xrdp-0.9.12,
+#  so it is included in the SlackBuild files
+install -D -m 0755 -o root -g root $CWD/rc.xrdp \
+  $PKG/etc/rc.d/rc.xrdp.new
+
+# Install logrotate scripts
+install -D -m 0644 -o root -g root $CWD/xrdp \
+  $PKG/etc/logrotate.d/xrdp.new
+install -D -m 0644 -o root -g root $CWD/xrdp-sesman \
+  $PKG/etc/logrotate.d/xrdp-sesman.new
+
+mkdir -p $PKG/var/lib/pkgtools/setup
+cat $CWD/setup-unprivileged.sh > $PKG/var/lib/pkgtools/setup/setup.xrdp-unprivileged
+chmod +x $PKG/var/lib/pkgtools/setup/setup.xrdp-unprivileged
+
+find $PKG | xargs file | grep -e "executable" -e "shared object" | grep ELF \
+  | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+
+find $PKG/usr/man -type f -exec gzip -9 {} \;
+
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a COPYING NEWS.md README.md $PKG/usr/doc/$PRGNAM-$VERSION
+# Keep a backup copy of startwm.sh in the docs
+cat sesman/startwm.sh > $PKG/usr/doc/$PRGNAM-$VERSION/startwm.sh-example
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+cat $CWD/doinst.sh > $PKG/install/doinst.sh
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE

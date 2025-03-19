@@ -1,0 +1,3 @@
+libfdk-aac
+fdkaac
+imlib2
