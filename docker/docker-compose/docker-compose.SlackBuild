@@ -24,10 +24,11 @@
 
 # Based on docker-buildx slackbuild by Andrew Clemons and Arch Linux PKGBUILD
 
+
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=docker-compose
-VERSION=${VERSION:-2.33.1}
+VERSION=${VERSION:-2.34.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}

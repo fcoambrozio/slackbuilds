@@ -25,15 +25,16 @@
 
 #
 # Modified by Francisco Ambrozio
-#  20250302 - updated to 2.0.3
+#  20250302: update for 2.0.3
+#  20250318: update for 2.0.4
 #
 
 
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=containerd
-VERSION=${VERSION:-2.0.3}
-GITHASH=${GITHASH:-06b99ca}
+VERSION=${VERSION:-2.0.4}
+GITHASH=${GITHASH:-1a43cb6}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}

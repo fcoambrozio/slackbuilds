@@ -1,9 +1,10 @@
 #!/bin/bash
 #
-# get source for docker-compose
+# get source for docker-compose - https://github.com/docker/compose
 #
 
-VERSION="2.33.1"
+
+VERSION="2.34.0"
 DOWNLOAD="https://github.com/docker/compose/archive/v$VERSION/compose-$VERSION.tar.gz"
 
 wget -c $DOWNLOAD

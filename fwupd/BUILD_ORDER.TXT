@@ -1,10 +1,6 @@
-gcab
-chrpath
-libsmbios
-libxmlb
-python-toml
 protobuf-c
-libjcat
-pefile
 flashrom
+libjcat
+libxmlb
+fwupd-efi
 fwupd

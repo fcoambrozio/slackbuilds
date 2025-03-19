@@ -1,3 +1,5 @@
+libfdk-aac
+fdkaac
 faac
 faad2
 libdv

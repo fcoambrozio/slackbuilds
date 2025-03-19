@@ -6,6 +6,7 @@
 # $Date$
 #
 # Copyright 2007-2018 Adis Nezirovic <adis_at_linux.org.ba>
+# Copyright 2025 Francisco Ambrozio <dev@franciscoambrozio.com>
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -36,7 +37,7 @@ PG_VERSION=${PG_VERSION:-@PG_VERSION@}
 PG_PORT=${PG_PORT:-@PG_PORT@}
 LIBDIRSUFFIX="@LIBDIRSUFFIX@"
 LOGFILE=/var/log/@PRGNAM@-$PG_VERSION
-DATADIR=/var/lib/pgsql/$PG_VERSION/data
+DATADIR=/var/lib/postgresql/$PG_VERSION/data
 POSTGRES=/usr/lib${LIBDIRSUFFIX}/@PRGNAM@/$PG_VERSION/bin/postgres
 PG_CTL=/usr/lib${LIBDIRSUFFIX}/@PRGNAM@/$PG_VERSION/bin/pg_ctl
 PIDFILE=$DATADIR/postmaster.pid

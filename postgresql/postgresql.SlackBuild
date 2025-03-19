@@ -24,13 +24,16 @@
 
 # Modified by the SlackBuilds.org Project
 
+#
 # Modified by Francisco Ambrozio
+#
+
 
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=postgresql
 VERSION=${VERSION:-17.4}
-BUILD=${BUILD:-1}
+BUILD=${BUILD:-2}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
@@ -72,7 +75,7 @@ if ! grep ^postgres: /etc/group 2>&1 > /dev/null; then
   exit 1
 elif ! grep ^postgres: /etc/passwd 2>&1 > /dev/null; then
   echo "  You must have a postgres user to run this script."
-  echo "    # useradd -r -u $PG_UID -g $PG_GID -d /var/lib/pgsql postgres"
+  echo "    # useradd -r -u $PG_UID -g $PG_GID -d /var/lib/postgresql postgres"
   exit 1
 fi
 
@@ -216,12 +219,11 @@ cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 cat $CWD/README.SBo > $PKG/usr/doc/$PRGNAM-$VERSION/README.SBo
 
 # base database directory
-# assumes you are using /var/lib/pgsql as a homedir for postgres user
-mkdir -p $PKG/var/lib/pgsql/$PG_VERSION/data
-chown -R postgres:postgres $PKG/var/lib/pgsql
-chmod 700 $PKG/var/lib/pgsql
+mkdir -p $PKG/var/lib/postgresql/$PG_VERSION/data
+chown -R postgres:postgres $PKG/var/lib/postgresql
+chmod 700 $PKG/var/lib/postgresql
 # permissions for DATADIR should be u=rwx (0700)
-chmod 700 $PKG/var/lib/pgsql/$PG_VERSION/data
+chmod 700 $PKG/var/lib/postgresql/$PG_VERSION/data
 
 # Install init script
 mkdir -p $PKG/etc/rc.d
