@@ -1,4 +1,4 @@
-#google-go-lang
+google-go-lang
 ayatana-ido
 libayatana-indicator
 libayatana-appindicator
@@ -59,6 +59,7 @@ docker/docker-cli
 docker/docker
 docker/docker-buildx
 docker/docker-compose
+Solaar
 postgresql
 php-pgsql
 nginx

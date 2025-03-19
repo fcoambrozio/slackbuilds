@@ -1,0 +1,4 @@
+python-typing-extensions
+python-pyudev
+python-xlib
+python-evdev
