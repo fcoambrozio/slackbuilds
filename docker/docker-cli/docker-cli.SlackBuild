@@ -30,8 +30,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=docker-cli
-VERSION=${VERSION:-28.0.2}
-GITHASH=${GITHASH:-0442a73}
+VERSION=${VERSION:-28.0.4}
+GITHASH=${GITHASH:-b8034c0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
