@@ -4,7 +4,7 @@
 #
 
 
-VERSION="9.2.2"
+VERSION="9.2.3"
 DOWNLOAD="https://download.qemu.org/qemu-$VERSION.tar.xz"
 
 wget -c $DOWNLOAD
