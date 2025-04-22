@@ -4,7 +4,7 @@
 #
 
 
-VERSION="570.133.07"
+VERSION="570.144"
 DOWNLOAD="https://download.nvidia.com/XFree86/Linux-x86_64/$VERSION/NVIDIA-Linux-x86_64-$VERSION.run"
 
 wget -c $DOWNLOAD
