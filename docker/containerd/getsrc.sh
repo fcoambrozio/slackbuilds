@@ -4,7 +4,7 @@
 #
 
 
-VERSION="2.0.4"
+VERSION="2.0.5"
 DOWNLOAD="https://github.com/containerd/containerd/archive/v$VERSION/containerd-$VERSION.tar.gz"
 
 wget -c $DOWNLOAD

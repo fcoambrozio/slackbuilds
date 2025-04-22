@@ -24,16 +24,14 @@
 
 #
 # Modifed by Francisco Ambrozio
-#  20250305: update for 0.21.2
-#  20250318: update for 0.22.0
 #
 
 
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=docker-buildx
-VERSION=${VERSION:-0.22.0}
-GITHASH=${GITHASH:-18ccba0}
+VERSION=${VERSION:-0.23.0}
+GITHASH=${GITHASH:-28c90ea}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}

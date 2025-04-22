@@ -4,7 +4,7 @@
 #
 
 
-VERSION="0.22.0"
+VERSION="0.23.0"
 DOWNLOAD="https://github.com/docker/buildx/archive/v$VERSION/buildx-$VERSION.tar.gz"
 
 wget -c $DOWNLOAD

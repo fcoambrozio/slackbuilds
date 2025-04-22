@@ -4,7 +4,7 @@
 #
 
 
-VERSION="28.0.4"
+VERSION="28.1.1"
 DOWNLOAD="https://github.com/moby/moby/archive/v$VERSION/moby-$VERSION.tar.gz"
 
 wget -c $DOWNLOAD
