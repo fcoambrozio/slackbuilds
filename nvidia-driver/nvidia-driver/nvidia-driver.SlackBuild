@@ -30,11 +30,10 @@
 #   - COMPAT32 and PERSISTENCED default to yes
 #
 
-
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=nvidia-driver
-VERSION=${VERSION:-570.144}
+VERSION=${VERSION:-575.51.02}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}

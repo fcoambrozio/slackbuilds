@@ -30,11 +30,10 @@
 # Modified by Francisco Ambrozio - added --tmpdir $TMP option to the .run file 
 #
 
-
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=nvidia-kernel
-VERSION=${VERSION:-570.144}
+VERSION=${VERSION:-575.51.02}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
