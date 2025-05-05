@@ -31,17 +31,15 @@
 
 #
 # Modified by Francisco Ambrozio - updated for version 12.6.1 based on archlinux PKGBUILD
-#  20250312 - updated to 12.8.1
 #
-
 
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=cudatoolkit
 FILENAME=cuda
-VERSION=${VERSION:-12.8.1}
-DRIVER=${DRIVER:-570.124.06}
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-12.9.0}
+DRIVER=${DRIVER:-575.51.03}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 

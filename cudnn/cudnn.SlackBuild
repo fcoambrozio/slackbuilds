@@ -24,14 +24,12 @@
 
 #
 # Modified by Francisco Ambrozio - upgraded to 9.4.0
-#  20250312 - 9.8.0.87
 #
-
 
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=cudnn
-VERSION=${VERSION:-9.8.0.87}
+VERSION=${VERSION:-9.9.0.52}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
