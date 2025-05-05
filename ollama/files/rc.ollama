@@ -1,0 +1,74 @@
+#!/bin/bash
+#
+# Ollama startup script for Slackware Linux
+#
+
+PATH=/opt/ollama/bin:/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
+
+OLLAMA_LOG=/var/log/ollama/serve.log
+
+G_ID=$(grep ollama /etc/group | cut -f3 -d:)
+U_ID=$(grep ollama /etc/passwd | cut -f3 -d:)
+
+if [ -z "$G_ID" ]; then
+    echo "Ollama group not found, please add with something like this:"
+    echo "    groupadd -r -g GROUP_ID ollama"
+    exit 1
+fi
+
+if [ -z "$U_ID" ]; then
+    echo "Ollama group not found, please add with something like this:"
+    echo "    useradd -m -r -u USER_ID -g GROUP_ID -s /bin/bash ollama"
+    exit 1
+fi
+
+# Default options.
+if [ -f /etc/default/ollama ]; then
+  . /etc/default/ollama
+fi
+
+ollama_start() {
+    echo "Starting ollama..."
+    su ollama -c "/opt/ollama/bin/ollama serve &>>$OLLAMA_LOG" &
+}
+
+ollama_stop() {
+    echo "Stopping ollama..."
+    killall ollama 2>/dev/null
+}
+
+ollama_restart() {
+    ollama_stop
+    sleep 1
+    ollama_start
+}
+
+ollama_status() {
+    ollama -v | grep Warning &>/dev/null
+
+    if [ $? -ne 0 ]; then
+        echo "Ollama is running."
+        exit 0
+    fi
+
+    echo "Ollama is not running."
+}
+
+case "$1" in
+  'start')
+    ollama_start
+    ;;
+  'stop')
+    ollama_stop
+    ;;
+  'restart')
+    ollama_restart
+    ;;
+  'status')
+    ollama_status
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|status}"
+esac
+
+exit 0

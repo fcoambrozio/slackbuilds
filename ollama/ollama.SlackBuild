@@ -1,0 +1,108 @@
+#!/bin/bash
+
+# Slackware build script for ollama
+
+# Copyright 2025 Francisco Ambrozio, Marília SP BRA
+# All rights reserved.
+#
+# Redistribution and use of this script, with or without modification, is
+# permitted provided that the following conditions are met:
+#
+# 1. Redistributions of this script must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
+#  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+#  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO
+#  EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+#  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+#  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+#  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+#  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+#  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+#  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+cd $(dirname $0) ; CWD=$(pwd)
+
+PRGNAM=ollama
+VERSION=${VERSION:-0.6.7}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_fco}
+PKGTYPE=${PKGTYPE:-txz}
+
+if [ -z "$ARCH" ]; then
+  case "$( uname -m )" in
+    i?86) ARCH=i586 ;;
+    arm*) ARCH=arm ; SRCARCH=arm ;;
+       *) ARCH=$( uname -m ) ; SRCARCH=amd64 ;;
+  esac
+fi
+
+if [ "$ARCH" != "x86_64" -a "$ARCH" != "arm" ]; then
+  echo "$ARCH architecture is unsupported." >/dev/stderr
+  exit 1
+fi
+
+# If the variable PRINT_PACKAGE_NAME is set, then this script will report what
+# the name of the created package would be, and then exit. This information
+# could be useful to other scripts.
+if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
+  echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE"
+  exit 0
+fi
+
+OLLAMA_GRPID=${OLLAMA_GRPID:-403}
+OLLAMA_USRID=${OLLAMA_USRID:-403}
+
+TMP=${TMP:-/var/tmp/build}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/var/tmp/packages}
+
+set -e
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $PKG
+mkdir -p opt/$PRGNAM
+tar xvf $CWD/$PRGNAM-linux-$SRCARCH.tgz -C opt/$PRGNAM
+chown -R root:root .
+find -L . \
+ \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
+  -o -perm 511 \) -exec chmod 755 {} \; -o \
+ \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
+  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+
+find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
+  | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+
+mkdir -p $PKG/etc/profile.d
+cp $CWD/files/ollama.sh $PKG/etc/profile.d/
+chmod +x $PKG/etc/profile.d/ollama.sh
+
+mkdir -p $PKG/etc/rc.d
+cp $CWD/files/rc.ollama $PKG/etc/rc.d
+chmod +x $PKG/etc/rc.d/rc.ollama
+
+mkdir -p $PKG/etc/ld.so.conf.d
+cat $CWD/files/ollama-ld.conf > $PKG/etc/ld.so.conf.d/ollama.conf
+
+mkdir -p $PKG/etc/logrotate.d
+cat $CWD/files/ollama-logrotate > $PKG/etc/logrotate.d/ollama
+
+mkdir $PKG/etc/default
+cat $CWD/files/ollama-default > $PKG/etc/default/ollama.new
+
+mkdir -p $PKG/var/log/ollama
+
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+cat $CWD/doinst.sh > $PKG/install/doinst.sh
+
+sed -i "s/@@G_ID@@/$OLLAMA_GRPID/g" $PKG/install/doinst.sh
+sed -i "s/@@U_ID@@/$OLLAMA_USRID/g" $PKG/install/doinst.sh
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
