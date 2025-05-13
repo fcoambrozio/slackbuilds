@@ -32,8 +32,8 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=spotify
 SRCNAM=spotify-client
-VERSION=${VERSION:-1.2.26.1187}
-RELVER=${RELVER:-g36b715a1}
+VERSION=${VERSION:-1.2.60.564}
+RELVER=${RELVER:-gcc6305cb}
 VERSION32=${VERSION32:-1.0.72.117}
 RELVER32=${RELVER32:-g6bd7cc73-35}
 BUILD=${BUILD:-1}
@@ -83,11 +83,10 @@ for res in 16 22 24 32 48 64 128 256 512; do
 done
 
 # docs.
-gzip -dc $PKG/usr/share/doc/$SRCNAM/changelog.gz > $PKG/usr/doc/$PRGNAM-$VERSION/ChangeLog
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 # remove dirs.
-rm -rf $PKG/usr/share/{doc,spotify/apt-keys}
+rm -rf $PKG/usr/share/spotify/apt-keys
 
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
@@ -95,10 +94,3 @@ cat $CWD/doinst.sh > $PKG/install/doinst.sh
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
-
-echo "PRGNAM=$PRGNAM" > $TMP/$PRGNAM-build.env
-echo "VERSION=$VERSION" >> $TMP/$PRGNAM-build.env
-echo "BUILD=$BUILD" >> $TMP/$PRGNAM-build.env
-echo "TAG=$TAG" >> $TMP/$PRGNAM-build.env
-echo "PKGTYPE=$PKGTYPE" >> $TMP/$PRGNAM-build.env
-echo "PKGFINAL=$OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE" >> $TMP/$PRGNAM-build.env

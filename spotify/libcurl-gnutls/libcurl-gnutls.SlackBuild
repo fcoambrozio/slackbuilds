@@ -36,7 +36,7 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=libcurl-gnutls
 SRCNAM=curl
-VERSION=${VERSION:-8.6.0}
+VERSION=${VERSION:-8.13.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -116,7 +116,7 @@ CURLLIB=$(echo $PKG/usr/lib$LIBDIRSUFFIX/libcurl.so.4.?.? | rev | cut -d/ -f1 | 
 
 mv ${PKG}/usr/lib${LIBDIRSUFFIX}/libcurl{,-gnutls}.so.$CURLLIB
 rm ${PKG}/usr/lib${LIBDIRSUFFIX}/libcurl.so*
-for VERSIONLIB in 3 4 4.0.0 4.1.0 4.2.0 4.3.0 4.4.0 4.5.0 4.6.0; do
+for VERSIONLIB in 3 4 4.0.0 4.1.0 4.2.0 4.3.0 4.4.0 4.5.0 4.6.0 4.7.0; do
   ln -s libcurl-gnutls.so.$CURLLIB $PKG/usr/lib${LIBDIRSUFFIX}/libcurl-gnutls.so.${VERSIONLIB}
 done
 
@@ -135,10 +135,3 @@ cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE
-
-echo "PRGNAM=$PRGNAM" > $TMP/$PRGNAM-build.env
-echo "VERSION=$VERSION" >> $TMP/$PRGNAM-build.env
-echo "BUILD=$BUILD" >> $TMP/$PRGNAM-build.env
-echo "TAG=$TAG" >> $TMP/$PRGNAM-build.env
-echo "PKGTYPE=$PKGTYPE" >> $TMP/$PRGNAM-build.env
-echo "PKGFINAL=$OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.$PKGTYPE" >> $TMP/$PRGNAM-build.env
