@@ -28,7 +28,7 @@ if [ -z "$U_ID" ]; then
     U_ID=@@U_ID@@
 
     echo "Adding ollama user: $G_ID"
-    useradd -m -r -u $U_ID -g $G_ID -s /bin/bash ollama
+    useradd -m -r -u $U_ID -g $G_ID -d /var/lib/ollama -s /bin/bash ollama
 fi
 
 chown $U_ID:$G_ID /var/log/ollama
