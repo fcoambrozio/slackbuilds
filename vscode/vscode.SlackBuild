@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Slackware build script for vscode-bin
+# Slackware build script for vscode
 
 # Copyright 2019-2022 Willy Sudiarto Raharjo <willysr@slackbuilds.org>
 # All rights reserved.
@@ -22,16 +22,15 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Modified by Francisco Ambrozio
-
+# Modified by Francisco Ambrozio - rename package from vscode-bin to vscode
 
 cd $(dirname $0) ; CWD=$(pwd)
 
-PRGNAM=vscode-bin
+PRGNAM=vscode
 SRCNAM=code-stable
-VERSION=${VERSION:-1.99.3}
-SRCVER=1744760498
-BUILD=${BUILD:-4}
+VERSION=${VERSION:-1.100.0}
+SRCVER=1746623059
+BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 
@@ -70,18 +69,25 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-mkdir -p $PKG/opt/vscode-bin $PKG/usr/bin
-mv * $PKG/opt/vscode-bin
+mkdir -p $PKG/opt/vscode $PKG/usr/bin
+mv * $PKG/opt/vscode
 
 mkdir -p $PKG/usr/share/applications
-cp $CWD/vscode-bin.desktop $PKG/usr/share/applications
+install -Dm 644 $CWD/files/code.desktop $PKG/usr/share/applications
+install -Dm 644 $CWD/files/code-url-handler.desktop $PKG/usr/share/applications
+
+mkdir -p $PKG/usr/share/metainfo
+cp $CWD/files/code.appdata.xml $PKG/usr/share/metainfo
 
 mkdir -p $PKG/usr/share/icons/hicolor/1024x1024/apps
-cp $PKG/opt/vscode-bin/resources/app/resources/linux/code.png $PKG/usr/share/icons/hicolor/1024x1024/apps
+cp $PKG/opt/vscode/resources/app/resources/linux/code.png $PKG/usr/share/icons/hicolor/1024x1024/apps
+
+install -D -m 0644 $PKG/opt/vscode/resources/completions/bash/code $PKG/usr/share/bash-completion/completions/code
+install -D -m 0644 $PKG/opt/vscode/resources/completions/zsh/_code $PKG/usr/share/zsh/site-functions/_code
 
 (
  cd $PKG/usr/bin
- ln -s /opt/vscode-bin/bin/code .
+ ln -s /opt/vscode/bin/code .
 )
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
