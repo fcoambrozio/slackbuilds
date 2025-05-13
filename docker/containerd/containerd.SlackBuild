@@ -27,12 +27,11 @@
 # Modified by Francisco Ambrozio
 #
 
-
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=containerd
-VERSION=${VERSION:-2.0.5}
-GITHASH=${GITHASH:-fb4c30d}
+VERSION=${VERSION:-2.1.0}
+GITHASH=${GITHASH:-061792f}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}

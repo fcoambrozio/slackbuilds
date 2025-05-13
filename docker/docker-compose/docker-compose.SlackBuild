@@ -2,7 +2,7 @@
 
 # Slackware build script for docker-compose
 
-# Copyright 2024 Francisco Ambrozio, Marília SP BRA
+# Copyright 2024,2025 Francisco Ambrozio, Marília SP BRA
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -24,11 +24,10 @@
 
 # Based on docker-buildx slackbuild by Andrew Clemons and Arch Linux PKGBUILD
 
-
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=docker-compose
-VERSION=${VERSION:-2.35.1}
+VERSION=${VERSION:-2.36.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
