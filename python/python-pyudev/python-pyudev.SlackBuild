@@ -28,7 +28,6 @@
 #  20250317 - refactoring build script, based on arch's PKGBUILD
 #
 
-
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=python-pyudev
