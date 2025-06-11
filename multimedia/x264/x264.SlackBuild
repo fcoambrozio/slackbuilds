@@ -28,12 +28,11 @@
 # Modified by Francisco Ambrozio
 #
 
-
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=x264
-VERSION=${VERSION:-20250103_373697b4}
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-20250527_ff620d0c}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
