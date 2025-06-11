@@ -1,13 +1,10 @@
-google-go-lang
 ayatana-ido
 libayatana-indicator
 libayatana-appindicator
-acpica
 xclip
 pwgen
 pass
 numactl
-gsoap
 imlib2
 powerline-status
 python/python-typing-extensions
@@ -38,7 +35,6 @@ qemu/spice
 qemu/usbredir
 qemu/virglrenderer
 qemu/libnfs
-qemu/benchmark
 qemu/snappy
 qemu/device-tree-compiler
 qemu/gperftools
