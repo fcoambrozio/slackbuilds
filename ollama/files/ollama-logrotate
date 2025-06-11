@@ -1,4 +1,4 @@
-/var/log/ollama {
+/var/log/ollama.log {
     daily
     rotate 7
     copytruncate

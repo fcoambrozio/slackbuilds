@@ -25,7 +25,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=ollama
-VERSION=${VERSION:-0.6.8}
+VERSION=${VERSION:-0.9.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -91,8 +91,6 @@ cat $CWD/files/ollama-logrotate > $PKG/etc/logrotate.d/ollama
 
 mkdir $PKG/etc/default
 cat $CWD/files/ollama-default > $PKG/etc/default/ollama.new
-
-mkdir -p $PKG/var/log/ollama
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild

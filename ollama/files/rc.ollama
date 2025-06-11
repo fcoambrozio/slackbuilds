@@ -5,7 +5,7 @@
 
 PATH=/opt/ollama/bin:/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
 
-OLLAMA_LOG=/var/log/ollama/serve.log
+OLLAMA_LOG=/var/log/ollama.log
 
 G_ID=$(grep ollama /etc/group | cut -f3 -d:)
 U_ID=$(grep ollama /etc/passwd | cut -f3 -d:)
@@ -29,6 +29,7 @@ fi
 
 ollama_start() {
     echo "Starting ollama..."
+    logrotate -f /etc/logrotate.d/ollama
     su ollama -c "/opt/ollama/bin/ollama serve &>>$OLLAMA_LOG" &
 }
 

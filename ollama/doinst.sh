@@ -31,6 +31,4 @@ if [ -z "$U_ID" ]; then
     useradd -m -r -u $U_ID -g $G_ID -d /var/lib/ollama -s /bin/bash ollama
 fi
 
-chown $U_ID:$G_ID /var/log/ollama
-
 config etc/default/ollama.new
