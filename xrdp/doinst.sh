@@ -32,6 +32,7 @@ config etc/xrdp/km-00000409.ini.new
 config etc/xrdp/km-0000040a.ini.new
 config etc/xrdp/km-0000040b.ini.new
 config etc/xrdp/km-0000040c.ini.new
+config etc/xrdp/km-0000040e.ini.new
 config etc/xrdp/km-00000410.ini.new
 config etc/xrdp/km-00000411.ini.new
 config etc/xrdp/km-00000412.ini.new
