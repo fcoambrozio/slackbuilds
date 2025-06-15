@@ -64,7 +64,7 @@
 
 cd $(dirname $0) ; CWD=$(pwd)
 
-PKGNAM=gcc13
+PKGNAM=gcc14
 SRCVER=${VERSION:-$(echo gcc-*.tar.?z | rev | cut -f 3- -d . | cut -f 1 -d - | rev)}
 VERSION=$(echo $SRCVER | cut -f 1 -d _)
 MJRVER=$(echo $VERSION | cut -d. -f1)
@@ -364,8 +364,8 @@ find $PKG -name "*.la" -exec rm -f "{}" \;
   rmdir usr/lib${LIBDIRSUFFIX}/gcc/${TARGET}/lib${LIBDIRSUFFIX}
   rm -rf usr/share/locale
   mkdir -p etc/profile.d
-  cat $CWD/gcc13.sh > etc/profile.d/gcc13.sh.new
-  cat $CWD/gcc13.csh > etc/profile.d/gcc13.csh.new
+  cat $CWD/gcc14.sh > etc/profile.d/gcc14.sh.new
+  cat $CWD/gcc14.csh > etc/profile.d/gcc14.csh.new
   cat $CWD/doinst.sh > install/doinst.sh
 )
 

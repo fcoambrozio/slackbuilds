@@ -6,14 +6,14 @@
 # leave one space after the ':'.
 
      |-----handy-ruler------------------------------------------------------|
-gcc13: gcc13 (C/C++ for GCC - version 13.x)
-gcc13:
-gcc13: GCC is the GNU Compiler Collection.
-gcc13:
-gcc13: This package contains those parts of the compiler collection needed to
-gcc13: compile C/C++ code.
-gcc13:
-gcc13:
-gcc13:
-gcc13:
-gcc13:
+gcc14: gcc14 (C/C++ for GCC - version 14.x)
+gcc14:
+gcc14: GCC is the GNU Compiler Collection.
+gcc14:
+gcc14: This package contains those parts of the compiler collection needed to
+gcc14: compile C/C++ code.
+gcc14:
+gcc14:
+gcc14:
+gcc14:
+gcc14:
