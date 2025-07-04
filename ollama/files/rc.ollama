@@ -7,17 +7,17 @@ PATH=/opt/ollama/bin:/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bi
 
 OLLAMA_LOG=/var/log/ollama.log
 
-G_ID=$(grep ollama /etc/group | cut -f3 -d:)
+G_ID=$(grep ollama /etc/group  | cut -f3 -d:)
 U_ID=$(grep ollama /etc/passwd | cut -f3 -d:)
 
 if [ -z "$G_ID" ]; then
-    echo "Ollama group not found, please add with something like this:"
+    echo "Ollama group not found, please add it with something like this:"
     echo "    groupadd -r -g GROUP_ID ollama"
     exit 1
 fi
 
 if [ -z "$U_ID" ]; then
-    echo "Ollama group not found, please add with something like this:"
+    echo "Ollama group not found, please add it with something like this:"
     echo "    useradd -m -r -u USER_ID -g GROUP_ID -s /bin/bash ollama"
     exit 1
 fi
@@ -29,7 +29,8 @@ fi
 
 ollama_start() {
     echo "Starting ollama..."
-    logrotate -f /etc/logrotate.d/ollama
+    touch $OLLAMA_LOG
+    chown ollama:ollama $OLLAMA_LOG
     su ollama -c "/opt/ollama/bin/ollama serve &>>$OLLAMA_LOG" &
 }
 
