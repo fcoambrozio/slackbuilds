@@ -29,8 +29,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=docker-buildx
-VERSION=${VERSION:-0.25.0}
-GITHASH=${GITHASH:-faaea65}
+VERSION=${VERSION:-0.26.1}
+GITHASH=${GITHASH:-1a8287f}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
