@@ -4,7 +4,7 @@
 #
 
 
-VERSION="2.16.90"
+VERSION="2.17"
 DOWNLOAD="https://github.com/gperftools/gperftools/archive/gperftools-$VERSION/gperftools-$VERSION.tar.gz"
 
 wget -c $DOWNLOAD
