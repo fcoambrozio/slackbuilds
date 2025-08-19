@@ -37,8 +37,8 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=cudatoolkit
 FILENAME=cuda
-VERSION=${VERSION:-12.9.1}
-DRIVER=${DRIVER:-575.57.08}
+VERSION=${VERSION:-13.0.0}
+DRIVER=${DRIVER:-580.65.06}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -80,7 +80,6 @@ mkdir -p $PKG/opt/cuda
 cd $PRGNAM-$VERSION/builds
 rm -r NVIDIA*.run bin
 mv integration nsight_compute nsight_systems EULA.txt $PKG/opt/cuda/
-mv cuda_demo_suite/extras $PKG/opt/cuda/
 mv cuda_sanitizer_api/compute-sanitizer $PKG/opt/cuda/extras/
 rmdir cuda_sanitizer_api
 
@@ -99,7 +98,7 @@ rm -f $PKG/opt/cuda/bin/cuda-uninstaller
 
 (
   cd $PKG
-  patch -p1 -i $CWD/fix-glibc241.patch
+  patch -p1 -i $CWD/fix-glibc242.patch
 ) || exit 1
 
 # Put man in the standard place
