@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2008-2022 Heinz Wiesinger, Amsterdam, The Netherlands
+# Copyright 2009-2022 Heinz Wiesinger, Amsterdam, The Netherlands
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -20,21 +20,19 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#
 # Modified by Francisco Ambrozio
+#
 
 cd $(dirname $0) ; CWD=$(pwd)
 
-PKGNAM=virtualbox-kernel
-SRC_VERSION=${VERSION:-$(echo $PKGNAM-*.tar.?z | rev | cut -f 3- -d . | cut -f 1 -d - | rev)}
+PKGNAM=gsoap
+VERSION=${VERSION:-$(echo $PKGNAM-*.tar.?z | rev | cut -f 3- -d . | cut -f 1 -d - | rev)}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
 
 export MAKEFLAGS=$NUMJOBS
-
-KERNEL=${KERNEL:-$(uname -r)}
-KERNELPATH=${KERNELPATH:-/lib/modules/$KERNEL/build}
-VERSION=${SRC_VERSION}_$(echo $KERNEL | tr - _)
 
 # Automatically determine the architecture we're building on:
 if [ -z "$ARCH" ]; then
@@ -55,6 +53,26 @@ if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
   exit 0
 fi
 
+if [ "$ARCH" = "i586" ]; then
+  SLKCFLAGS="-O2 -march=i586 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "i686" ]; then
+  SLKCFLAGS="-O2 -march=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "s390" ]; then
+  SLKCFLAGS="-O2"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "x86_64" ]; then
+  SLKCFLAGS="-O2 -fPIC"
+  LIBDIRSUFFIX="64"
+elif [ "$ARCH" = "armv7hl" ]; then
+  SLKCFLAGS="-O3 -march=armv7-a -mfpu=vfpv3-d16"
+  LIBDIRSUFFIX=""
+else
+  SLKCFLAGS="-O2"
+  LIBDIRSUFFIX=""
+fi
+
 TMP=${TMP:-/var/tmp/build}
 PKG=$TMP/package-$PKGNAM
 OUTPUT=${OUTPUT:-/var/tmp/packages}
@@ -63,9 +81,9 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 
 cd $TMP
-rm -rf $PKGNAM-$SRC_VERSION
-tar xvf $CWD/$PKGNAM-$SRC_VERSION.tar.?z || exit 1
-cd $PKGNAM-$SRC_VERSION || exit 1
+rm -rf $PKGNAM-$VERSION
+tar xvf $CWD/$PKGNAM-$VERSION.tar.?z || exit 1
+cd $PKGNAM-$VERSION || exit 1
 
 chown -R root:root .
 find . \
@@ -74,25 +92,36 @@ find . \
   \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
   -exec chmod 644 {} \+
 
-# Fix compatibility with 5.18.x
-sed -i "s|netif_rx_ni|netif_rx|g" vboxnetflt/linux/VBoxNetFlt-linux.c
+# Build shared libraries (patch from gentoo)
+zcat $CWD/gsoap-2.8.126-shared_libs.patch.gz | patch -p1 --verbose || exit 1
 
-make objtool=true KCFLAGS="-Wno-error" KERN_DIR=${KERNELPATH} || exit 1
+autoreconf -vif
 
-mkdir -p $PKG/lib/modules/$KERNEL/misc
-install -m 0644 vboxdrv.ko $PKG/lib/modules/$KERNEL/misc/
-install -m 0644 vboxnetflt.ko $PKG/lib/modules/$KERNEL/misc/
-install -m 0644 vboxnetadp.ko $PKG/lib/modules/$KERNEL/misc/
+CFLAGS="$SLKCFLAGS" \
+CXXFLAGS="$SLKCFLAGS" \
+./configure \
+  --prefix=/usr \
+  --libdir=/usr/lib$LIBDIRSUFFIX \
+  --sysconfdir=/etc \
+  --localstatedir=/var \
+  --disable-static \
+  --disable-xlocale \
+  --build=$ARCH-slackware-linux || exit 1
 
-find $PKG -name "*.ko" -exec strip --strip-debug "{}" \;
+make || exit 1
+make install-strip DESTDIR=$PKG || exit 1
+
+# Don't ship .la/.a files:
+rm -f $PKG/{,usr/}lib${LIBDIRSUFFIX}/*.la
+rm -f $PKG/{,usr/}lib${LIBDIRSUFFIX}/*.a
 
 mkdir -p $PKG/usr/doc/$PKGNAM-$VERSION
-cat $CWD/COPYING > $PKG/usr/doc/$PKGNAM-$VERSION/COPYING
-cat $CWD/COPYING.CDDL > $PKG/usr/doc/$PKGNAM-$VERSION/COPYING.CDDL
+cp -a changelog.md GPLv2_license.txt INSTALL.txt LICENSE.txt \
+  NOTES.txt README.txt factsheet.pdf license.pdf \
+  $PKG/usr/doc/$PKGNAM-$VERSION
 
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
-sed "s%@KERNEL@%$KERNEL%" $CWD/doinst.sh > $PKG/install/doinst.sh
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PKGNAM-$VERSION-$ARCH-$BUILD$TAG.txz

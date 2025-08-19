@@ -21,11 +21,13 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+# Modified by Francisco Ambrozio
+
 cd $(dirname $0) ; CWD=$(pwd)
 
 PKGNAM=virtualbox
 VERSION=${VERSION:-$(echo VirtualBox-*.tar.?z | rev | cut -f 3- -d . | cut -f 1 -d - | rev)}
-BUILD=${BUILD:-2}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 
 # Automatically determine the architecture we're building on:
@@ -87,8 +89,6 @@ rm -rf VirtualBox-$VERSION
 tar xvf $CWD/VirtualBox-$VERSION.tar.?z || exit 1
 cd VirtualBox-$VERSION || exit 1
 
-patch -p1 -i $CWD/022-index-out-of-bound.patch || exit 1
-
 chown -R root:root .
 find . \
   \( -perm 777 -o -perm 775 -o -perm 711 -o -perm 555 -o -perm 511 \) \
@@ -102,9 +102,6 @@ MODE="755"
 
 # We don't want an init-script building kernel modules.
 zcat $CWD/vboxdrv.sh-setup.diff.gz | patch -d src/VBox/Installer/linux --verbose || exit 1
-
-# file missing from this release
-sed '/security-of-remote-vms/d' -i doc/manual/en_US/dita/UserManual.ditamap
 
 # Skip python2 detection
 sed -i 's|python2.7 python2.6 ||' ./configure
