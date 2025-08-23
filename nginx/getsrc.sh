@@ -3,7 +3,7 @@
 # get source for nginx
 #
 
-VERSION="1.28.0"
+VERSION="1.29.1"
 DOWNLOAD="https://nginx.org/download/nginx-$VERSION.tar.gz"
 
 wget -c $DOWNLOAD
