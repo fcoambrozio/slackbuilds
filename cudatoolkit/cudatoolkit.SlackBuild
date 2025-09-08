@@ -37,8 +37,8 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=cudatoolkit
 FILENAME=cuda
-VERSION=${VERSION:-13.0.0}
-DRIVER=${DRIVER:-580.65.06}
+VERSION=${VERSION:-13.0.1}
+DRIVER=${DRIVER:-580.82.07}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -79,8 +79,8 @@ sh $CWD/$FILENAME\_$VERSION\_$DRIVER\_linux.run --target $PRGNAM-$VERSION --noex
 mkdir -p $PKG/opt/cuda
 cd $PRGNAM-$VERSION/builds
 rm -r NVIDIA*.run bin
-mv integration nsight_compute nsight_systems EULA.txt $PKG/opt/cuda/
-mv cuda_sanitizer_api/compute-sanitizer $PKG/opt/cuda/extras/
+rm -r integration
+mv cuda_sanitizer_api/compute-sanitizer nsight_compute nsight_systems EULA.txt $PKG/opt/cuda/
 rmdir cuda_sanitizer_api
 
 for lib in *; do
@@ -90,6 +90,12 @@ for lib in *; do
   cp -r $lib/* $PKG/opt/cuda/
 done
 
+ln -s ../compute-sanitizer/compute-sanitizer $PKG/opt/cuda/bin/compute-sanitizer
+
+mv $PKG/opt/cuda/extras/CUPTI/include/* $PKG/opt/cuda/include/
+mv $PKG/opt/cuda/extras/CUPTI/lib64/* $PKG/opt/cuda/lib64/
+rmdir $PKG/opt/cuda/extras/CUPTI/{include,lib64}
+
 # broken symlinks
 rm -f $PKG/opt/cuda/targets/x86_64-linux/include/include
 rm -f $PKG/opt/cuda/targets/x86_64-linux/lib/lib64
@@ -98,6 +104,7 @@ rm -f $PKG/opt/cuda/bin/cuda-uninstaller
 
 (
   cd $PKG
+  ln -s lib64 $PKG/opt/cuda/lib
   patch -p1 -i $CWD/fix-glibc242.patch
 ) || exit 1
 
