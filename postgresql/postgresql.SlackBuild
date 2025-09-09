@@ -31,7 +31,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=postgresql
-VERSION=${VERSION:-17.6}
+VERSION=${VERSION:-18rc1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -39,7 +39,7 @@ NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
 
 export MAKEFLAGS=$NUMJOBS
 
-PG_VERSION=${PG_VERSION:-17}
+PG_VERSION=${PG_VERSION:-18}
 PG_PORT=${PG_PORT:-5432}
 PG_UID=${PG_UID:-209}
 PG_GID=${PG_GID:-209}

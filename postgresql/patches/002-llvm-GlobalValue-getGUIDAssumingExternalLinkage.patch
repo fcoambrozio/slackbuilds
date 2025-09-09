@@ -1,0 +1,11 @@
+--- ./src/backend/jit/llvm/llvmjit_inline.cpp-orig	2025-09-09 08:46:42.831954364 -0300
++++ ./src/backend/jit/llvm/llvmjit_inline.cpp	2025-09-09 08:46:55.370591772 -0300
+@@ -238,7 +238,7 @@
+ 
+ 		llvm_split_symbol_name(symbolName.data(), &cmodname, &cfuncname);
+ 
+-		funcGUID = llvm::GlobalValue::getGUID(cfuncname);
++		funcGUID = llvm::GlobalValue::getGUIDAssumingExternalLinkage(cfuncname);
+ 
+ 		/* already processed */
+ 		if (inlineState.processed)
