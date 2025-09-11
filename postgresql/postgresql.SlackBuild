@@ -106,10 +106,18 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-for p in $CWD/patches/*.patch; do
-  patch -p1 -i $p
-done
-unset p
+#for p in $CWD/patches/*.patch; do
+#  patch -p1 -i $p
+#done
+#unset p
+
+patch -p1 -i $CWD/patches/0001-Set-DEFAULT_PGSOCKET_DIR-to-run-postgresql.patch
+
+LLVMVER=$(llvm-config --version | cut -f1 -d.)
+
+if [ $LLVMVER -ge 21 ]; then
+  patch -p1 -i $CWD/patches/0002-llvm21-GlobalValue-getGUIDAssumingExternalLinkage.patch
+fi
 
 CFLAGS="$SLKCFLAGS" \
 ./configure \
