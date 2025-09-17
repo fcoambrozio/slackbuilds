@@ -103,25 +103,31 @@ MODE="755"
 # We don't want an init-script building kernel modules.
 zcat $CWD/vboxdrv.sh-setup.diff.gz | patch -d src/VBox/Installer/linux --verbose || exit 1
 
+for patch in $CWD/patches/*; do
+  patch -p1 -i $patch || exit 1
+done
+
 # Skip python2 detection
-sed -i 's|python2.7 python2.6 ||' ./configure
+sed -i 's|python2.6 ||' ./configure
 
 # Use our CFLAGS
 sed -i "s|CXX_FLAGS=\"\"|CXX_FLAGS=\"$SLKCFLAGS -std=c++11\"|" ./configure
 
-bash ./configure \
+./configure \
+  --disable-docs \
   --disable-kmods \
+  --disable-vmmraw \
   --enable-vde \
   --enable-vnc \
-  --with-makeself=/usr/bin/echo \
   --enable-webservice \
-  --enable-hardening || exit 1
+  --with-makeself=/usr/bin/echo || exit 1
 
 . ./env.sh
 
 cp $CWD/LocalConfig.kmk .
 sed -i "s|LIBDIR|lib$LIBDIRSUFFIX|" ./LocalConfig.kmk
 sed -i "s|CXXFLAGS|$SLKCFLAGS -std=c++11|" ./LocalConfig.kmk
+echo "VBOX_GCC_OPT=$SLKCFLAGS" >> LocalConfig.kmk
 
 kmk ${NUMJOBS} LOCALCFG=./LocalConfig.kmk || exit 1
 
@@ -242,8 +248,12 @@ chmod 0755 $PKG/etc/profile.d/*
 mkdir -p $PKG/lib/udev/rules.d
 install -m 644 $CWD/10-virtualbox.rules $PKG/lib/udev/rules.d/
 
-mkdir $PKG/etc/modprobe.d
-cat $CWD/modprobe-virtualbox.conf > $PKG/etc/modprobe.d/virtualbox.conf
+SLKVER=$(cat /etc/slackware-version | cut -f2 -d" ")
+
+if [ "$SLKVER" != "15.0" ]; then
+  mkdir $PKG/etc/modprobe.d
+  cat $CWD/modprobe-virtualbox.conf > $PKG/etc/modprobe.d/virtualbox.conf
+fi
 
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
