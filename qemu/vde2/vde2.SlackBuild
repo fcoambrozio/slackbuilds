@@ -28,13 +28,12 @@
 # Modified by Francisco Ambrozio
 #
 
-
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=vde2
 SRCNAM=vde-2
 VERSION=${VERSION:-2.3.3}
-BUILD=${BUILD:-4}
+BUILD=${BUILD:-5}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
@@ -92,7 +91,7 @@ find -L . \
 
 autoreconf -fiv
 
-CFLAGS="$SLKCFLAGS" \
+CFLAGS="$SLKCFLAGS -std=gnu17" \
 CXXFLAGS="$SLKCFLAGS" \
 ./configure \
   --prefix=/usr \
