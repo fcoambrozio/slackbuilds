@@ -5,7 +5,6 @@ spice
 usbredir
 virglrenderer
 libnfs
-benchmark
 snappy
 device-tree-compiler
 gperftools
