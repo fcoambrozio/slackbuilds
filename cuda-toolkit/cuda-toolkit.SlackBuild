@@ -30,15 +30,16 @@
 # subdirectory locations have changed
 
 #
-# Modified by Francisco Ambrozio - updated for version 12.6.1 based on archlinux PKGBUILD
+# Modified by Francisco Ambrozio - updated for version 12.6.1, based on archlinux PKGBUILD
+#   2025-10-10: renamed to cuda-toolkit
 #
 
 cd $(dirname $0) ; CWD=$(pwd)
 
-PRGNAM=cudatoolkit
+PRGNAM=cuda-toolkit
 FILENAME=cuda
-VERSION=${VERSION:-13.0.1}
-DRIVER=${DRIVER:-580.82.07}
+VERSION=${VERSION:-13.0.2}
+DRIVER=${DRIVER:-580.95.05}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}

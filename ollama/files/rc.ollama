@@ -22,13 +22,16 @@ if [ -z "$U_ID" ]; then
     exit 1
 fi
 
-# Default options.
-if [ -f /etc/default/ollama ]; then
-  . /etc/default/ollama
-fi
-
 ollama_start() {
     echo "Starting ollama..."
+    
+    # Default options.
+    if [ -f /etc/default/ollama ]; then
+      set -a
+      . /etc/default/ollama
+      set +a
+    fi
+
     touch $OLLAMA_LOG
     chown ollama:ollama $OLLAMA_LOG
     su ollama -c "/opt/ollama/bin/ollama serve &>>$OLLAMA_LOG" &
