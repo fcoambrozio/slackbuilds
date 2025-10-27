@@ -3,7 +3,7 @@
 # get source for python-pyudev - https://github.com/pyudev/pyudev
 #
 
-VERSION="0.24.3"
+VERSION="0.24.4"
 DOWNLOAD="https://github.com/pyudev/pyudev/archive/v${VERSION}/pyudev-${VERSION}.tar.gz"
 
 wget -c $DOWNLOAD
