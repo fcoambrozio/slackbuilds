@@ -27,7 +27,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=nvidia-container-toolkit
-VERSION=${VERSION:-1.17.8}
+VERSION=${VERSION:-1.18.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -98,10 +98,7 @@ install -m 755 -t $PKG/usr/bin build/nvidia-cdi-hook
 install -m 755 -t $PKG/usr/bin build/nvidia-ctk
 
 mkdir -p $PKG/etc/nvidia-container-runtime/host-files-for-container.d
-cat $CWD/config.toml.new > $PKG/etc/nvidia-container-runtime/config.toml.new
-
-mkdir -p $PKG/usr/share/containers/oci/hooks.d
-cat $CWD/oci-nvidia-hook.json.new > $PKG/usr/share/containers/oci/hooks.d/oci-nvidia-hook.json.new
+$PKG/usr/bin/nvidia-ctk --quiet config --config-file=$PKG/etc/nvidia-container-runtime/config.toml.new --in-place
 
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
