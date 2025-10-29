@@ -30,13 +30,12 @@
 # Modified by Francisco Ambrozio
 #
 
-
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=srt
-VERSION=${VERSION:-1.5.4}
-VERSION=$VERSION
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-1.5.5_rc0a}
+SRCVER=1.5.5-rc.0a
+BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
@@ -81,9 +80,9 @@ set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
-cd $PRGNAM-$VERSION
+rm -rf $PRGNAM-$SRCVER
+tar xvf $CWD/$PRGNAM-$SRCVER.tar.gz
+cd $PRGNAM-$SRCVER
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
@@ -95,7 +94,7 @@ CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
 ./configure \
   --prefix=/usr \
-  --disable-static \
+  --enable-static=0 \
   --cmake_install_libdir=/usr/lib${LIBDIRSUFFIX} \
   --cmake_install_bindir=/usr/bin \
   --cmake_install_includedir=/usr/include

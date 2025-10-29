@@ -23,17 +23,14 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 # Modified by SlackBuilds.org
-
-#
 # Modified by Francisco Ambrozio
 #
-
 
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=rtmpdump
 VERSION=${VERSION:-20240301_6f6bb13}
-BUILD=${BUILD:-4}
+BUILD=${BUILD:-5}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}

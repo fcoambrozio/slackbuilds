@@ -29,12 +29,11 @@
 # Modified by Francisco Ambrozio
 #
 
-
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM="schroedinger"
 VERSION=${VERSION:-1.0.11}
-BUILD=${BUILD:-4}
+BUILD=${BUILD:-5}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
