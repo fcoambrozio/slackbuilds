@@ -30,7 +30,7 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=libnvidia-container
 VERSION=${VERSION:-1.18.0}
-BUILD=${BUILD:-2}
+BUILD=${BUILD:-3}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 
@@ -96,7 +96,7 @@ patch -p1 -i $CWD/fix-makefile.patch
 export GOPATH="$(pwd)"
 export GOFLAGS="-mod=vendor"
 
-make \
+make install \
   CGO_CFLAGS="$SLKCFLAGS" \
   GO_LDFLAGS="-compressdwarf=false -linkmode=external" \
   prefix=/usr \
@@ -107,9 +107,8 @@ make \
   docdir=/usr/doc/$PRGNAM-$VERSION \
   build=$ARCH-slackware-linux \
   GIT_TAG=$VERSION \
-  REVISION=$VERSION 
-
-make GIT_TAG=$VERSION REVISION=$VERSION DESTDIR=$PKG install 
+  REVISION=$VERSION \
+  DESTDIR=$PKG
 
 rm -f $PKG/{,usr/}lib${LIBDIRSUFFIX}/*.la
 
