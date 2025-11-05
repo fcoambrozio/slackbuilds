@@ -24,17 +24,22 @@ fi
 
 ollama_start() {
     echo "Starting ollama..."
-    
+
     # Default options.
+    OLLAMA_OPTS=""
     if [ -f /etc/default/ollama ]; then
-      set -a
-      . /etc/default/ollama
-      set +a
+      IFS=$'\n'
+
+      for opt in $(grep -v -e"^#" /etc/default/ollama)
+      do
+        [ -z "$opt" ] && continue
+        OLLAMA_OPTS="$OLLAMA_OPTS $opt"
+      done
     fi
 
     touch $OLLAMA_LOG
     chown ollama:ollama $OLLAMA_LOG
-    su ollama -c "/opt/ollama/bin/ollama serve &>>$OLLAMA_LOG" &
+    su - ollama -c "$OLLAMA_OPTS ollama serve &>>$OLLAMA_LOG" &
 }
 
 ollama_stop() {
@@ -44,7 +49,7 @@ ollama_stop() {
 
 ollama_restart() {
     ollama_stop
-    sleep 1
+    sleep 5
     ollama_start
 }
 

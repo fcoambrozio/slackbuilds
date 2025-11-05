@@ -25,7 +25,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=ollama
-VERSION=${VERSION:-0.12.7}
+VERSION=${VERSION:-0.12.9}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -76,18 +76,18 @@ find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | gr
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
 mkdir -p $PKG/etc/profile.d
-cp $CWD/files/ollama.sh $PKG/etc/profile.d/
-chmod +x $PKG/etc/profile.d/ollama.sh
+cat $CWD/files/ollama.sh > $PKG/etc/profile.d/ollama.sh.new
+chmod +x $PKG/etc/profile.d/ollama.sh.new
 
 mkdir -p $PKG/etc/rc.d
-cp $CWD/files/rc.ollama $PKG/etc/rc.d
-chmod +x $PKG/etc/rc.d/rc.ollama
+cat $CWD/files/rc.ollama > $PKG/etc/rc.d/rc.ollama.new
+chmod +x $PKG/etc/rc.d/rc.ollama.new
 
 mkdir -p $PKG/etc/ld.so.conf.d
-cat $CWD/files/ollama-ld.conf > $PKG/etc/ld.so.conf.d/ollama.conf
+cat $CWD/files/ollama-ld.conf > $PKG/etc/ld.so.conf.d/ollama.conf.new
 
 mkdir -p $PKG/etc/logrotate.d
-cat $CWD/files/ollama-logrotate > $PKG/etc/logrotate.d/ollama
+cat $CWD/files/ollama-logrotate > $PKG/etc/logrotate.d/ollama.new
 
 mkdir $PKG/etc/default
 cat $CWD/files/ollama-default > $PKG/etc/default/ollama.new
