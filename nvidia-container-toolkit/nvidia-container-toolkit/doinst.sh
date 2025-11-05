@@ -95,5 +95,5 @@ schema_install() {
 }
 
 config etc/nvidia-container-runtime/config.toml.new
-config usr/share/containers/oci/hooks.d/oci-nvidia-hook.json.new
+#config usr/share/containers/oci/hooks.d/oci-nvidia-hook.json.new
 

@@ -1,0 +1,32 @@
+From 62fe831e4a2e5bf87d7677acc6395b01f38ac081 Mon Sep 17 00:00:00 2001
+From: Evan Lezar <elezar@nvidia.com>
+Date: Mon, 3 Nov 2025 11:02:40 +0100
+Subject: [PATCH] Fix generate tests when cdi hook exists in path
+
+The TestGenerateSpec unit tests resolve the path to the
+nvidia-cdi-hook binary if it exists on the system making the
+results dependent on system configuration.
+
+This change sets the path to the binary explicitly to skip the
+resolution in the path.
+
+Signed-off-by: Evan Lezar <elezar@nvidia.com>
+(cherry picked from commit 95a152a6e74d8b0f7ca1536aec5490cf5e522b6c)
+---
+ cmd/nvidia-ctk/cdi/generate/generate_test.go | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/cmd/nvidia-ctk/cdi/generate/generate_test.go b/cmd/nvidia-ctk/cdi/generate/generate_test.go
+index dbef158a8..5e4940bfc 100644
+--- a/cmd/nvidia-ctk/cdi/generate/generate_test.go
++++ b/cmd/nvidia-ctk/cdi/generate/generate_test.go
+@@ -450,6 +450,9 @@ containerEdits:
+ 	}
+ 
+ 	for _, tc := range testCases {
++		// Apply overrides for all test cases:
++		tc.options.nvidiaCDIHookPath = "/usr/bin/nvidia-cdi-hook"
++
+ 		t.Run(tc.description, func(t *testing.T) {
+ 			c := command{
+ 				logger: logger,
