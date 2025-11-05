@@ -28,13 +28,12 @@
 #  20250317 - rename package name from password-store to pass
 #
 
-
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=pass
 SRCNAM=password-store
 VERSION=${VERSION:-1.7.4}
-BUILD=${BUILD:-1}
+BUILD=${BUILD:-2}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 
@@ -68,6 +67,8 @@ find -L . \
   -o -perm 511 \) -exec chmod 755 {} \; -o \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+
+patch -p0 -i $CWD/remove-clear-clipboard-history.patch
 
 # Extensions is hard-coded to /usr/lib/password-store/extensions
 PREFIX=/usr LIBDIR=/usr/lib MANDIR=/usr/man DESTDIR=$PKG make

@@ -1,0 +1,16 @@
+--- src/password-store.sh.orig	2025-11-05 10:47:38.450162993 -0300
++++ src/password-store.sh	2025-11-05 11:04:51.389908148 -0300
+@@ -190,11 +190,11 @@
+ 		#
+ 		# Clipboard managers frequently write their history out in plaintext,
+ 		# so we axe it here:
+-		qdbus org.kde.klipper /klipper org.kde.klipper.klipper.clearClipboardHistory &>/dev/null
++		#qdbus org.kde.klipper /klipper org.kde.klipper.klipper.clearClipboardHistory &>/dev/null
+ 
+ 		echo "$before" | $BASE64 -d | "${copy_cmd[@]}"
+ 	) >/dev/null 2>&1 & disown
+-	echo "Copied $2 to clipboard. Will clear in $CLIP_TIME seconds."
++	echo "Copied $2 to clipboard."
+ }
+ 
+ qrcode() {
