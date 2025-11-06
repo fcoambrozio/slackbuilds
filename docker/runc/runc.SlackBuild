@@ -30,8 +30,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=runc
-VERSION=${VERSION:-1.3.2}
-GITHASH=${GITHASH:-aeabe4e}
+VERSION=${VERSION:-1.3.3}
+GITHASH=${GITHASH:-d842d77}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -77,11 +77,11 @@ find -L . \
 # Do not try to get git commit hash, we're not inside git repository.
 sed -i '/^COMMIT/d' Makefile
 
-export GOPATH="$TMP/go"
-export GOCACHE="$TMP/go-build"
+export GOPATH="$(pwd)"
 
 make \
   BUILDTAGS="seccomp" \
+  GOFLAGS="-trimpath -mod=readonly -modcacherw" \
   COMMIT=$GITHASH
 make install BINDIR=$PKG/usr/bin
 make install-bash PREFIX=$PKG/usr

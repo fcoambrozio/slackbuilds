@@ -29,8 +29,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=docker-cli
-VERSION=${VERSION:-28.5.1}
-GITHASH=${GITHASH:-e180ab8}
+VERSION=${VERSION:-28.5.2}
+GITHASH=${GITHASH:-ecc6942}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -78,6 +78,8 @@ find -L . \
 mkdir build
 mv vendor build/src
 ln -sf $TMP/$SRCNAM-$VERSION build/src/github.com/docker/cli
+
+export GOPATH="$(pwd)"
 
 GO111MODULE=auto \
 DISABLE_WARN_OUTSIDE_CONTAINER=1 \

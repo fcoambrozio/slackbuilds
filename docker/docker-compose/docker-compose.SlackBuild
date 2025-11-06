@@ -27,7 +27,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=docker-compose
-VERSION=${VERSION:-2.40.0}
+VERSION=${VERSION:-2.40.3}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -66,10 +66,11 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-CGO_ENABLED=0 \
-GOFLAGS="-buildmode=pie -trimpath -ldflags=-linkmode=external -ldflags=-X=github.com/docker/compose/v2/internal.Version=${VERSION} -mod=readonly -modcacherw" \
-GO111MODULE=on \
-  go build -o compose ./cmd
+export GOPATH="$(pwd)"
+export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
+
+GO_LDFLAGS="-linkmode=external -compressdwarf=false -X=github.com/docker/compose/v2/internal.Version=${VERSION}"
+  go build -ldflags "$GO_LDFLAGS" -trimpath -tags "e2e,kube"  -o compose ./cmd
 
 mkdir -p $PKG/usr/libexec/docker/cli-plugins/
 install -Dm755 compose $PKG/usr/libexec/docker/cli-plugins/docker-compose
