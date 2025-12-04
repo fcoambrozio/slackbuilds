@@ -8,9 +8,19 @@ PG_GROUP=postgres
 PG_GROUP_ID=@GID@
 PG_VERSION=@PG_VERSION@
 
-echo "Adding PostgreSQL user and group..."
-groupadd -r -g $PG_GROUP_ID $PG_GROUP
-useradd -r -g $PG_GROUP -u $PG_USER_ID -d $PG_HOME -c PostgreSQL $PG_USER
+SYS_GID=$(grep $PG_USER /etc/group  | cut -f3 -d:)
+SYS_UID=$(grep $PG_USER /etc/passwd | cut -f3 -d:)
+
+if [ -z "$SYS_GID" ]; then
+    echo "Adding PostgreSQL group..."
+    groupadd -r -g $PG_GROUP_ID $PG_GROUP
+fi
+
+if [ -z "$SYS_UID" ]; then
+    echo "Adding PostgreSQL user..."
+    useradd -r -g $PG_GROUP -u $PG_USER_ID -d $PG_HOME -c PostgreSQL $PG_USER
+fi
+
 mkdir -p $PG_HOME/$PG_VERSION/data
 
 ## default permissions

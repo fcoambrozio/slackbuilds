@@ -28,8 +28,8 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=vscode
 SRCNAM=code-stable
-VERSION=${VERSION:-1.105.1}
-SRCVER=1760482455
+VERSION=${VERSION:-1.106.3}
+SRCVER=1764110803
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -88,6 +88,7 @@ install -D -m 0644 $PKG/opt/vscode/resources/completions/zsh/_code $PKG/usr/shar
 (
  cd $PKG/usr/bin
  ln -s /opt/vscode/bin/code .
+ ln -s /opt/vscode/bin/code-tunnel .
 )
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION

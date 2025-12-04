@@ -30,16 +30,15 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=docker
-VERSION=${VERSION:-28.5.2}
-GITHASH=${GITHASH:-89c5e8f}
+SRCNAM=moby-$PRGNAM
+VERSION=${VERSION:-29.1.2}
+GITHASH=${GITHASH:-de45c2a}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
 
 export MAKEFLAGS=$NUMJOBS
-
-SRCNAM=moby
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
@@ -66,9 +65,9 @@ set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-rm -rf $SRCNAM-$VERSION
-tar xvf $CWD/$SRCNAM-$VERSION.tar.gz
-cd $SRCNAM-$VERSION
+rm -rf $SRCNAM-v$VERSION
+tar xvf $CWD/$SRCNAM-v$VERSION.tar.gz
+cd $SRCNAM-v$VERSION
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
@@ -81,8 +80,13 @@ export GOFLAGS='-buildmode=pie -trimpath -mod=readonly -modcacherw -ldflags=-lin
 export GO111MODULE=off
 export DISABLE_WARN_OUTSIDE_CONTAINER=1
 
-AUTO_GOPATH=1 \
-  DOCKER_GITCOMMIT=$GITHASH \
+mkdir -p src/github.com/moby/moby
+(
+  cd src/github.com/moby/moby
+  ln -sf ../../../.. v2
+)
+
+DOCKER_GITCOMMIT=$GITHASH \
   DOCKER_BUILDTAGS="seccomp" \
   VERSION=$VERSION \
   ./hack/make.sh dynbinary
@@ -99,11 +103,7 @@ ln -s tini-static $PKG/usr/bin/docker-init
 
 install -D -m 0644 $CWD/config/docker.default $PKG/etc/default/docker.new
 install -D -m 0644 $CWD/config/docker.logrotate $PKG/etc/logrotate.d/docker.new
-install -D -m 0644 $CWD/config/rc.docker $PKG/etc/rc.d/rc.docker.new
-
-# Install udev rules.
-install -D -m 0644 contrib/udev/80-docker.rules \
-  $PKG/lib/udev/rules.d/80-docker.rules
+install -D -m 0755 $CWD/config/rc.docker $PKG/etc/rc.d/rc.docker.new
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a LICENSE NOTICE README.md $PKG/usr/doc/$PRGNAM-$VERSION

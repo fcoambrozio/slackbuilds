@@ -29,8 +29,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=docker-cli
-VERSION=${VERSION:-28.5.2}
-GITHASH=${GITHASH:-ecc6942}
+VERSION=${VERSION:-29.1.2}
+GITHASH=${GITHASH:-890dcca}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -81,7 +81,7 @@ ln -sf $TMP/$SRCNAM-$VERSION build/src/github.com/docker/cli
 
 export GOPATH="$(pwd)"
 
-GO111MODULE=auto \
+GO111MODULE=off \
 DISABLE_WARN_OUTSIDE_CONTAINER=1 \
 make dynbinary \
   GITCOMMIT=$GITHASH \

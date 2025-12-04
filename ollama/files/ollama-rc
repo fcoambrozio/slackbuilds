@@ -18,28 +18,23 @@ fi
 
 if [ -z "$U_ID" ]; then
     echo "Ollama group not found, please add it with something like this:"
-    echo "    useradd -m -r -u USER_ID -g GROUP_ID -s /bin/bash ollama"
+    echo "    useradd -m -r -u USER_ID -g GROUP_ID ollama"
     exit 1
 fi
 
 ollama_start() {
-    echo "Starting ollama..."
+    OLLAMA_START_SCRIPT="/var/lib/ollama/bin/start.sh"
 
-    # Default options.
-    OLLAMA_OPTS=""
-    if [ -f /etc/default/ollama ]; then
-      IFS=$'\n'
-
-      for opt in $(grep -v -e"^#" /etc/default/ollama)
-      do
-        [ -z "$opt" ] && continue
-        OLLAMA_OPTS="$OLLAMA_OPTS $opt"
-      done
+    if [ ! -x $OLLAMA_START_SCRIPT ]; then
+        echo "Error: could not start ollama - $OLLAMA_START_SCRIPT not found..."
+        exit 1
     fi
+
+    echo "Starting ollama..."
 
     touch $OLLAMA_LOG
     chown ollama:ollama $OLLAMA_LOG
-    su - ollama -c "$OLLAMA_OPTS ollama serve &>>$OLLAMA_LOG" &
+    su - ollama -c $OLLAMA_START_SCRIPT &
 }
 
 ollama_stop() {
