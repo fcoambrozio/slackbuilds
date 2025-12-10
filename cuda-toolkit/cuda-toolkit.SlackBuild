@@ -38,8 +38,8 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=cuda-toolkit
 FILENAME=cuda
-VERSION=${VERSION:-13.0.2}
-DRIVER=${DRIVER:-580.95.05}
+VERSION=${VERSION:-13.1.0}
+DRIVER=${DRIVER:-590.44.01}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -102,6 +102,9 @@ rm -f $PKG/opt/cuda/targets/x86_64-linux/include/include
 rm -f $PKG/opt/cuda/targets/x86_64-linux/lib/lib64
 
 rm -f $PKG/opt/cuda/bin/cuda-uninstaller
+
+find $PKG/opt/cuda/nsight_compute -type f -name "*.exe" -delete
+find $PKG/opt/cuda/nsight_systems -type f -name "*.exe" -delete
 
 (
   cd $PKG
