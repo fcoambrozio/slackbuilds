@@ -3,7 +3,7 @@
 # get source for ollama - https://github.com/ollama/ollama
 #
 
-VERSION=0.13.2
+VERSION=0.13.3
 DOWNLOAD="https://github.com/ollama/ollama/releases/download/v${VERSION}/ollama-linux-amd64.tgz"
 
 wget -c $DOWNLOAD
