@@ -50,7 +50,7 @@
 # -----------------------------------------------------------------------------
 
 PRGNAM=flatpak
-VERSION_CUR=1.16.1
+VERSION_CUR=1.16.2
 VERSION_150=1.12.7
 BUILD=${BUILD:-1}
 NUMJOBS=${NUMJOBS:-" -j$(nproc) "}
@@ -192,14 +192,12 @@ cd meson-build
     --prefix=/usr \
     --mandir=/usr/man \
     --libdir=/usr/lib${LIBDIRSUFFIX} \
-    --buildtype=release \
     -Ddbus_config_dir=/usr/share/dbus-1/system.d \
     -Dprivileged_group=wheel \
     -Dprofile_dir=/etc/profile.d \
     -Dsystem_bubblewrap=bwrap \
     -Dsystem_dbus_proxy=xdg-dbus-proxy \
-    -Dsystem_helper_user=flatpak \
-    -Dtests=false \
+    -Dsystem_helper_user=flatpak
     .. \
     2>&1 | tee $OUTPUT/configure-${PRGNAM}.log
   meson compile \

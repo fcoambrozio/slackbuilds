@@ -27,7 +27,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=ostree
-VERSION=${VERSION:-2025.6}
+VERSION=${VERSION:-2025.7}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -90,12 +90,17 @@ CXXFLAGS="$SLKCFLAGS" \
   --localstatedir=/var \
   --mandir=/usr/man \
   --docdir=/usr/doc/$PRGNAM-$VERSION \
+  --disable-static \
   --enable-gtk-doc \
   --with-ed25519-libsodium \
+  --with-grub2-mkconfig-path=/usr/bin/grub-mkconfig \
+  --with-modern-grub \
   --with-openssl \
   --with-curl \
+  --with-dracut=yesbutnoconf \
   --build=$ARCH-slackware-linux
 
+sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 make
 make install DESTDIR=$PKG
 
