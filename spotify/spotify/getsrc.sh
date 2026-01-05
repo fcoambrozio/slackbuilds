@@ -10,7 +10,7 @@ case "$( uname -m )" in
 esac
 
 if [ "$ARCH" = "x86_64" ]; then
-    DOWNLOAD="https://repository-origin.spotify.com/pool/non-free/s/spotify-client/spotify-client_1.2.79.425.g1d0fcf61_amd64.deb"
+    DOWNLOAD="https://repository-origin.spotify.com/pool/non-free/s/spotify-client/spotify-client_1.2.77.358.g4339a634_amd64.deb"
 else
     DOWNLOAD="http://repository.spotify.com/pool/non-free/s/spotify-client/spotify-client_1.0.72.117.g6bd7cc73-35_i386.deb"
 fi
