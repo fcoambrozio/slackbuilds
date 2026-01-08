@@ -20,12 +20,13 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+# Modified by Francisco Ambrozio - stuck to release version at https://gitlab.com/kernel-firmware/linux-firmware/-/releases
+
 cd $(dirname $0) ; CWD=$(pwd)
 
 PKGNAM=kernel-firmware
 ARCH=noarch
-BUILD=${BUILD:-2}
-GITHASH=7673dffd5e3324a726caf8bfc0f1a005862f5f16
+BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 # Compress the firmware blobs?
 # Default is "none" for no compression.
@@ -35,21 +36,17 @@ COMPRESSION=${COMPRESSION:-none}
 # Bundle /boot/amd-ucode.img?
 AMD_UCODE=${AMD_UCODE:-YES}
 
+REMOTE_TAG=${REMOTE_TAG:-20251125}
+REMOTE_HASH=${REMOTE_HASH:-4ee5122b}
+
+# although there is a release source tarball available let's keep this way
+DATE=$REMOTE_TAG
+HEADISAT=$REMOTE_HASH
+
 # If the variable PRINT_PACKAGE_NAME is set, then this script will report what
 # the name of the created package would be, and then exit. This information
 # could be useful to other scripts.
 if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
-  # Internally, git considers the repo date to be the date the last committed
-  # patch was submitted. This is somewhat confusing, as it can lead to a newer
-  # git clone having a date older than the last one we used. To avoid this
-  # situation, we're going to deviate a little and use the date the HEAD
-  # patch or merge occured as the repo date, rather than the date of the
-  # patch itself.
-  #DATE="$(lynx -dump -width=256 https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=HEAD | grep "    author   " | head -n 1 | rev | cut -f 3 -d ' ' | rev | tr -d -)"
-  #DATE="$(lynx -dump -width=256 https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=HEAD | grep "   committer " | head -n 1 | rev | cut -f 3 -d ' ' | rev | tr -d -)"
-  #HEADISAT="$(lynx -dump -width=256 https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=HEAD | grep "    commit   " | head -n 1 | cut -f 2 -d ] | cut -b 1-7)"
-  DATE="20250109"
-  HEADISAT=$(echo $GITHASH | cut -b 1-7)
   echo "$PKGNAM-${DATE}_${HEADISAT}-$ARCH-$BUILD.txz"
   exit 0
 fi
@@ -61,15 +58,11 @@ rm -rf $PKG
 mkdir -p $TMP $PKG
 
 cd $PKG
+echo "Fetching kernel-firmware-${DATE}_${HEADISAT}..."
 git clone git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
 cd linux-firmware
-git checkout $GITHASH
+git checkout $REMOTE_TAG
 cd -
-# Better determine these the same way as above.
-#DATE="$(lynx -dump -width=256 https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=HEAD | grep "   committer " | head -n 1 | rev | cut -f 3 -d ' ' | rev | tr -d -)"
-#HEADISAT="$(lynx -dump -width=256 https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?id=HEAD | grep "    commit   " | head -n 1 | cut -f 2 -d ] | cut -b 1-7)"
-DATE="20250109"
-HEADISAT=$(echo $GITHASH | cut -b 1-7)
 chown -R root:root .
 
 if [ "$AMD_UCODE" = "YES" ]; then
@@ -90,8 +83,10 @@ case $COMPRESSION in
   *) INSTALLTARGET="install" ;;
 esac
 ( cd linux-firmware
-  echo "Running make DESTDIR=$PKG ${INSTALLTARGET}..."
+  echo "Running make DESTDIR=$PKG ${INSTALLTARGET} ..."
   make DESTDIR=$PKG $INSTALLTARGET 2> /dev/null || exit 1
+  echo "Running make dedup DESTDIR=$PKG ..."
+  make dedup DESTDIR=$PKG 2> /dev/null || exit 1
 ) || exit 1
 
 # Install documentation:
@@ -116,5 +111,5 @@ mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
-/sbin/makepkg -l y -c n $TMP/$PKGNAM-${DATE}_${HEADISAT}-$ARCH-$BUILD$TAG.txz
+/sbin/makepkg -l y -c n $TMP/$PKGNAM-${DATE}_${HEADISAT}-$ARCH-${BUILD}${TAG}.txz
 
