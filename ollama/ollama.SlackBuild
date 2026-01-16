@@ -25,7 +25,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=ollama
-VERSION=${VERSION:-0.13.5}
+VERSION=${VERSION:-0.14.1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -64,7 +64,7 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $PKG
 mkdir -p opt/$PRGNAM
-tar xvf $CWD/$PRGNAM-linux-$SRCARCH.tgz -C opt/$PRGNAM
+tar xvf $CWD/$PRGNAM-linux-$SRCARCH.tar.zst -C opt/$PRGNAM
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
