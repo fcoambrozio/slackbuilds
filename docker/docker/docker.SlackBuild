@@ -31,8 +31,8 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=docker
 SRCNAM=moby-$PRGNAM
-VERSION=${VERSION:-29.1.3}
-GITHASH=${GITHASH:-fbf3ed2}
+VERSION=${VERSION:-29.1.4}
+GITHASH=${GITHASH:-08440b6}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
