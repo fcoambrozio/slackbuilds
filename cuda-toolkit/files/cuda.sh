@@ -3,7 +3,7 @@
 export CUDA_PATH=/opt/cuda
 
 if ! echo $PATH | grep -q "/opt/cuda/bin" ; then
-    export PATH=${PATH}:/opt/cuda/bin:/opt/cuda/nsight_compute:/opt/cuda/nsight_systems/bin
+    export PATH=${PATH}:/opt/cuda/bin
 fi
 
 if ! echo $LD_LIBRARY_PATH | grep -q "/opt/cuda/lib64" ; then

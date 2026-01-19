@@ -38,8 +38,8 @@ cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=cuda-toolkit
 FILENAME=cuda
-VERSION=${VERSION:-13.1.0}
-DRIVER=${DRIVER:-590.44.01}
+VERSION=${VERSION:-13.1.1}
+DRIVER=${DRIVER:-590.48.01}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -81,7 +81,9 @@ mkdir -p $PKG/opt/cuda
 cd $PRGNAM-$VERSION/builds
 rm -r NVIDIA*.run bin
 rm -r integration
-mv cuda_sanitizer_api/compute-sanitizer nsight_compute nsight_systems EULA.txt $PKG/opt/cuda/
+rm -r cuda_nsight
+rm -r nsight_compute nsight_systems
+mv cuda_sanitizer_api/compute-sanitizer EULA.txt $PKG/opt/cuda/
 rmdir cuda_sanitizer_api
 
 for lib in *; do
@@ -102,9 +104,6 @@ rm -f $PKG/opt/cuda/targets/x86_64-linux/include/include
 rm -f $PKG/opt/cuda/targets/x86_64-linux/lib/lib64
 
 rm -f $PKG/opt/cuda/bin/cuda-uninstaller
-
-find $PKG/opt/cuda/nsight_compute -type f -name "*.exe" -delete
-find $PKG/opt/cuda/nsight_systems -type f -name "*.exe" -delete
 
 (
   cd $PKG
@@ -134,6 +133,9 @@ install -D -m 755 $CWD/files/cuda.sh $PKG/etc/profile.d/cuda.sh.new
 mkdir -p $PKG/usr/lib64/pkgconfig
 cp $CWD/files/*.pc $PKG/usr/lib64/pkgconfig
 
+mkdir -p $PKG/etc/ld.so.conf.d
+cp $CWD/files/cuda.conf $PKG/etc/ld.so.conf.d/
+
 # Allow newer compilers to work.
 # See https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#system-requirements
 # for official requirements
@@ -144,9 +146,6 @@ sed -i "/.*unsupported clang version.*/d" $PKG/opt/cuda/targets/x86_64-linux/inc
 for f in $(find $PKG/opt/cuda -name Makefile); do
   sed -i "s|/usr/local/cuda|/opt/cuda|g" $f
 done
-
-mkdir -p $PKG/usr/share/applications
-cp $CWD/files/*.desktop $PKG/usr/share/applications
 
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
