@@ -3,7 +3,7 @@
 # get source for libnvidia-container - https://github.com/NVIDIA/libnvidia-container
 #
 
-VERSION="1.18.1"
+VERSION="1.18.2"
 MODPROBEVER="550.54.14"
 
 PKGNAME="libnvidia-container"
