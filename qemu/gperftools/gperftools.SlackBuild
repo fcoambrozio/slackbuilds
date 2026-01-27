@@ -29,8 +29,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=gperftools
-VERSION=${VERSION:-2.17.2}
-BUILD=${BUILD:-2}
+VERSION=${VERSION:-2.18}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}
