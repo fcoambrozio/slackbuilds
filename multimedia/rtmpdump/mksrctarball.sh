@@ -1,7 +1,7 @@
 #!/bin/bash
 
 git clone git://git.ffmpeg.org/rtmpdump
-commit=6f6bb1353fc84f4cc37138baa99f586750028a01
+commit=138fdb258d9fc26f1843fd1b891180416c9dc575
 
 cd rtmpdump
   git checkout $commit

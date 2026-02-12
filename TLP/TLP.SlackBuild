@@ -24,14 +24,12 @@
 
 #
 # Modified by Francisco Ambrozio
-#  20250306 - updated to 1.8.0
 #
-
 
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=TLP
-VERSION=${VERSION:-1.8.0}
+VERSION=${VERSION:-1.9.1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -88,6 +86,7 @@ sed "s|/lib/elogind|/lib${LIBDIRSUFFIX}/elogind|" -i Makefile
 
 export TLP_MAN=/usr/man
 make install-tlp install-man DESTDIR=$PKG
+make install-pd install-man-pd DESTDIR=$PKG
 make install-rdw install-man-rdw DESTDIR=$PKG
 
 # Don't clobber configs

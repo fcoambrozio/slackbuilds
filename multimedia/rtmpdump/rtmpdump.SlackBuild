@@ -29,8 +29,8 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=rtmpdump
-VERSION=${VERSION:-20240301_6f6bb13}
-BUILD=${BUILD:-5}
+VERSION=${VERSION:-20251114_138fdb2}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
 NUMJOBS=${NUMJOBS:-"-j$(expr $(nproc) + 1)"}

@@ -29,7 +29,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=x265
-VERSION=${VERSION:-20250928_ffba52bab}
+VERSION=${VERSION:-20260109_afa0028dd}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
@@ -76,7 +76,7 @@ set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-rm -rf ${PRGNAM}_${VERSION}
+rm -rf ${PRGNAM}-${VERSION}
 tar xvf $CWD/${PRGNAM}-${VERSION}.tar.?z*
 cd ${PRGNAM}-${VERSION}
 chown -R root:root .

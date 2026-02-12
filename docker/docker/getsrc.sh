@@ -4,7 +4,7 @@
 #
 
 PKGNAME="docker"
-VERSION="29.2.0"
+VERSION="29.2.1"
 
 SOURCE=(
   "moby-${PKGNAME}-v${VERSION}.tar.gz|https://github.com/moby/moby/archive/refs/tags/${PKGNAME}-v${VERSION}.tar.gz"
