@@ -36,8 +36,8 @@ COMPRESSION=${COMPRESSION:-none}
 # Bundle /boot/amd-ucode.img?
 AMD_UCODE=${AMD_UCODE:-YES}
 
-REMOTE_TAG=${REMOTE_TAG:-20251125}
-REMOTE_HASH=${REMOTE_HASH:-4ee5122b}
+REMOTE_TAG=${REMOTE_TAG:-20260110}
+REMOTE_HASH=${REMOTE_HASH:-06a743fd}
 
 # although there is a release source tarball available let's keep this way
 DATE=$REMOTE_TAG
