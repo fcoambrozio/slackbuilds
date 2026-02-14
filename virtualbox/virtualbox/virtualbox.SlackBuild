@@ -127,6 +127,7 @@ sed -i "s|CXX_FLAGS=\"\"|CXX_FLAGS=\"$SLKCFLAGS -std=c++11\"|" ./configure
 cp $CWD/LocalConfig.kmk .
 sed -i "s|LIBDIR|lib$LIBDIRSUFFIX|" ./LocalConfig.kmk
 sed -i "s|CXXFLAGS|$SLKCFLAGS -std=c++11|" ./LocalConfig.kmk
+echo "VBOX_WITHOUT_SPLIT_SOAPC = 1" >> LocalConfig.kmk
 echo "VBOX_GCC_OPT=$SLKCFLAGS" >> LocalConfig.kmk
 
 kmk ${NUMJOBS} LOCALCFG=./LocalConfig.kmk || exit 1
@@ -175,7 +176,7 @@ cd out/linux.$BUILDDIR/release/bin/
 
   export VBOX_INSTALL_PATH=/usr/lib$LIBDIRSUFFIX/virtualbox
   cd sdk/installer/python/
-    python3 ./vboxapisetup.py install --prefix "/usr" --root $PKG || exit 1
+    python ./vboxapisetup.py install --prefix "/usr" --root $PKG || exit 1
   cd -
   rm -rf sdk/installer
 
