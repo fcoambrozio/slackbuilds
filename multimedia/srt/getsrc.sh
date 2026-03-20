@@ -4,7 +4,7 @@
 #
 
 VERSION="1.5.5"
-VERSADD="-rc.0a"
+VERSADD="-rc.1"
 SRCEXT="tar.gz"
 DOWNLOAD="https://github.com/Haivision/srt/archive/refs/tags/v${VERSION}${VERSADD}.${SRCEXT}"
 

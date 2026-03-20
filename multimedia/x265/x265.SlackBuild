@@ -29,7 +29,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=x265
-VERSION=${VERSION:-20260109_afa0028dd}
+VERSION=${VERSION:-20260312_8be7dbf81}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
