@@ -33,7 +33,7 @@
 cd $(dirname $0) ; CWD=$(pwd)
 
 PRGNAM=nvidia-kernel
-VERSION=${VERSION:-595.45.04}
+VERSION=${VERSION:-595.58.03}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_fco}
 PKGTYPE=${PKGTYPE:-txz}
